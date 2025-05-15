@@ -10,4 +10,5 @@ if ($uri = str_replace('/', '', $_SERVER['PATH_INFO'])){
 }
 
 
+
 require "views/template/app.php";
