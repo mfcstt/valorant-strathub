@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="icon" type="image/png" href="./assets/logo.svg">
+    <title>Valorant Strathub</title>
     <link href="./dist/output.css" rel="stylesheet">
 </head>
 
@@ -16,10 +17,10 @@
             </div>
                 <ul class="flex space-x-4">
                     <li><a href="/" class="">Explorar</a></li>
-                    <li> <a href="/minhas-estrategias.php" class="">Minhas estratégias</a></li>
+                    <li> <a href="/minhas-estrategias" class="">Minhas estratégias</a></li>
                 </ul>
                 <ul>
-                    <li><a href="/login.php">Login</a></li>
+                    <li><a href="/login">Login</a></li>
                 </ul>
         </nav>
     </header>
