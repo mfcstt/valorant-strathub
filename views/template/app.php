@@ -16,7 +16,7 @@
             </div>
                 <ul class="flex space-x-4">
                     <li><a href="/" class="">Explorar</a></li>
-                    <li> <a href="/" class="">Estatisticas</a></li>
+                    <li> <a href="/minhas-estrategias.php" class="">Minhas estratégias</a></li>
                 </ul>
                 <ul>
                     <li><a href="/login.php">Login</a></li>

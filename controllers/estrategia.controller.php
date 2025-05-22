@@ -6,5 +6,5 @@ $filtrado = array_filter($estrategias, fn($e) => $e['id'] == $id);
 $estrategia = array_pop($filtrado);
 
 $view = "estrategia";
-require "views/tamplate/app.php";
+require "views/template/app.php";
 ?>

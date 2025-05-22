@@ -1,14 +1,10 @@
 <?php
+$controller = 'index';
 
-require 'dados.php';
-
-
-$view = 'index';
-
-if ($uri = str_replace('/', '', $_SERVER['PATH_INFO'])){
-    $view = $uri;
+if (isset($_SERVER['PATH_INFO'])){
+    $controller = str_replace('/','', [$_SERVER['PATH_INFO']]);
 }
 
 
 
-require "views/template/app.php";
+require "controllers/{$controller}.controller.php";

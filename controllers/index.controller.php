@@ -3,7 +3,8 @@
 require "./dados.php";
 
 $view = "index";
-require "views/tamplate/app.php";
+require "views/template/app.php";
+
 ?>
 
 
