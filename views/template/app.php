@@ -27,7 +27,7 @@
 
     <main class="mx-auto max-w-screen-lg px-8 py-4" >
       <!-- Estrategias -->
-           <?php require "views/{$view}.view.php"; ?>
+        <?php require "views/{$view}.view.php"; ?>
 
 </main>
 

@@ -1,12 +1,19 @@
 <?php
+require '../database.php';
+require '../models/Estrategia.php';
 
-$id = $_REQUEST['id'];
-$db = new DB;
+$id = $_GET['id'] ?? null;
+
+if (!$id) {
+    die('ID da estratégia não especificado.');
+}
+
+$db = new DB();
 
 $estrategia = $db->estrategia($id);
 
-require "./database.php";
+if (!$estrategia) {
+    die('Estratégia não encontrada.');
+}
 
-$view = "estrategia";
-require "views/template/app.php";
-?>
+require '../views/estrategia.view.php';

@@ -21,14 +21,18 @@
             <div class="flex">
                 <div class="w-1/3">Imagem</div>
                 <div class="space-y-1">
-                    <a href="/estrategia?id=<?= $estrategia->id ?>"><?= $estrategia->titulo ?></a>
+                    <!-- NÃO MUDA ISSO -->
+                    <a href="controllers/estrategia.controller.php?id=<?= $estrategia->id ?>">
+                        <?= $estrategia->titulo ?>
+                    </a>
+
                     <div class="text-xs italic"><?= $estrategia->fk_usuario_id ?></div>
                     <div class="text-xs italic"><?= $estrategia->fk_mapas_id ?></div>
                 </div>
             </div>
 
             <div class="text-sm-2">
-                <?= $estrategia->fk_categoria_id ?></
+                <?= $estrategia->fk_categoria_id ?>
             </div>
         </div>
     <?php endforeach; ?>
