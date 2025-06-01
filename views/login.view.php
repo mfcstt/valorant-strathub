@@ -1,4 +1,12 @@
-<div class="mt-6 grid grid-cols-2 gap-2">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="mt-6 grid grid-cols-2 gap-2">
     <div class="border border-stone-700 rounded">
     <h1 class="border-b border-stone-700 text-stone-400 font-bold px-4 py-2">Login</h1>    
     <form class="p-4 space-y-4">
@@ -49,3 +57,5 @@
         </form>
     </div>
 </div>
+</body>
+</html>

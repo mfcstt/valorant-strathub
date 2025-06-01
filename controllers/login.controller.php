@@ -1,4 +1,4 @@
 <?php
 
-$view = "login";
-require "views/template/app.php";
+$view = "login.view.php";
+require '../views/login.view.php';

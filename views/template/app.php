@@ -13,14 +13,14 @@
     <header class="bg-background_primary">
         <nav class="mx-auto max-w-screen-lg flex justify-between px-8 py-4">
             <div >
-                <img src="./assets/logo.svg" alt="logo" class="h-10 w-10">
+                <a href="#"><img src="./assets/logo.svg" alt="logo" class="h-10 w-10"></a>
             </div>
                 <ul class="flex space-x-4">
-                    <li><a href="/" class="">Explorar</a></li>
-                    <li> <a href="/minhas-estrategias" class="">Minhas estratégias</a></li>
+                    <li><a href="#" class="">Explorar</a></li>
+                    <li> <a href="controllers/MinhasEstrategias.controller.php" class="">Minhas estratégias</a></li>
                 </ul>
                 <ul>
-                    <li><a href="/login">Login</a></li>
+                    <li><a href="controllers/login.controller.php">Login</a></li>
                 </ul>
         </nav>
     </header>

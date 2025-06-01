@@ -7,7 +7,8 @@
             class="border-stone-800 border-2 rounded-md bg-stone-900 text-sm focus:outline-none px-2 py-1"
             placeholder="Pesquisar" />
         <button type="submit">🔍</button>
-        <button class="bg-primary text-text_primary mt-6 px-7 py-6">+ Novo</button>
+        <!-- coloque novamente aquele estilo de btn vermelho pvr :) -->
+        <a href="controllers/novaEstrategia.controller.php">+ Novo</a>
     </form>
 
 </div>
@@ -21,7 +22,7 @@
             <div class="flex">
                 <div class="w-1/3">Imagem</div>
                 <div class="space-y-1">
-                    <!-- NÃO MUDA ISSO -->
+                    <!-- NÃO MUDA ISSO PVR-->
                     <a href="controllers/estrategia.controller.php?id=<?= $estrategia->id ?>">
                         <?= $estrategia->titulo ?>
                     </a>
