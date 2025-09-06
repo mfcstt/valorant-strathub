@@ -1,0 +1,14 @@
+{
+  "name": "valorant-strathub",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  },
+  "dependencies": {
+    "valorant-strathub": "file:"
+  }
+}

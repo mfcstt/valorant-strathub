@@ -1,87 +1,61 @@
-<?php
-$form = '';
-$formLogin = null;
-$formRegister = null;
-
-if (flash()->get('validations_login') ?? []) {
-  $formLogin = 'login';
-  $form = "_$formLogin";
-} else if (flash()->get('validations_register') ?? []) {
-  $formRegister = 'register';
-  $form = "_$formRegister";
-}
-?>
-
-<!-- Login e Cadastro-->
-<section class="h-full flex p-4">
-  <!-- Thumb -->
-  <div class="flex flex-col justify-between w-2/4 p-8 rounded-[18px] bg-thumb bg-cover bg-no-repeat">
-  </div
-
-  <!-- Forms -->
-  <div class="w-2/4 text-gray-5 pt-[135px]">
-    <div class="flex flex-col font-nunito">
-      <header class="flex gap-1 w-[328px] mx-auto p-1 rounded-[10px] bg-gray-2 text-center">
-        <div class="relative flex-1 rounded-md">
-          <input
-            type="checkbox"
-            id="btnL"
-            class="checkbox absolute opacity-0 pointer-events-none"
-            <?php if (!isset($formRegister)) echo 'checked'; ?> >
-
-          <label for="btnL" class="block w-full h-full px-3 py-2 rounded-md focus:outline-red-base cursor-pointer">Login </label>
-        </div>
-
-        <div class="relative flex-1 rounded-md">
-          <input
-            type="checkbox"
-            id="btnR"
-            class="checkbox absolute opacity-0 pointer-events-none"
-            <?php if (isset($formRegister)) echo 'checked'; ?> >
-
-          <label for="btnR" class="block w-full h-full px-3 py-2 rounded-md focus:outline-red-base cursor-pointer">Cadastro </label>
-        </div>
-      </header>
-
-      <div class="flex justify-center gap-80 ml-4 overflow-hidden">
-        <!-- Login -->
-        <section id="login" class="text-center w-[328px] <?php if (isset($formRegister)) echo 'hidden disabled'; ?> ">
-          <h1 class="w-[328px] mt-[52px] mb-5 text-2xl text-gray-7 text-start font-rammetto">Acesse sua conta</h1>
-
-          <form method="post" novalidate>
-            <div class="flex flex-col gap-4">
-              <?php input('email', 'email', 'E-mail', 'ph ph-envelope', $formLogin); ?>
-
-              <?php input('password', 'senha', 'Senha', 'ph ph-password', $formLogin); ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="mt-6 grid grid-cols-2 gap-2">
+    <div class="border border-stone-700 rounded">
+    <h1 class="border-b border-stone-700 text-stone-400 font-bold px-4 py-2">Login</h1>    
+    <form class="p-4 space-y-4">
+            <div class="flex flex-col px-4 py-2">
+            <label class="text-stone-400 mb-1">E-mail</label>
+            <input type="email"
+            name="email" required
+            class="border-stone-800 border-2 rounded-md bg-stone-900 text-sm focus:outline-none px-2 py-1"
+            placeholder="Digite seu e-mail"/>
             </div>
-
-            <button type="submit" class="submit w-full mt-8 px-5 py-3 rounded-md bg-red-base text-white hover:bg-red-light hover:shadow-buttonHover focus:bg-red-light focus:shadow-buttonHover outline-none">Entrar</button>
-          </form>
-        </section>
-
-        <!-- Cadastro -->
-        <section id="register" class="text-center w-[328px] <?php if (!isset($formRegister)) echo 'hidden'; ?>  ">
-          <h1 class="mt-[52px] mb-5 text-2xl text-gray-7 text-start font-rammetto">Crie sua conta</h1>
-
-          <form action="/register" method="post" novalidate>
-            <div class="flex flex-col gap-4">
-              <?php input('text', 'nome', 'Nome', 'ph ph-user', $formRegister); ?>
-
-              <?php input('email', 'email', 'E-mail', 'ph ph-envelope', $formRegister); ?>
-
-              <?php input('password', 'senha', 'Senha', 'ph ph-password', $formRegister); ?>
+            <div class="flex flex-col px-4 py-2">
+            <label class="text-stone-400 mb-1">Senha</label>
+            <input type="password"
+            name="senha" required
+            class="border-stone-800 border-2 rounded-md bg-stone-900 text-sm focus:outline-none px-2 py-1"
+            placeholder="Digite sua senha"/>
             </div>
-
-            <button type="submit" class="submit w-full mt-8 px-5 py-3 rounded-md bg-red-base text-white hover:bg-red-light hover:shadow-buttonHover focus:bg-red-light focus:shadow-buttonHover outline-none">Criar</button>
-          </form>
-        </section>
-      </div>
+            <button type="submit" class="border-stone-800 bg-stone-900 text-stone-400 px-4 py-1 rounded-md border-2 hover:bg-stone-800">Logar</button>
+        </form>
     </div>
-  </div>
-</section>
 
-<?php
-// Limpar os dados das sessões após utiliza-los
-unset($_SESSION["flash_validations$form"]);
-unset($_SESSION["flash_formData"]);
-?>
+    <div>
+        <h1 class="border-b border-stone-700 text-stone-400 font-bold px-4 py-2">Registro</h1>    
+        <form class="p-4 space-y-4">
+            <div class="flex flex-col px-4 py-2">
+            <label class="text-stone-400 mb-1">Nome</label>
+            <input type="text"
+            name="nome" required
+            class="border-stone-800 border-2 rounded-md bg-stone-900 text-sm focus:outline-none px-2 py-1"
+            placeholder="Digite seu nome"/>
+            </div>
+            <div class="flex flex-col px-4 py-2">
+            <label class="text-stone-400 mb-1">E-mail</label>
+            <input type="email"
+            name="email" required
+            class="border-stone-800 border-2 rounded-md bg-stone-900 text-sm focus:outline-none px-2 py-1"
+            placeholder="Digite seu e-mail"/>
+            </div>
+            <div class="flex flex-col px-4 py-2">
+            <label class="text-stone-400 mb-1">Senha</label>
+            <input type="password"
+            name="senha" required
+            class="border-stone-800 border-2 rounded-md bg-stone-900 text-sm focus:outline-none px-2 py-1"
+            placeholder="Digite sua senha"/>
+            </div>
+            <button type="reset" class="border-stone-800 bg-stone-900 text-stone-400 px-4 py-1 rounded-md border-2 hover:bg-stone-800">Cancelar</button>
+            <button type="submit" class="border-stone-800 bg-stone-900 text-stone-400 px-4 py-1 rounded-md border-2 hover:bg-stone-800">Registrar</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
