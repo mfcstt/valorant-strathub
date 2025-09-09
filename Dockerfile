@@ -1,21 +1,25 @@
-# Usar imagem oficial do PHP com Apache
-FROM php:8.2-apache
+FROM php:8.1-apache
 
-# Instalar extensões necessárias (PDO para MySQL/Postgres)
-RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql
+# Atualiza pacotes e instala dependências
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    libzip-dev \
+    unzip \
+    git \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql
 
-# Habilitar mod_rewrite (para rotas bonitas / index.php)
+# Habilitar mod_rewrite (rotas bonitas /index.php)
 RUN a2enmod rewrite
 
-# Copiar código para dentro do container
+# Copiar projeto para dentro do container
 COPY . /var/www/html/
 
-# Definir diretório de trabalho
-WORKDIR /var/www/html/
+# Definir pasta de trabalho
+WORKDIR /var/www/html
 
-# Dar permissão para uploads e cache
-RUN chown -R www-data:www-data /var/www/html
+# Definir permissões para cache, storage e uploads (se necessário)
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
-# Expor porta usada pelo Apache
+# Expor porta do Apache
 EXPOSE 80
-
