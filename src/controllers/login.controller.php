@@ -1,56 +1,73 @@
 <?php
 
+// Redireciona se já estiver logado
 if (auth()) {
-  header('location: /explore');
-  exit();
+    header('Location: /explore');
+    exit();
 }
 
 $message = $_REQUEST['message'] ?? '';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $email = $_POST['email'];
-  $password = $_POST['senha'];
+// Processa o POST do login
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['senha'] ?? '';
 
-  $validation = Validation::validate([
-    'email' => ['required', 'email'],
-    'senha' => ['required']
-  ], $_POST);
-
-  if ($validation->notPassed('login')) {
-    // Armazenar valores do form na SESSION.
-    flash()->put('formData', $_POST);
-
-    header('location: /login');
-    exit();
-  }
-
-  $user = $database->query(
-    query: "select * from users where email = :email",
-    class: User::class,
-    params: compact('email')
-  )->fetch();
-
-  if ($user) {
+    // Validação dos campos
     $validation = Validation::validate([
-      'senha' => ["passwordMatch:$user->password"]
+        'email' => ['required', 'email'],
+        'senha' => ['required']
     ], $_POST);
 
     if ($validation->notPassed('login')) {
-      header('location: /login');
-      exit();
+        flash()->put('formData', $_POST);
+        header('Location: /login');
+        exit();
     }
 
-    $_SESSION['auth'] = $user;
-    flash()->put('message', 'Seja bem-vindo(a), ' . "<span class='text-red-light capitalize'>$user->name</span>");
-    header('location: /explore');
-    exit();
-  } else {
-    $validation->addValidationMessage('senha', 'Email ou senha incorretos!');
-    if ($validation->notPassed('login')) {
-      header('location: /login');
-      exit();
+    // Criar instância do Database
+    $database = new Database(config('database'));
+
+    // Buscar usuário pelo email
+    $results = $database->query(
+        "SELECT * FROM users WHERE email = :email",
+        User::class,
+        compact('email')
+    );
+
+    // Normaliza resultado: sempre array
+    $user = is_array($results) ? ($results[0] ?? null) : $results;
+
+    if ($user) {
+        // Verifica se a senha bate
+        if (!password_verify($password, $user->password)) {
+            flash()->put('formData', $_POST);
+            $validation->addValidationMessage('senha', 'Email ou senha incorretos!');
+            header('Location: /login');
+            exit();
+        }
+
+        // Autenticação bem-sucedida
+        // Criar objeto User limpo para a sessão (sem PDO)
+        $userSession = new stdClass();
+        $userSession->id = $user->id;
+        $userSession->name = $user->name;
+        $userSession->email = $user->email;
+        $userSession->avatar = $user->avatar;
+        $userSession->created_at = $user->created_at;
+        $userSession->updated_at = $user->updated_at;
+        
+        $_SESSION['auth'] = $userSession;
+        flash()->put('message', 'Seja bem-vindo(a), ' . "<span class='text-red-light capitalize'>{$user->name}</span>");
+        header('Location: /explore');
+        exit();
+    } else {
+        flash()->put('formData', $_POST);
+        $validation->addValidationMessage('senha', 'Email ou senha incorretos!');
+        header('Location: /login');
+        exit();
     }
-  }
 }
 
+// Renderiza a view do login
 view("login");

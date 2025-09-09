@@ -1,56 +1,56 @@
 <?php
 
 if (!auth()) {
-  abort(403, 'Você precisa estar logado para acessar essa página.');
+    abort(403, 'Você precisa estar logado para acessar essa página.');
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $user_id = auth()->id;
-  $title = $_POST['titulo'];
-  $category = $_POST['categoria'];
-  $agent_id = $_POST['agente'];
-  $mapa = $_POST['mapa'];
-  $description = $_POST['descricao'];
-  $fileCover = $_FILES['capa'];
-  $_POST["capa"] = $fileCover['name'];
-  
-  $randomName = md5(rand());
-  $extension = pathinfo($fileCover['name'], PATHINFO_EXTENSION);
-  $cover =  "$randomName.$extension";
-  move_uploaded_file($fileCover['tmp_name'], __DIR__ . '/../../public/assets/images/covers/' . $cover);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user_id = auth()->id;
+    $title = $_POST['titulo'] ?? '';
+    $category = $_POST['categoria'] ?? '';
+    $agent_id = $_POST['agente'] ?? '';
+    $description = $_POST['descricao'] ?? '';
+    $fileCover = $_FILES['capa'] ?? null;
 
-  $validation = Validation::validate([
-    'titulo' => ['required', 'min:3'],
-    'categoria' => ['required'],
-    'agente' => ['required'],
-    'mapa' => ['required'],
-    'descricao' => ['required', 'min:10'],
-    'capa' => ['required'],
-  ], $_POST);
+    $_POST["capa"] = $fileCover['name'] ?? '';
 
-  if ($validation->notPassed()) {
-    // Armazenar valores do form na SESSION.
-    flash()->put('formData', $_POST);
+    $validation = Validation::validate([
+        'titulo' => ['required', 'min:3'],
+        'categoria' => ['required'],
+        'agente' => ['required'],
+        'descricao' => ['required', 'min:10'],
+        'capa' => ['required'],
+    ], $_POST);
 
-    header('location: /strategy-create');
+    if ($validation->notPassed()) {
+        flash()->put('formData', $_POST);
+        header('Location: /strategy-create');
+        exit();
+    }
+
+    $cover = '';
+    if ($fileCover) {
+        $randomName = md5(rand());
+        $extension = pathinfo($fileCover['name'], PATHINFO_EXTENSION);
+        $cover = "$randomName.$extension";
+        move_uploaded_file($fileCover['tmp_name'], __DIR__ . '/../../public/assets/images/covers/' . $cover);
+    }
+
+    $database = new Database(config('database'));
+
+    $database->query(
+        "INSERT INTO estrategias (title, category, description, cover, user_id, agent_id) 
+        VALUES (:title, :category, :description, :cover, :user_id, :agent_id)",
+        null,
+        compact('title', 'category', 'description', 'cover', 'user_id', 'agent_id')
+    );
+
+    unset($_FILES);
+    unset($_POST);
+
+    flash()->put('message', 'Estratégia adicionada com sucesso!');
+    header('Location: /myStrategy');
     exit();
-  }
-
-  // Se passar de tudo isso, vamos adiconar a estratégia no BD
-  $database->query(
-    query: 
-      "insert into estrategias (title, category, description, cover, user_id, agent_id, mapa) 
-      values (:title, :category, :description, :cover, :user_id, :agent_id, :mapa)",
-    params: compact('title', 'category', 'description', 'cover', 'user_id', 'agent_id', 'mapa')
-  );
-
-  unset($_FILES);
-  unset($_POST);
-
-  flash()->put('message', 'Estratégia adicionada com sucesso!');
-
-  header('location: /myStrategy');
-  exit();
 }
 
 $agents = Agent::all();
