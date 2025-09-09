@@ -1,0 +1,40 @@
+# Arquivos de ambiente
+.env
+.env.local
+.env.production
+
+# Arquivos de banco de dados
+*.sqlite
+*.db
+
+# Logs
+*.log
+logs/
+
+# Cache
+cache/
+tmp/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependências
+vendor/
+node_modules/
+
+# Uploads de usuários
+public/assets/images/covers/*
+!public/assets/images/covers/.gitkeep
+public/assets/images/avatares/*
+!public/assets/images/avatares/.gitkeep
+
+# Arquivos temporários
+*.tmp
+*.temp
