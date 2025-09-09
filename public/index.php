@@ -1,19 +1,19 @@
-<?php 
+<?php
 
-require "../src/models/User.php";
-require "../src/models/Estrategia.php";
-require "../src/models/Agent.php";
-require "../src/models/Map.php";
-require "../src/models/Rating.php";
+require __DIR__ . "/../src/models/User.php";
+require __DIR__ . "/../src/models/Estrategia.php";
+require __DIR__ . "/../src/models/Agent.php";
+require __DIR__ . "/../src/models/Map.php";
+require __DIR__ . "/../src/models/Rating.php";
 
 session_start();
 
-require "../Flash.php";
-require "../functions.php";
-require "../Validation.php";
-require "../Database.php";
+require __DIR__ . "/../Flash.php";
+require __DIR__ . "/../functions.php";
+require __DIR__ . "/../Validation.php";
+require __DIR__ . "/../Database.php";
 
 // Criar instância global do banco de dados
 $database = new Database(config('database'));
 
-require "../routes.php";
+require __DIR__ . "/../routes.php";
