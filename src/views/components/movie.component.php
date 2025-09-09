@@ -9,12 +9,12 @@ $formData = flash()->get("formData")['comentario'] ?? '';
   <!-- Infos do Filme -->
   <section class="relative h-[618px] flex items-center justify-center">
     <!-- Background imagem -->
-    <div class="absolute z-[-1] w-full h-full bg-[url(assets/images/covers/<?= $movie->cover ?>)] bg-center bg-cover opacity-[5%] shadingThumb">
+    <div class="absolute z-[-1] w-full h-full bg-[url(/assets/images/covers/<?= $movie->cover ?>)] bg-center bg-cover opacity-[5%] shadingThumb">
     </div>
 
     <article class="flex gap-12">
       <div class="w-96">
-        <img src="/assets/images/covers/<?= $movie->cover ?>" alt="Capa do filmes" class="w-full object-cover rounded-[18px]">
+        <img src="/assets/images/covers/<?= $movie->cover ?>" alt="Capa da estratégia" class="w-full object-cover rounded-[18px]">
       </div>
 
       <div class="w-[644px]">
@@ -67,7 +67,7 @@ $formData = flash()->get("formData")['comentario'] ?? '';
       <?php foreach ($ratings as $rating): ?>
         <article class="flex gap-12 p-8 rounded-xl bg-gray-2">
           <div class="flex gap-4 w-[216px]">
-            <img src="assets/images/avatares/<?= $rating->user_avatar ?? 'avatarDefault.png' ?>" alt="Avatar perfil" class="w-12 h-12 rounded-md border border-[#7435DB]">
+            <img src="/assets/images/avatares/<?= $rating->user_avatar ?? 'avatarDefault.png' ?>" alt="Avatar perfil" class="w-12 h-12 rounded-md border border-[#7435DB]">
   
             <div>
               <h3 class="text-gray-7 font-bold font-rajdhani capitalize">
@@ -128,7 +128,7 @@ $formData = flash()->get("formData")['comentario'] ?? '';
        <input type="hidden" name="estrategia_id" value="<?= $movie->id ?>">
 
       <div class="flex gap-8 mt-8">
-        <img src="assets/images/covers/<?= $movie->cover ?>" alt="Capa do filmes" class="w-[137px] rounded-md">
+        <img src="/assets/images/covers/<?= $movie->cover ?>" alt="Capa da estratégia" class="w-[137px] rounded-md">
 
         <div class="w-full">
           <h3 class="text-2xl text-gray-7 font-bold font-rajdhani"><?= $movie->title ?></h3>

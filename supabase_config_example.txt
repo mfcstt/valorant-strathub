@@ -1,0 +1,20 @@
+# Configurações do Supabase
+# Copie este arquivo para .env e preencha com suas credenciais
+
+# Host do Supabase (exemplo: db.bblwxvyyzbusvszyoodt.supabase.co)
+DB_HOST=db.bblwxvyyzbusvszyoodt.supabase.co
+
+# Porta (geralmente 5432 para PostgreSQL)
+DB_PORT=5432
+
+# Nome do banco de dados
+DB_NAME=postgres
+
+# Usuário do banco
+DB_USER=postgres
+
+# Senha do banco (encontre no painel do Supabase)
+DB_PASSWORD=VavazinhoHoje
+
+# URL de conexão completa (alternativa ao método acima)
+# DATABASE_URL=postgresql://postgres:VavazinhoHoje@db.bblwxvyyzbusvszyoodt.supabase.co:5432/postgres

@@ -12,24 +12,26 @@ class Agent
     $database = new Database(config('database'));
 
     return $database->query(
-      query: "SELECT * FROM agents WHERE $where",
-      class: self::class,
-      params: $params
+      "SELECT * FROM agents WHERE $where",
+      self::class,
+      $params
     );
   }
 
   public static function get($agent_id)
   {
-    return (new self)->query('id = :agent_id', compact('agent_id'))->fetch();
+    $result = (new self)->query('id = :agent_id', compact('agent_id'));
+    return is_array($result) ? ($result[0] ?? null) : $result;
   }
 
   public static function all()
   {
-    return (new self)->query('1 = 1', [])->fetchAll();
+    return (new self)->query('1 = 1', []);
   }
 
   public static function getByName($name)
   {
-    return (new self)->query('name = :name', compact('name'))->fetch();
+    $result = (new self)->query('name = :name', compact('name'));
+    return is_array($result) ? ($result[0] ?? null) : $result;
   }
 }
