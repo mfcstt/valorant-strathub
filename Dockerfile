@@ -12,13 +12,13 @@ RUN apt-get update && apt-get install -y \
 # Habilitar mod_rewrite
 RUN a2enmod rewrite
 
-# Configurar DocumentRoot para a pasta public
+# Definir diretório de trabalho
 WORKDIR /var/www/html
 
-# Copiar todo o projeto
+# Copiar todo o projeto para o container
 COPY . /var/www/html/
 
-# Ajustar Apache para usar /public como root
+# Ajustar Apache para usar /public como DocumentRoot
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf \
     && sed -i 's!/var/www/!/var/www/html/public!g' /etc/apache2/apache2.conf
 
@@ -29,3 +29,6 @@ RUN chown -R www-data:www-data /var/www/html \
 
 # Expor porta 80
 EXPOSE 80
+
+# Comando padrão para rodar o Apache no foreground
+CMD ["apache2-foreground"]
