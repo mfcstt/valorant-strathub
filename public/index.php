@@ -17,17 +17,17 @@ session_start();
 require __DIR__ . "/../Flash.php";
 require __DIR__ . "/../functions.php";
 require __DIR__ . "/../Validation.php";
-require __DIR__ . "/../Database.php";
+require __DIR__ . "/../database.php";
 
 // Configurações do banco via variáveis de ambiente
 $config = [
-  'driver' => 'pgsql',
-  'host' => getenv('DB_HOST'),
-  'port' => getenv('DB_PORT') ?: 5432,
-  'dbname' => getenv('DB_NAME'),
-  'user' => getenv('DB_USER'),
-  'password' => getenv('DB_PASS'),
-  'sslmode' => 'require'
+    'driver' => 'pgsql',
+    'host' => getenv('DB_HOST'),
+    'port' => getenv('DB_PORT') ?: 5432,
+    'dbname' => getenv('DB_NAME'),
+    'user' => getenv('DB_USER'),
+    'password' => getenv('DB_PASS'),
+    'sslmode' => 'require'
 ];
 
 // Criar instância global do banco de dados
@@ -35,3 +35,4 @@ $database = new Database($config);
 
 // Inclui as rotas
 require __DIR__ . "/../routes.php";
+
