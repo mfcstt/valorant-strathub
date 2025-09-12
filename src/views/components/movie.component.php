@@ -78,7 +78,7 @@ $formData = flash()->get("formData")['comentario'] ?? '';
               </h3>
   
               <p class="text-gray-5 text-sm font-nunito leading-[160%] mt-1">
-                <?= $rating->rated_movies ?> <?= $rating->rated_movies == 1 ? "filme avaliado" : "filmes avaliados" ?>
+                <?= $rating->rated_movies ?> <?= $rating->rated_movies == 1 ? "estratégia avaliada" : "estratégias avaliadas" ?>
               </p>
             </div>
           </div>
