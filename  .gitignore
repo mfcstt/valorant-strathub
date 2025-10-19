@@ -1,0 +1,14 @@
+# Composer vendor directory
+vendor/
+
+# Local databases
+public/database.sqlite
+
+# IDE/editor
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
