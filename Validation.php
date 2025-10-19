@@ -37,7 +37,7 @@ class Validation
     {
         if (strlen($value) === 0) return;
 
-        $db = new Database(config('database'));
+        $db = new Database(config('database')['database']);
 
         $result = $db->query(
             "SELECT * FROM $table WHERE $field = :value",

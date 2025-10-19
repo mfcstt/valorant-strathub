@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         move_uploaded_file($fileCover['tmp_name'], __DIR__ . '/../../public/assets/images/covers/' . $cover);
     }
 
-    $database = new Database(config('database'));
+    $database = new Database(config('database')['database']);
 
     $database->query(
         "INSERT INTO estrategias (title, category, description, cover, user_id, agent_id) 

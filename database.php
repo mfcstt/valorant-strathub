@@ -8,9 +8,13 @@ class Database {
         
         if ($driver === 'sqlite') {
             $dsn = "$driver:" . $config['database'];
-            $this->pdo = new PDO($dsn, null, null, [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]);
+            try {
+                $this->pdo = new PDO($dsn, null, null, [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+                ]);
+            } catch (PDOException $e) {
+                throw new Exception("SQLite connection failed: " . $e->getMessage());
+            }
         } else {
             $host = $config['host'];
             $port = $config['port'];
@@ -21,9 +25,18 @@ class Database {
 
             $dsn = "$driver:host=$host;port=$port;dbname=$dbname;sslmode=$sslmode";
 
-            $this->pdo = new PDO($dsn, $user, $password, [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]);
+            try {
+                $this->pdo = new PDO($dsn, $user, $password, [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_TIMEOUT => 10 // 10 second timeout
+                ]);
+            } catch (PDOException $e) {
+                // Check if it's a hostname resolution error
+                if (strpos($e->getMessage(), 'could not translate host name') !== false) {
+                    throw new Exception("Database connection failed: Cannot resolve hostname '$host'. Please check your Supabase configuration or use SQLite fallback by setting USE_SQLITE=true in your .env file.");
+                }
+                throw new Exception("Database connection failed: " . $e->getMessage());
+            }
         }
     }
 

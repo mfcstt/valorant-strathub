@@ -14,6 +14,6 @@ require "../Validation.php";
 require "../Database.php";
 
 // Criar instância global do banco de dados
-$database = new Database(config('database'));
+$database = new Database(config('database')['database']);
 
 require "../routes.php";

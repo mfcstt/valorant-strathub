@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $database = new Database(config('database'));
+    $database = new Database(config('database')['database']);
 
     $database->query(
         "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)",
