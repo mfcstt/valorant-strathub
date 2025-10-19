@@ -18,7 +18,7 @@ class Estrategia {
     private $database;
 
     public function __construct() {
-        $this->database = new Database(config('database'));
+        $this->database = new Database(config('database')['database']);
     }
 
     public function query($where, $params = []) {

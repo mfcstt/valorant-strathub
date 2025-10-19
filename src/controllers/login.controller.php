@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Criar instância do Database
-    $database = new Database(config('database'));
+    $database = new Database(config('database')['database']);
 
     // Buscar usuário pelo email
     $results = $database->query(

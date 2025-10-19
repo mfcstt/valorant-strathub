@@ -3,7 +3,7 @@
 require_once 'Database.php';
 
 try {
-    $database = new Database(config('database'));
+    $database = new Database(config('database')['database']);
     
     // Ler o arquivo SQL
     $sql = file_get_contents('database_schema.sql');

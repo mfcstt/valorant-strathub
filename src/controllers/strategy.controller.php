@@ -8,7 +8,7 @@ $estrategia_id = $_GET['id'] ?? null;
 
 $estrategia = Estrategia::get($estrategia_id);
 
-$database = new Database(config('database'));
+$database = new Database(config('database')['database']);
 
 // Buscar avaliações
 $ratings = $database->query(

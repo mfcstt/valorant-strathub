@@ -9,7 +9,7 @@ class Agent
 
   public function query($where, $params)
   {
-    $database = new Database(config('database'));
+    $database = new Database(config('database')['database']);
 
     return $database->query(
       "SELECT * FROM agents WHERE $where",

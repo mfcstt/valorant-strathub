@@ -21,7 +21,7 @@ if ($validation->notPassed()) {
     exit();
 }
 
-$database = new Database(config('database'));
+$database = new Database(config('database')['database']);
 
 // Verificar se já existe uma avaliação
 $existing = $database->query(
