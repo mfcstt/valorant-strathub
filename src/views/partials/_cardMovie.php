@@ -5,7 +5,7 @@
   <!-- Conteúdo -->
   <article class="shadingCard absolute z-[1] w-full h-full flex flex-col justify-between rounded-xl">
     <div class="flex items-center gap-1.5 self-end m-2 px-2.5 py-1.5 text-xl text-gray-7 font-bold font-rajdhani bg-[#0f0f1acc] rounded-full">
-      <p><?= number_format($estrategia->rating_average, 1, ',', '.')?> <span class="text-xs font-medium">/ 5</span></p>
+      <p><?= number_format($estrategia->rating_average, 1, ',', '.') ?> <span class="text-xs font-medium">/ 5</span> <span class="text-xs font-medium">• <?= $estrategia->ratings_count ?> <?= $estrategia->ratings_count == 1 ? 'avaliação' : 'avaliações' ?></span></p>
       <i class="ph-fill ph-star text-base"></i>
     </div>
 

@@ -34,7 +34,7 @@ class Estrategia {
                     THEN CONCAT('$supabaseUrl/storage/v1/object/public/strategy-covers/', i.file_path)
                     ELSE NULL 
                 END AS cover_image_url,
-                COALESCE(SUM(r.rating)/COUNT(r.id), 0) AS rating_average,
+                COALESCE(AVG(r.rating), 0) AS rating_average,
                 COALESCE(COUNT(r.id), 0) AS ratings_count
             FROM estrategias e
             LEFT JOIN agents a ON a.id = e.agent_id

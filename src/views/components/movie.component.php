@@ -38,14 +38,21 @@ $formData = flash()->get("formData")['comentario'] ?? '';
         <div class="flex items-center gap-3 mt-4">
           <ul class="flex items-center text-red-light text-2xl">
             <?php 
-              $filledStars = str_repeat('<li><i class="ph-fill ph-star p-1"></i></li>', round($movie->rating_average)); 
-              $emptyStars = str_repeat('<li><i class="ph ph-star p-1"></i></li>', 5 - round($movie->rating_average));
-              echo $filledStars . $emptyStars;
+              $avg = (float) $movie->rating_average;
+              $filledCount = (int) floor($avg);
+              $hasHalf = ($avg - $filledCount) >= 0.5;
+              $emptyCount = 5 - $filledCount - ($hasHalf ? 1 : 0);
+
+              echo str_repeat('<li><i class="ph-fill ph-star p-1"></i></li>', $filledCount);
+              if ($hasHalf) {
+                echo '<li><i class="ph ph-star-half p-1"></i></li>';
+              }
+              echo str_repeat('<li><i class="ph ph-star p-1"></i></li>', $emptyCount);
             ?>
           </ul>
 
           <p class="text-gray-7 text-2xl font-bold font-rajdhani">
-            <?= round($movie->rating_average) ?>
+            <?= number_format($movie->rating_average, 1, ',', '.') ?> <span class="text-gray-6 text-base leading-[160%] font-normal font-nunito">/ 5</span>
             <span class="text-gray-6 text-base leading-[160%] font-normal font-nunito">(<?= $movie->ratings_count ?> <?= $movie->ratings_count == 1 ? "avaliação" : "avaliações"?>)</span>
           </p>
         </div>

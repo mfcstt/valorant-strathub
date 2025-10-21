@@ -7,7 +7,7 @@
     <!-- Header com rating -->
     <div class="flex justify-between items-start p-4">
       <div class="flex items-center gap-1.5 px-3 py-1.5 text-lg text-gray-7 font-bold font-rajdhani bg-[#0f0f1acc] rounded-full backdrop-blur-sm">
-        <p><?= number_format($estrategia->rating_average, 1, ',', '.')?> <span class="text-xs font-medium">/ 5</span></p>
+        <p><?= number_format($estrategia->rating_average, 1, ',', '.') ?> <span class="text-xs font-medium">/ 5</span> <span class="text-xs font-medium">• <?= $estrategia->ratings_count ?> <?= $estrategia->ratings_count == 1 ? 'avaliação' : 'avaliações' ?></span></p>
         <i class="ph-fill ph-star text-sm"></i>
       </div>
       
@@ -37,7 +37,7 @@
   <!-- Imagem -->
   <div class="absolute w-full h-full overflow-hidden rounded-xl">
     <?php if ($estrategia->cover_image_url): ?>
-      <img src="<?= $estrategia->cover_image_url ?>" alt="Capa da estratégia" class="object-cover group-hover:scale-110 group-focus:scale-110 transition-transform duration-[400ms]">
+      <img src="<?= $estrategia->cover_image_url ?>" alt="Capa da estratégia" class="w-full h-full object-cover group-hover:scale-110 group-focus:scale-110 transition-transform duration-[400ms]">
     <?php else: ?>
       <div class="w-full h-full bg-gray-800 flex items-center justify-center">
         <span class="text-gray-500 text-sm">Sem imagem</span>
