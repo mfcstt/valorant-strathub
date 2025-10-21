@@ -76,6 +76,14 @@ if (flash()->get('validations_login') ?? []) {
           </form>
         </section>
       </div>
+
+      <!-- Entrar como visitante -->
+      <div class="mt-8 w-[328px] mx-auto text-center">
+        <a href="/guest" class="inline-flex items-center gap-2 px-5 py-3 rounded-md text-gray-7 bg-gray-3 outline-none hover:bg-gray-2 focus:outline-red-base transition-all duration-300">
+          <i class="ph ph-eye text-xl"></i>
+          Entrar como visitante
+        </a>
+      </div>
     </div>
   </div>
 </section>

@@ -5,6 +5,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
+// Bloqueia visitantes: exige login para avaliar
+if (!auth()) {
+    $estrategia_id = $_POST['estrategia_id'] ?? null;
+    flash()->put('error', 'Faça login para avaliar estratégias.');
+    header('Location: /login');
+    exit();
+}
+
 $user_id = auth()->id;
 $estrategia_id = $_POST['estrategia_id'] ?? null;
 $rating = $_POST['avaliacao'] ?? null;

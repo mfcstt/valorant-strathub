@@ -2,12 +2,17 @@
 
 unset($_SESSION["flash_validations_login"]);
 
-if (!auth()) {
-    abort(403, 'Você precisa estar logado para acessar essa página.');
-}
+// Permitir acesso como visitante; bloquear apenas ações que exigem login
 
 // Upload de avatar de perfil
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
+    // Se não estiver autenticado, redireciona para login
+    if (!auth()) {
+        flash()->put('error', 'Faça login para alterar seu avatar.');
+        header('Location: /login');
+        exit();
+    }
+
     $userId = auth()->id;
     $file = $_FILES['avatar'] ?? null;
 

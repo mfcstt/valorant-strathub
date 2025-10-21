@@ -1,9 +1,12 @@
 /* Submit quando avatar de perfil for selecionado*/
 function submitFormOnFileSelect() {
   var fileInput = document.getElementById("avatarProfile");
-  fileInput.addEventListener("change", function () {
-    document.getElementById("formAvatarProfile").submit();
-  });
+  var form = document.getElementById("formAvatarProfile");
+  if (fileInput && form) {
+    fileInput.addEventListener("change", function () {
+      form.submit();
+    });
+  }
 }
 window.onload = submitFormOnFileSelect;
 
