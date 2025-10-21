@@ -25,10 +25,12 @@
   <title>Valorant Strathub | TCC Fatec</title>
 </head>
 
-<body class="bg-gray-1">
-  <div class="relative h-screen modalOverFlow">
+<body class="bg-gray-1 min-h-screen flex flex-col">
+  <div class="relative flex-1 modalOverFlow">
     <?php require "../src/views/{$view}.view.php"; ?>
   </div>
+
+  <?php require "../src/views/partials/_footer.php"; ?>
 
   <?php if ($message = flash()->get('message')): ?>
     <div id="message" class="fixed bottom-8 right-[-400px] z-10 w-max flex flex-col pb-1 px-1 text-white border border-red-base rounded-md bg-gray-1">

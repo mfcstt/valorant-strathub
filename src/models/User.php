@@ -63,20 +63,26 @@ class User {
 
     // Atualizar usuário
     public function update($id, $data) {
-        $stmt = $this->database->prepare(
+        // Executa o UPDATE usando a API de query do Database
+        $this->database->query(
             "UPDATE users
              SET name = :name, email = :email, avatar = :avatar
-             WHERE id = :id
-             RETURNING *"
+             WHERE id = :id",
+            null,
+            [
+                ':name' => $data['name'],
+                ':email' => $data['email'],
+                ':avatar' => $data['avatar'] ?? 'avatarDefault.png',
+                ':id' => $id
+            ]
         );
-        $stmt->execute([
-            ':name' => $data['name'],
-            ':email' => $data['email'],
-            ':avatar' => $data['avatar'] ?? 'avatarDefault.png',
-            ':id' => $id
-        ]);
 
-        $result = $stmt->fetchAll(PDO::FETCH_CLASS, self::class);
-        return $result[0] ?? null;
+        // Busca o usuário atualizado
+        return $this->database->fetchOne(
+            "SELECT id, name, email, password, avatar, created_at, updated_at
+             FROM users WHERE id = :id",
+            self::class,
+            [':id' => $id]
+        );
     }
 }

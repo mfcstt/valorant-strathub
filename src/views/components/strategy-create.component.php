@@ -4,12 +4,13 @@ $validationsMessages = flash()->get("validations") ?? null;
 
 // SESSION FormData para recuperar os valores do form
 $formData = flash()->get("formData")['descricao'] ?? '';
+$formDataAll = flash()->get("formData") ?? [];
 
 // Ativar o botão de limpar o campo se campo estiver preenchido
 $hidden = ($formData ?? '') ? '' : 'hidden';
 ?>
 
-<form action="/strategy-create" method="post" class="w-max flex gap-12 mx-auto mt-20" enctype="multipart/form-data" novalidate>
+<form action="/strategy-create" method="post" class="w-max flex gap-12 mx-auto mt-20 pb-8" enctype="multipart/form-data" novalidate>
   <label>
     <div class="cursor-pointer w-[381px] h-[490px] flex flex-col items-center justify-center rounded-[18px] bg-gray-3 border-2 border-gray-3 hover:border-2 hover:border-red-base focus-within:border-2 focus-within:border-red-base transition-all ease-in-out duration-300">
       <i class="
@@ -27,7 +28,7 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
         <?php foreach ($validationsMessages["capa"] as $messages): ?>
           <li class="flex gap-1.5 items-center justify-center text-error-light">
             <i class="ph ph-warning text-base"></i>
-            <span class="text-xs mt-[2px]"><?= $messages ?></span>
+            <span class="text-xs mt-[2px]<?= '' ?>"><?= $messages ?></span>
           </li>
         <?php endforeach; ?>
       </ul>
@@ -42,7 +43,28 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
         <?php input('text', 'titulo', 'Título da estratégia', 'ph ph-target'); ?>
 
         <div>
-          <?php input('text', 'categoria', 'Categoria', 'ph ph-tag'); ?>
+          <label class="block text-gray-7 font-nunito text-sm mb-2">Categoria</label>
+          <div class="flex items-center relative">
+            <select name="categoria" class="inpForm" required>
+              <option value="" disabled <?= empty($formDataAll['categoria']) ? 'selected' : '' ?>>Selecione</option>
+              <option value="defesa" <?= ($formDataAll['categoria'] ?? '') === 'defesa' ? 'selected' : '' ?>>Defesa</option>
+              <option value="ataque" <?= ($formDataAll['categoria'] ?? '') === 'ataque' ? 'selected' : '' ?>>Ataque</option>
+              <option value="pós plant" <?= ($formDataAll['categoria'] ?? '') === 'pós plant' ? 'selected' : '' ?>>Pós plant</option>
+              <option value="retake" <?= ($formDataAll['categoria'] ?? '') === 'retake' ? 'selected' : '' ?>>Retake</option>
+            </select>
+            <i class="ph ph-tag text-xl absolute left-4 pointer-events-none text-gray-5"></i>
+          </div>
+
+          <?php if (isset($validationsMessages["categoria"])): ?>
+            <ul class="mt-2 ml-1 flex flex-wrap gap-x-3">
+              <?php foreach ($validationsMessages["categoria"] as $messages): ?>
+                <li class="flex gap-1.5 items-center text-start text-error-light">
+                  <i class="ph ph-warning text-base"></i>
+                  <span class="text-xs mt-[2px]"><?= $messages ?></span>
+                </li>
+              <?php endforeach; ?>
+            </ul>
+          <?php endif; ?>
         </div>
 
          <div>
@@ -54,17 +76,17 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
                foreach ($agentsToShow as $agent): 
                ?>
                  <label class="agent-option flex-shrink-0 cursor-pointer group">
-                   <input type="radio" name="agente" value="<?= $agent->id ?>" class="hidden agent-radio">
+                   <input type="radio" name="agente" value="<?= $agent->id ?>" class="hidden agent-radio" <?= (($formDataAll['agente'] ?? '') == $agent->id) ? 'checked' : '' ?>>
                    <div class="agent-card w-20 h-20 flex flex-col items-center justify-center rounded-lg bg-gray-1 border-2 border-gray-3 group-hover:border-red-base transition-all duration-300">
-                     <img src="assets/images/agents/<?= strtolower($agent->name) ?>.png" 
+                     <img src="assets/images/agents/<?= $agent->photo ?>" 
                           alt="<?= $agent->name ?>" 
-                          class="w-12 h-12 object-contain mb-1">
+                          class="w-12 h-12 object-cover rounded-md mb-1">
                      <span class="text-xs text-gray-6 font-nunito text-center"><?= $agent->name ?></span>
                    </div>
                  </label>
                <?php endforeach; ?>
              </div>
-             <i class="ph ph-user text-xl absolute left-4 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-4"></i>
+             <!-- ícone de agente removido -->
            </div>
            
            <?php if (isset($validationsMessages["agente"])): ?>
@@ -82,23 +104,39 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
          <div>
            <label class="block text-gray-7 font-nunito text-sm mb-2">Mapa</label>
            <div class="relative">
-             <div class="map-selection-container flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-4 scrollbar-track-gray-2">
+             <div class="flex flex-col gap-3">
                <?php 
-               $mapsToShow = array_slice($maps, 0, 10); // Limitar para 10 mapas
-               foreach ($mapsToShow as $map): 
+                 $firstRow = array_slice($maps, 0, 6);
+                 $secondRow = array_slice($maps, 6, 6);
                ?>
-                 <label class="map-option flex-shrink-0 cursor-pointer group">
-                   <input type="radio" name="mapa" value="<?= $map->id ?>" class="hidden map-radio">
-                   <div class="map-card w-20 h-20 flex flex-col items-center justify-center rounded-lg bg-gray-1 border-2 border-gray-3 group-hover:border-red-base transition-all duration-300">
-                     <img src="assets/images/maps/<?= strtolower($map->name) ?>.png" 
-                          alt="<?= $map->name ?>" 
-                          class="w-12 h-12 object-contain mb-1">
-                     <span class="text-xs text-gray-6 font-nunito text-center"><?= $map->name ?></span>
-                   </div>
-                 </label>
-               <?php endforeach; ?>
+               <div class="flex gap-3 pb-2">
+                 <?php foreach ($firstRow as $map): ?>
+                   <label class="map-option flex-shrink-0 cursor-pointer group">
+                     <input type="radio" name="mapa" value="<?= $map->id ?>" class="hidden map-radio" <?= (($formDataAll['mapa'] ?? '') == $map->id) ? 'checked' : '' ?>>
+                     <div class="map-card w-20 h-20 flex flex-col items-center justify-center rounded-lg bg-gray-1 border-2 border-gray-3 group-hover:border-red-base transition-all duration-300">
+                       <img src="assets/images/maps/<?= $map->image ?? (strtolower($map->name) . '.png') ?>" 
+                            alt="<?= $map->name ?>" 
+                            class="w-12 h-12 object-cover rounded-md mb-1">
+                       <span class="text-xs text-gray-6 font-nunito text-center"><?= $map->name ?></span>
+                     </div>
+                   </label>
+                 <?php endforeach; ?>
+               </div>
+               <div class="flex gap-3 pb-2">
+                 <?php foreach ($secondRow as $map): ?>
+                   <label class="map-option flex-shrink-0 cursor-pointer group">
+                     <input type="radio" name="mapa" value="<?= $map->id ?>" class="hidden map-radio" <?= (($formDataAll['mapa'] ?? '') == $map->id) ? 'checked' : '' ?>>
+                     <div class="map-card w-20 h-20 flex flex-col items-center justify-center rounded-lg bg-gray-1 border-2 border-gray-3 group-hover:border-red-base transition-all duration-300">
+                       <img src="assets/images/maps/<?= $map->image ?? (strtolower($map->name) . '.png') ?>" 
+                            alt="<?= $map->name ?>" 
+                            class="w-12 h-12 object-cover rounded-md mb-1">
+                       <span class="text-xs text-gray-6 font-nunito text-center"><?= $map->name ?></span>
+                     </div>
+                   </label>
+                 <?php endforeach; ?>
+               </div>
              </div>
-             <i class="ph ph-map-pin text-xl absolute left-4 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-4"></i>
+             <!-- ícone de localização removido -->
            </div>
            
            <?php if (isset($validationsMessages["mapa"])): ?>

@@ -18,16 +18,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validar dados
     $validation = Validation::validate([
         'titulo' => ['required', 'min:3', 'max:255'],
+        'categoria' => ['required'],
         'descricao' => ['required', 'min:10'],
         'agente' => ['required'],
         'mapa' => ['required']
     ], $_POST);
 
+    // Validar categoria contra lista permitida
+    $allowedCategories = ['defesa', 'ataque', 'pós plant', 'retake'];
+    if ($category !== '' && !in_array($category, $allowedCategories, true)) {
+        $validation->addValidationMessage('categoria', 'Categoria inválida, selecione uma opção válida');
+    }
+
     $map_id = $_POST['mapa'] ?? '';
 
     if ($validation->notPassed()) {
+        flash()->put('formData', $_POST);
         header('Location: /strategy-create');
-        exit;
+        exit();
     }
 
     $cover_image_id = null;

@@ -132,3 +132,31 @@
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background: #E55566;
 }
+
+/* Select dropdown (dark theme) */
+select.inpForm {
+  background-color: transparent;
+  color: #1a1b2d; /* texto escuro para legibilidade em box branca */
+  border: 1px solid #1a1b2d;
+  padding: 0.75rem 2.5rem 0.75rem 2.75rem; /* mais espaço à direita para a seta */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%237a7b9f' viewBox='0 0 20 20'%3E%3Cpath d='M5.23 7.21a.75.75 0 011.06-.02L10 10.67l3.71-3.48a.75.75 0 011.04 1.08l-4.24 3.98a.75.75 0 01-1.04 0L5.25 8.27a.75.75 0 01-.02-1.06z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center; /* desloca seta para a esquerda */
+  background-size: 1rem 1rem;
+}
+
+select.inpForm:hover,
+select.inpForm:focus {
+  outline: 2px solid #E55566;
+}
+
+select.inpForm option {
+  color: #1a1b2d; /* texto escuro nas opções */
+}
+
+select.inpForm option[disabled] {
+  color: #7a7b9f;
+}
