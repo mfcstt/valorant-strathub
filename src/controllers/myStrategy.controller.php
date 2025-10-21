@@ -2,8 +2,11 @@
 
 unset($_SESSION["flash_formData"]);
 
+// Redireciona visitantes para login
 if (!auth()) {
-    abort(403, 'Você precisa estar logado para acessar essa página.');
+    flash()->put('error', 'Faça login para acessar Minhas estratégias.');
+    header('Location: /login');
+    exit();
 }
 
 $search = $_REQUEST['pesquisar'] ?? '';

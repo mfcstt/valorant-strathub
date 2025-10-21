@@ -1,7 +1,10 @@
 <?php
 
+// Redireciona visitantes para login na criação de estratégia
 if (!auth()) {
-    abort(403, 'Você precisa estar logado para acessar essa página.');
+    flash()->put('error', 'Faça login para cadastrar uma estratégia.');
+    header('Location: /login');
+    exit();
 }
 
 

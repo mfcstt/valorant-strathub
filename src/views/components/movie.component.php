@@ -2,7 +2,7 @@
 // Mensagens de validações de cada formulário
 $validationsMessages = flash()->get("validations") ?? null;
 
-$formData = flash()->get("formData")['comentario'] ?? '';
+$formData = flash()->get("formData")["comentario"] ?? '';
 ?>
 
 <div class="modalBlur w-full h-full">
@@ -69,10 +69,17 @@ $formData = flash()->get("formData")['comentario'] ?? '';
     <div class="w-full flex justify-between items_center mb-10">
       <h2 class="font-rajdhani text-2xl font-bold text-[#E5E2E9] self-end">Avaliações</h2>
 
-      <button type="button" class="showModal flex items-center gap-2 bg-red-base px-5 py-3 rounded-md text-white font-nunito leading-6 outline-none hover:bg-red-light focus:bg-red-light focus:outline-red-base transition-all ease-in-out duration-300">
-        <i class="ph ph-star text-xl"></i>
-        Avaliar estratégia
-      </button>
+      <?php if (auth()): ?>
+        <button type="button" class="showModal flex items-center gap-2 bg-red-base px-5 py-3 rounded-md text-white font-nunito leading-6 outline-none hover:bg-red-light focus:bg-red-light focus:outline-red-base transition-all ease-in-out duration-300">
+          <i class="ph ph-star text-xl"></i>
+          Avaliar estratégia
+        </button>
+      <?php else: ?>
+        <a href="/login" class="flex items-center gap-2 bg-red-base px-5 py-3 rounded-md text-white font-nunito leading-6 outline-none hover:bg-red-light focus:bg-red-light focus:outline-red-base transition-all ease-in-out duration-300">
+          <i class="ph ph-star text-xl"></i>
+          Fazer login para avaliar
+        </a>
+      <?php endif; ?>
     </div>
 
     <!-- CARDS AVALIAÇÕES -->
@@ -85,7 +92,7 @@ $formData = flash()->get("formData")['comentario'] ?? '';
             <div>
               <h3 class="text-gray-7 font-bold font-rajdhani capitalize">
                 <?= $rating->user_name ?>
-                <?php if($rating->user_id == auth()->id): ?>
+                <?php if(auth() && $rating->user_id == auth()->id): ?>
                   <span class="px-1.5 ml-2 bg-red-base rounded-full text-xs font-bold font-nunito leading-[160%]">você</span>
                 <?php endif; ?>
               </h3>
@@ -118,10 +125,17 @@ $formData = flash()->get("formData")['comentario'] ?? '';
           Que tal enviar o primeiro comentário?
         </p>
 
-        <button type="button" class="showModal flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
-          <i class="ph ph-star text-xl"></i>
-          Avaliar estratégia
-        </button>
+        <?php if (auth()): ?>
+          <button type="button" class="showModal flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
+            <i class="ph ph-star text-xl"></i>
+            Avaliar estratégia
+          </button>
+        <?php else: ?>
+          <a href="/login" class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
+            <i class="ph ph-star text-xl"></i>
+            Fazer login para avaliar
+          </a>
+        <?php endif; ?>
       </div>
     <?php endif; ?>
   </section>

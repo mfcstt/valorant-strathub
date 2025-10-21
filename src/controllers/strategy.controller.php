@@ -1,8 +1,6 @@
 <?php
 
-if (!auth()) {
-    abort(403, 'Você precisa estar logado para acessar essa página.');
-}
+// Permitir acesso ao detalhe para visitantes
 
 $estrategia_id = $_GET['id'] ?? null;
 
@@ -13,9 +11,9 @@ $database = new Database(config('database')['database']);
 // Buscar avaliações
 $ratings = $database->query(
     "SELECT 
-        r.*,
-        u.name as user_name,
-        u.avatar as user_avatar,
+        r.*, 
+        u.name as user_name, 
+        u.avatar as user_avatar, 
         (SELECT COUNT(*) FROM ratings countR WHERE countR.user_id = r.user_id) AS rated_movies
      FROM ratings r
      LEFT JOIN users u ON u.id = r.user_id
