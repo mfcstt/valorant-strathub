@@ -10,7 +10,7 @@ if (!auth()) {
 }
 
 $search = $_REQUEST['pesquisar'] ?? '';
-$order = $_REQUEST['ordenar'] ?? 'mais_estrelas';
+$order = $_REQUEST['ordenar'] ?? 'recentes';
 
 $estrategias = $search ? Estrategia::all($search) : Estrategia::myEstrategias(auth()->id);
 
