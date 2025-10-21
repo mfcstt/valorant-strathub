@@ -31,7 +31,7 @@
               </div>
 
               <img 
-                src="/assets/images/avatares/<?= auth()->avatar ?? 'avatarDefault.png' ?>"
+                src="<?= (auth()->avatar && auth()->avatar !== 'avatarDefault.png') ? auth()->avatar : '/assets/images/avatares/avatarDefault.png' ?>"
                 alt="Avatar perfil" 
                 class="w-full h-full object-cover"
               >
