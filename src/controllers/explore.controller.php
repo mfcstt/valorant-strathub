@@ -17,13 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
     $file = $_FILES['avatar'] ?? null;
 
     if ($file && $file['error'] === UPLOAD_ERR_OK) {
-        // Validações básicas
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'];
+        // Validações básicas alinhadas ao serviço de storage
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
         $maxSizeBytes = 5 * 1024 * 1024; // 5MB
 
         $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         if (!in_array($extension, $allowedExtensions)) {
-            flash()->put('error', 'Formato de imagem inválido. Use JPG, PNG, WEBP, AVIF ou GIF.');
+            flash()->put('error', 'Formato de imagem inválido. Use JPG, PNG ou WEBP.');
             header('Location: /explore');
             exit();
         }
@@ -34,24 +34,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
             exit();
         }
 
-        // Gera nome e caminho de destino
-        $filename = 'avatar_' . $userId . '_' . bin2hex(random_bytes(6)) . '.' . $extension;
-        $destinationDir = __DIR__ . '/../../public/assets/images/avatares/';
-        $destinationPath = $destinationDir . $filename;
-
-        if (!move_uploaded_file($file['tmp_name'], $destinationPath)) {
-            flash()->put('error', 'Falha ao salvar imagem. Tente novamente.');
-            header('Location: /explore');
-            exit();
-        }
-
-        // Atualiza avatar no banco
+        // Faz upload para Supabase e salva metadados na tabela images
         try {
+            $storageService = new SupabaseStorageService();
+            $uploadedImage = $storageService->uploadImage($file, $userId);
+
+            if (!$uploadedImage) {
+                flash()->put('error', 'Falha ao enviar avatar para o armazenamento.');
+                header('Location: /explore');
+                exit();
+            }
+
+            $publicUrl = $uploadedImage->getPublicUrl();
+
+            // Atualiza avatar no banco guardando a URL pública
             $userModel = new User();
             $updated = $userModel->update($userId, [
                 'name' => auth()->name,
                 'email' => auth()->email,
-                'avatar' => $filename
+                'avatar' => $publicUrl
             ]);
 
             if ($updated) {

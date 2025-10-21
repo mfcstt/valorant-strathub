@@ -87,7 +87,7 @@ $formData = flash()->get("formData")["comentario"] ?? '';
       <?php foreach ($ratings as $rating): ?>
         <article class="flex gap-12 p-8 rounded-xl bg-gray-2">
           <div class="flex gap-4 w-[216px]">
-            <img src="/assets/images/avatares/<?= $rating->user_avatar ?? 'avatarDefault.png' ?>" alt="Avatar perfil" class="w-12 h-12 rounded-md border border-[#7435DB]">
+            <img src="<?= ($rating->user_avatar && $rating->user_avatar !== 'avatarDefault.png') ? $rating->user_avatar : '/assets/images/avatares/avatarDefault.png' ?>" alt="Avatar perfil" class="w-12 h-12 rounded-md border border-[#7435DB]">
   
             <div>
               <h3 class="text-gray-7 font-bold font-rajdhani capitalize">
