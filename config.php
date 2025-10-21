@@ -23,11 +23,11 @@ return [
         'database' => __DIR__ . '/public/database.sqlite'
     ] : [
         'driver' => 'pgsql',
-        'host' => $_ENV['DB_HOST'] ?? 'db.bblwxvyyzbusvszyoodt.supabase.co',
+        'host' => $_ENV['DB_HOST'] ?? 'YOUR_DB_HOST',
         'port' => $_ENV['DB_PORT'] ?? '5432',
         'dbname' => $_ENV['DB_NAME'] ?? 'postgres',
         'user' => $_ENV['DB_USER'] ?? 'postgres',
-        'password' => $_ENV['DB_PASSWORD'] ?? 'VavazinhoHoje',
+        'password' => $_ENV['DB_PASSWORD'] ?? 'YOUR_DB_PASSWORD',
         'sslmode' => 'require',
     ],
 ];

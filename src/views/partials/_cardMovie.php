@@ -24,6 +24,12 @@
 
   <!-- Imagem -->
   <div class="absolute w-full h-full overflow-hidden rounded-xl">
-    <img src="assets/images/covers/<?= $estrategia->cover ?>" alt="Capa da estratégia" class="object-cover group-hover:scale-110 group-focus:scale-110 transition-transform duration-[400ms]">
+    <?php if ($estrategia->cover_image_url): ?>
+      <img src="<?= $estrategia->cover_image_url ?>" alt="Capa da estratégia" class="object-cover group-hover:scale-110 group-focus:scale-110 transition-transform duration-[400ms]">
+    <?php else: ?>
+      <div class="w-full h-full bg-gray-800 flex items-center justify-center">
+        <span class="text-gray-500 text-sm">Sem imagem</span>
+      </div>
+    <?php endif; ?>
   </div>
 </a>

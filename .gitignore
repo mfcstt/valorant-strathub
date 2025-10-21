@@ -1,0 +1,22 @@
+# Environment
+# Versione .env com placeholders para facilitar setup em equipe
+# (não colocar segredos reais no .env do repositório)
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# OS & IDE files
+.DS_Store
+Thumbs.db
+/.vscode/
+/.idea/
+
+# Logs
+*.log
+
+# Local databases and generated files
+/public/database.sqlite
+
+# Herd/Valet runtime files (if any)
+/.config/

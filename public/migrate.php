@@ -1,12 +1,24 @@
 <?php
 
-require_once 'Database.php';
+require_once __DIR__ . '/../functions.php';
+require_once __DIR__ . '/../database.php';
 
 try {
-    $database = new Database(config('database')['database']);
+    $config = require __DIR__ . '/../config.php';
+    $dbConf = $config['database'];
+    $database = new Database($dbConf);
     
+    // Escolhe schema conforme driver
+    $schemaFile = $dbConf['driver'] === 'sqlite' 
+        ? __DIR__ . '/../database_schema_sqlite.sql' 
+        : __DIR__ . '/../database_schema.sql';
+
+    if (!file_exists($schemaFile)) {
+        throw new Exception('Arquivo de schema não encontrado: ' . $schemaFile);
+    }
+
     // Ler o arquivo SQL
-    $sql = file_get_contents('database_schema.sql');
+    $sql = file_get_contents($schemaFile);
     
     // Dividir em comandos individuais
     $commands = array_filter(array_map('trim', explode(';', $sql)));
@@ -19,8 +31,6 @@ try {
     }
     
     echo "\n🎉 Migração concluída com sucesso!\n";
-    echo "Tabelas criadas: users, movies, ratings\n";
-    
 } catch (Exception $e) {
     echo "❌ Erro na migração: " . $e->getMessage() . "\n";
 }

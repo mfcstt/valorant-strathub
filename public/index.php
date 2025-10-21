@@ -5,6 +5,8 @@ require "../src/models/Estrategia.php";
 require "../src/models/Agent.php";
 require "../src/models/Map.php";
 require "../src/models/Rating.php";
+require "../src/models/Image.php";
+require "../src/services/SupabaseStorageService.php";
 
 session_start();
 

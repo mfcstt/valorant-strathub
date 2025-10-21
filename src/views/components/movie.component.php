@@ -9,12 +9,18 @@ $formData = flash()->get("formData")['comentario'] ?? '';
   <!-- Infos do Filme -->
   <section class="relative h-[618px] flex items-center justify-center">
     <!-- Background imagem -->
-    <div class="absolute z-[-1] w-full h-full bg-[url(/assets/images/covers/<?= $movie->cover ?>)] bg-center bg-cover opacity-[5%] shadingThumb">
+    <div class="absolute z-[-1] w-full h-full bg-[url(<?= $movie->cover_image_url ?: '/assets/images/thumb.png' ?>)] bg-center bg-cover opacity-[5%] shadingThumb">
     </div>
 
     <article class="flex gap-12">
       <div class="w-96">
-        <img src="/assets/images/covers/<?= $movie->cover ?>" alt="Capa da estratégia" class="w-full object-cover rounded-[18px]">
+        <?php if ($movie->cover_image_url): ?>
+          <img src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia" class="w-full object-cover rounded-[18px]">
+        <?php else: ?>
+          <div class="w-full h-96 bg-gray-800 flex items-center justify-center rounded-[18px]">
+            <span class="text-gray-500">Sem imagem</span>
+          </div>
+        <?php endif; ?>
       </div>
 
       <div class="w-[644px]">
@@ -128,7 +134,13 @@ $formData = flash()->get("formData")['comentario'] ?? '';
        <input type="hidden" name="estrategia_id" value="<?= $movie->id ?>">
 
       <div class="flex gap-8 mt-8">
-        <img src="/assets/images/covers/<?= $movie->cover ?>" alt="Capa da estratégia" class="w-[137px] rounded-md">
+        <?php if ($movie->cover_image_url): ?>
+          <img src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia" class="w-[137px] rounded-md">
+        <?php else: ?>
+          <div class="w-[137px] h-20 bg-gray-800 flex items-center justify-center rounded-md">
+            <span class="text-gray-500 text-xs">Sem imagem</span>
+          </div>
+        <?php endif; ?>
 
         <div class="w-full">
           <h3 class="text-2xl text-gray-7 font-bold font-rajdhani"><?= $movie->title ?></h3>
