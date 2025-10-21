@@ -40,10 +40,3 @@ function config($key = null)
     }
     return $config;
 }
-
-function printLog($text, $var) {
-    echo '<pre class="text-red-500">';
-    echo $text;
-    print_r($var);
-    echo '</pre>';
-}

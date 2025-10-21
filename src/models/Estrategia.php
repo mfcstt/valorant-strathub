@@ -5,7 +5,8 @@ class Estrategia {
     public $title;
     public $category;
     public $description;
-    public $cover;
+    public $cover_image_id;
+    public $cover_image_url;
     public $user_id;
     public $agent_id;
     public $agent_name;
@@ -22,17 +23,25 @@ class Estrategia {
     }
 
     public function query($where, $params = []) {
+        $supabaseUrl = $_ENV['SUPABASE_URL'] ?? 'https://YOUR_PROJECT_REF.supabase.co';
+        
         return $this->database->query(
             "SELECT 
-                e.id, e.title, e.category, e.description, e.cover, e.user_id, e.agent_id, e.created_at, e.updated_at,
+                e.id, e.title, e.category, e.description, e.cover_image_id, e.user_id, e.agent_id, e.created_at, e.updated_at,
                 a.name AS agent_name, a.photo AS agent_photo,
+                CASE 
+                    WHEN i.file_path IS NOT NULL 
+                    THEN CONCAT('$supabaseUrl/storage/v1/object/public/strategy-covers/', i.file_path)
+                    ELSE NULL 
+                END AS cover_image_url,
                 COALESCE(SUM(r.rating)/COUNT(r.id), 0) AS rating_average,
                 COALESCE(COUNT(r.id), 0) AS ratings_count
             FROM estrategias e
             LEFT JOIN agents a ON a.id = e.agent_id
+            LEFT JOIN images i ON i.id = e.cover_image_id
             LEFT JOIN ratings r ON r.estrategia_id = e.id
             WHERE $where
-            GROUP BY e.id, a.name, a.photo",
+            GROUP BY e.id, a.name, a.photo, i.file_path",
             self::class,
             $params
         );
@@ -45,7 +54,7 @@ class Estrategia {
 
     public static function all($search = '') {
         return (new self)->query(
-            'e.title ILIKE :filter OR e.category ILIKE :filter OR a.name ILIKE :filter',
+            'LOWER(e.title) LIKE LOWER(:filter) OR LOWER(e.category) LIKE LOWER(:filter) OR LOWER(a.name) LIKE LOWER(:filter)',
             ['filter' => "%$search%"]
         ); // já retorna array de objetos
     }
