@@ -5,6 +5,7 @@ function clearField() {
 
   inpts.forEach((input, i) => {
     const button = btns[i];
+    if (!button) return;
 
     input.addEventListener('input', () => {
       button.style.display = input.value.trim() ? 'block' : 'none';

@@ -15,7 +15,7 @@ $formData = flash()->get("formData")["comentario"] ?? '';
     <article class="flex gap-12">
       <div class="w-96">
         <?php if ($movie->cover_image_url): ?>
-          <img src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia" class="w-full object-cover rounded-[18px]">
+          <img src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia" class="w-full h-96 object-cover rounded-[18px]">
         <?php else: ?>
           <div class="w-full h-96 bg-gray-800 flex items-center justify-center rounded-[18px]">
             <span class="text-gray-500">Sem imagem</span>
@@ -33,7 +33,34 @@ $formData = flash()->get("formData")["comentario"] ?? '';
         <div class="text-gray-6 font-nunito leading-[160%] mt-4">
           <p><span class="font-bold">Categoria:</span> <?= $movie->category ?></p>
           <p><span class="font-bold">Agente:</span> <?= $movie->agent_name ?></p>
+          <?php if ($movie->map_name): ?>
+            <p><span class="font-bold">Mapa:</span> <?= $movie->map_name ?></p>
+          <?php endif; ?>
         </div>
+
+        <!-- Seção de Vídeo -->
+        <?php if ($movie->video_url): ?>
+          <div class="mt-6">
+            <h3 class="text-lg font-bold text-gray-7 font-rajdhani mb-3">Vídeo da Estratégia</h3>
+            <div class="relative bg-gray-800 rounded-lg overflow-hidden">
+              <video 
+                controls 
+                class="w-full h-auto max-h-80 object-contain"
+                preload="metadata"
+              >
+                <source src="<?= $movie->video_url ?>" type="video/mp4">
+                <source src="<?= $movie->video_url ?>" type="video/webm">
+                <source src="<?= $movie->video_url ?>" type="video/ogg">
+                Seu navegador não suporta a reprodução de vídeos.
+              </video>
+              <?php if ($movie->video_duration): ?>
+                <div class="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
+                  <?= $movie->video_duration ?>
+                </div>
+              <?php endif; ?>
+            </div>
+          </div>
+        <?php endif; ?>
   
         <div class="flex items-center gap-3 mt-4">
           <ul class="flex items-center text-red-light text-2xl">

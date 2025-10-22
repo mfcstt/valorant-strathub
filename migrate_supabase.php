@@ -47,14 +47,41 @@ try {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )",
 
+        // Novas tabelas consistentes com o código
+        "CREATE TABLE IF NOT EXISTS images (
+            id SERIAL PRIMARY KEY,
+            filename VARCHAR(255) NOT NULL,
+            original_name VARCHAR(255) NOT NULL,
+            file_path VARCHAR(500) NOT NULL,
+            file_size INTEGER NOT NULL,
+            mime_type VARCHAR(100) NOT NULL,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )",
+
+        "CREATE TABLE IF NOT EXISTS videos (
+            id SERIAL PRIMARY KEY,
+            filename VARCHAR(255) NOT NULL,
+            original_name VARCHAR(255) NOT NULL,
+            file_path VARCHAR(500) NOT NULL,
+            file_size INTEGER NOT NULL,
+            mime_type VARCHAR(100) NOT NULL,
+            duration INTEGER,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )",
+
+        // Estratégias com colunas esperadas pelo app
         "CREATE TABLE IF NOT EXISTS estrategias (
             id SERIAL PRIMARY KEY,
             title VARCHAR(255) NOT NULL,
             category VARCHAR(100) NOT NULL,
             description TEXT,
-            cover VARCHAR(255),
+            cover_image_id INTEGER REFERENCES images(id) ON DELETE SET NULL,
+            video_id INTEGER REFERENCES videos(id) ON DELETE SET NULL,
             user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
             agent_id INTEGER REFERENCES agents(id) ON DELETE SET NULL,
+            map_id INTEGER REFERENCES maps(id) ON DELETE SET NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )",
@@ -75,15 +102,38 @@ try {
         echo "✓ Tabela criada ou já existe.\n";
     }
 
+    // Garantir colunas esperadas em estrategias (se tabela já existir)
+    $alterCommands = [
+        "ALTER TABLE estrategias ADD COLUMN IF NOT EXISTS cover_image_id INTEGER REFERENCES images(id) ON DELETE SET NULL",
+        "ALTER TABLE estrategias ADD COLUMN IF NOT EXISTS video_id INTEGER REFERENCES videos(id) ON DELETE SET NULL",
+        "ALTER TABLE estrategias ADD COLUMN IF NOT EXISTS map_id INTEGER REFERENCES maps(id) ON DELETE SET NULL"
+    ];
+
+    foreach ($alterCommands as $alterSql) {
+        try {
+            $db->query($alterSql);
+            echo "✓ Coluna ajustada em estrategias.\n";
+        } catch (Exception $e) {
+            echo "Aviso ao ajustar coluna: " . $e->getMessage() . "\n";
+        }
+    }
+
     // ----------------------
     // Criar índices
     // ----------------------
     $indexes = [
         "CREATE INDEX IF NOT EXISTS idx_estrategias_user_id ON estrategias(user_id)",
         "CREATE INDEX IF NOT EXISTS idx_estrategias_agent_id ON estrategias(agent_id)",
+        "CREATE INDEX IF NOT EXISTS idx_estrategias_map_id ON estrategias(map_id)",
+        "CREATE INDEX IF NOT EXISTS idx_estrategias_cover_image_id ON estrategias(cover_image_id)",
+        "CREATE INDEX IF NOT EXISTS idx_estrategias_video_id ON estrategias(video_id)",
         "CREATE INDEX IF NOT EXISTS idx_ratings_estrategia_id ON ratings(estrategia_id)",
         "CREATE INDEX IF NOT EXISTS idx_ratings_user_id ON ratings(user_id)",
-        "CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)"
+        "CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)",
+        "CREATE INDEX IF NOT EXISTS idx_images_user_id ON images(user_id)",
+        "CREATE INDEX IF NOT EXISTS idx_images_filename ON images(filename)",
+        "CREATE INDEX IF NOT EXISTS idx_videos_user_id ON videos(user_id)",
+        "CREATE INDEX IF NOT EXISTS idx_videos_filename ON videos(filename)"
     ];
 
     foreach ($indexes as $indexSql) {

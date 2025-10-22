@@ -22,10 +22,17 @@
     </div>
   </article>
 
-  <!-- Imagem -->
+  <!-- Imagem / Fallback de vídeo -->
   <div class="absolute w-full h-full overflow-hidden rounded-xl">
     <?php if ($estrategia->cover_image_url): ?>
       <img src="<?= $estrategia->cover_image_url ?>" alt="Capa da estratégia" class="object-cover group-hover:scale-110 group-focus:scale-110 transition-transform duration-[400ms]">
+    <?php elseif ($estrategia->video_url): ?>
+      <video src="<?= $estrategia->video_url ?>" class="object-cover group-hover:scale-110 group-focus:scale-110 transition-transform duration-[400ms] video-cover" preload="metadata" muted playsinline></video>
+      <div class="absolute inset-0 z-[3] flex items-center justify-center pointer-events-none">
+        <span class="flex items-center justify-center bg-black/45 border border-white/40 rounded-full w-14 h-14">
+          <i class="ph-fill ph-play text-white text-2xl ml-0.5"></i>
+        </span>
+      </div>
     <?php else: ?>
       <div class="w-full h-full bg-gray-800 flex items-center justify-center">
         <span class="text-gray-500 text-sm">Sem imagem</span>
