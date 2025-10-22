@@ -11,35 +11,66 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
 ?>
 
 <form action="/strategy-create" method="post" class="w-max flex gap-12 mx-auto mt-20 pb-8" enctype="multipart/form-data" novalidate>
-  <label>
-    <div class="cursor-pointer w-[381px] h-[490px] flex flex-col items-center justify-center rounded-[18px] bg-gray-3 border-2 border-gray-3 hover:border-2 hover:border-red-base focus-within:border-2 focus-within:border-red-base transition-all ease-in-out duration-300">
-      <i class="
-        ph ph-upload-simple text-[40px] 
-        <?php echo (isset($validationsMessages["capa"]) ? ' text-error-base' : ' text-red-light') ?>
-      "></i>
+  <div class="flex flex-col gap-6">
+    <!-- Upload de Imagem -->
+    <label>
+      <div class="cursor-pointer w-[381px] h-[240px] flex flex-col items-center justify-center rounded-[18px] bg-gray-3 border-2 border-gray-3 hover:border-2 hover:border-red-base focus-within:border-2 focus-within:border-red-base transition-all ease-in-out duration-300">
+        <i class="
+          ph ph-image text-[40px] 
+          <?php echo (isset($validationsMessages["capa"]) ? ' text-error-base' : ' text-red-light') ?>
+        "></i>
 
-      <span class="mt-3 text-gray-5 font-nunito">Fazer upload</span>
+        <span class="mt-3 text-gray-5 font-nunito">Upload de Imagem</span>
+        <span class="text-xs text-gray-4 font-nunito">PNG, JPG até 5MB</span>
 
-      <input type="file" name="capa" class="absolute inset-0 z-[-1] opacity-0">
-    </div>
+        <input type="file" name="capa" accept="image/*" class="absolute inset-0 z-[-1] opacity-0">
+      </div>
 
-    <?php if (isset($validationsMessages["capa"])): // agora sim acho que tá bacana! ?>
-      <ul class="mt-2">
-        <?php foreach ($validationsMessages["capa"] as $messages): ?>
-          <li class="flex gap-1.5 items-center justify-center text-error-light">
-            <i class="ph ph-warning text-base"></i>
-            <span class="text-xs mt-[2px]<?= '' ?>"><?= $messages ?></span>
-          </li>
-        <?php endforeach; ?>
-      </ul>
-    <?php endif; ?>
-  </label>
+      <?php if (isset($validationsMessages["capa"])): ?>
+        <ul class="mt-2">
+          <?php foreach ($validationsMessages["capa"] as $messages): ?>
+            <li class="flex gap-1.5 items-center justify-center text-error-light">
+              <i class="ph ph-warning text-base"></i>
+              <span class="text-xs mt-[2px]"><?= $messages ?></span>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+      <?php endif; ?>
+    </label>
+
+    <!-- Upload de Vídeo -->
+    <label>
+      <div class="cursor-pointer w-[381px] h-[240px] flex flex-col items-center justify-center rounded-[18px] bg-gray-3 border-2 border-gray-3 hover:border-2 hover:border-red-base focus-within:border-2 focus-within:border-red-base transition-all ease-in-out duration-300">
+        <i class="
+          ph ph-video text-[40px] 
+          <?php echo (isset($validationsMessages["video"]) ? ' text-error-base' : ' text-red-light') ?>
+        "></i>
+
+        <span class="mt-3 text-gray-5 font-nunito">Upload de Vídeo</span>
+        <span class="text-xs text-gray-4 font-nunito">MP4, WEBM até 100MB</span>
+
+        <input type="file" name="video" accept="video/*" class="absolute inset-0 z-[-1] opacity-0">
+      </div>
+
+      <?php if (isset($validationsMessages["video"])): ?>
+        <ul class="mt-2">
+          <?php foreach ($validationsMessages["video"] as $messages): ?>
+            <li class="flex gap-1.5 items-center justify-center text-error-light">
+              <i class="ph ph-warning text-base"></i>
+              <span class="text-xs mt-[2px]"><?= $messages ?></span>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+      <?php endif; ?>
+    </label>
+  </div>
 
   <div class="flex flex-col justify-between">
     <div>
       <h2 class="font-rajdhani font-bold text-xl text-gray-7">Nova estratégia</h2>
 
       <div class="flex flex-col gap-4 mt-6">
+
         <?php input('text', 'titulo', 'Título da estratégia', 'ph ph-target'); ?>
 
         <div>

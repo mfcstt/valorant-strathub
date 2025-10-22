@@ -66,10 +66,6 @@ class Database {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function lastInsertId() {
-        return $this->pdo->lastInsertId();
-    }
-
     private function ensureSqliteDatabase($path) {
         $dir = dirname($path);
         if (!is_dir($dir)) {
@@ -99,4 +95,9 @@ class Database {
             }
         }
     }
+    public function lastInsertId() {
+        return $this->pdo->lastInsertId();
+    }
 }
+
+?>

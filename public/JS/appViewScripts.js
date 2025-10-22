@@ -13,6 +13,7 @@ window.onload = submitFormOnFileSelect;
 /* Abrir e Fechar o modal para avaliar um filme */
 function Modal() {
   const modal = document.querySelector("dialog");
+  if (!modal) return;
   const showBtns = document.querySelectorAll(".showModal");
   const closeBtn = document.querySelector(".closeModal");
   const isOpen = modal.classList.contains("open");
@@ -185,3 +186,41 @@ function initMapSelection() {
 }
 
 document.addEventListener("DOMContentLoaded", initMapSelection);
+
+function initVideoCovers() {
+  const videos = document.querySelectorAll('.video-cover');
+
+  videos.forEach((video) => {
+    try {
+      video.preload = 'metadata';
+      video.muted = true;
+      video.playsInline = true;
+
+      const seekToStart = () => {
+        try {
+          // Use a small offset to ensure a decodable frame
+          video.currentTime = 0.01;
+        } catch (e) {}
+      };
+
+      // When metadata is available, try seeking to the start
+      video.addEventListener('loadedmetadata', () => {
+        seekToStart();
+      });
+
+      // Once a frame is loaded, pause to keep it static
+      video.addEventListener('loadeddata', () => {
+        try { video.pause(); } catch (e) {}
+      });
+
+      // If already loaded enough, apply immediately
+      if (video.readyState >= 1) {
+        seekToStart();
+      }
+    } catch (e) {
+      // Silently ignore issues to avoid breaking the feed
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initVideoCovers);

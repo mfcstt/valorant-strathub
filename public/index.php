@@ -6,6 +6,7 @@ require "../src/models/Agent.php";
 require "../src/models/Map.php";
 require "../src/models/Rating.php";
 require "../src/models/Image.php";
+require "../src/models/Video.php";
 require "../src/services/SupabaseStorageService.php";
 
 session_start();
