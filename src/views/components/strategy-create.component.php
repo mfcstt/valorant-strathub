@@ -101,12 +101,9 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
          <div>
            <label class="block text-gray-7 font-nunito text-sm mb-2">Agente</label>
            <div class="relative">
-             <div class="agent-selection-container flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-4 scrollbar-track-gray-2">
-               <?php 
-               $agentsToShow = array_slice($agents, 0, 10); // Limitar para 10 agentes
-               foreach ($agentsToShow as $agent): 
-               ?>
-                 <label class="agent-option flex-shrink-0 cursor-pointer group">
+             <div class="agent-selection-container flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-4 scrollbar-track-gray-2 w-full max-w-[500px]" style="scrollbar-width: thin;">
+               <?php foreach ($agents as $agent): ?>
+                 <label class="agent-option cursor-pointer group flex-shrink-0">
                    <input type="radio" name="agente" value="<?= $agent->id ?>" class="hidden agent-radio" <?= (($formDataAll['agente'] ?? '') == $agent->id) ? 'checked' : '' ?>>
                    <div class="agent-card w-20 h-20 flex flex-col items-center justify-center rounded-lg bg-gray-1 border-2 border-gray-3 group-hover:border-red-base transition-all duration-300">
                      <img src="assets/images/agents/<?= $agent->photo ?>" 
@@ -135,37 +132,18 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
          <div>
            <label class="block text-gray-7 font-nunito text-sm mb-2">Mapa</label>
            <div class="relative">
-             <div class="flex flex-col gap-3">
-               <?php 
-                 $firstRow = array_slice($maps, 0, 6);
-                 $secondRow = array_slice($maps, 6, 6);
-               ?>
-               <div class="flex gap-3 pb-2">
-                 <?php foreach ($firstRow as $map): ?>
-                   <label class="map-option flex-shrink-0 cursor-pointer group">
-                     <input type="radio" name="mapa" value="<?= $map->id ?>" class="hidden map-radio" <?= (($formDataAll['mapa'] ?? '') == $map->id) ? 'checked' : '' ?>>
-                     <div class="map-card w-20 h-20 flex flex-col items-center justify-center rounded-lg bg-gray-1 border-2 border-gray-3 group-hover:border-red-base transition-all duration-300">
-                       <img src="assets/images/maps/<?= $map->image ?? (strtolower($map->name) . '.png') ?>" 
-                            alt="<?= $map->name ?>" 
-                            class="w-12 h-12 object-cover rounded-md mb-1">
-                       <span class="text-xs text-gray-6 font-nunito text-center"><?= $map->name ?></span>
-                     </div>
-                   </label>
-                 <?php endforeach; ?>
-               </div>
-               <div class="flex gap-3 pb-2">
-                 <?php foreach ($secondRow as $map): ?>
-                   <label class="map-option flex-shrink-0 cursor-pointer group">
-                     <input type="radio" name="mapa" value="<?= $map->id ?>" class="hidden map-radio" <?= (($formDataAll['mapa'] ?? '') == $map->id) ? 'checked' : '' ?>>
-                     <div class="map-card w-20 h-20 flex flex-col items-center justify-center rounded-lg bg-gray-1 border-2 border-gray-3 group-hover:border-red-base transition-all duration-300">
-                       <img src="assets/images/maps/<?= $map->image ?? (strtolower($map->name) . '.png') ?>" 
-                            alt="<?= $map->name ?>" 
-                            class="w-12 h-12 object-cover rounded-md mb-1">
-                       <span class="text-xs text-gray-6 font-nunito text-center"><?= $map->name ?></span>
-                     </div>
-                   </label>
-                 <?php endforeach; ?>
-               </div>
+             <div class="map-selection-container flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-4 scrollbar-track-gray-2 w-full max-w-[500px]" style="scrollbar-width: thin;">
+               <?php foreach ($maps as $map): ?>
+                 <label class="map-option flex-shrink-0 cursor-pointer group">
+                   <input type="radio" name="mapa" value="<?= $map->id ?>" class="hidden map-radio" <?= (($formDataAll['mapa'] ?? '') == $map->id) ? 'checked' : '' ?>>
+                   <div class="map-card w-20 h-20 flex flex-col items-center justify-center rounded-lg bg-gray-1 border-2 border-gray-3 group-hover:border-red-base transition-all duration-300">
+                     <img src="assets/images/maps/<?= $map->image ?? (strtolower($map->name) . '.png') ?>" 
+                          alt="<?= $map->name ?>" 
+                          class="w-12 h-12 object-cover rounded-md mb-1">
+                     <span class="text-xs text-gray-6 font-nunito text-center"><?= $map->name ?></span>
+                   </div>
+                 </label>
+               <?php endforeach; ?>
              </div>
              <!-- ícone de localização removido -->
            </div>
@@ -216,6 +194,62 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
     </div>
   </div>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Funcionalidade para seleção de agentes
+    const agentRadios = document.querySelectorAll('.agent-radio');
+    const agentCards = document.querySelectorAll('.agent-card');
+    
+    agentRadios.forEach((radio, index) => {
+        radio.addEventListener('change', function() {
+            // Remove seleção de todos os cards
+            agentCards.forEach(card => {
+                card.classList.remove('border-red-base', 'bg-red-base/10');
+                card.classList.add('border-gray-3');
+            });
+            
+            // Adiciona seleção ao card atual
+            if (this.checked) {
+                agentCards[index].classList.remove('border-gray-3');
+                agentCards[index].classList.add('border-red-base', 'bg-red-base/10');
+            }
+        });
+        
+        // Verifica se já está selecionado no carregamento da página
+        if (radio.checked) {
+            agentCards[index].classList.remove('border-gray-3');
+            agentCards[index].classList.add('border-red-base', 'bg-red-base/10');
+        }
+    });
+    
+    // Funcionalidade para seleção de mapas
+    const mapRadios = document.querySelectorAll('.map-radio');
+    const mapCards = document.querySelectorAll('.map-card');
+    
+    mapRadios.forEach((radio, index) => {
+        radio.addEventListener('change', function() {
+            // Remove seleção de todos os cards
+            mapCards.forEach(card => {
+                card.classList.remove('border-red-base', 'bg-red-base/10');
+                card.classList.add('border-gray-3');
+            });
+            
+            // Adiciona seleção ao card atual
+            if (this.checked) {
+                mapCards[index].classList.remove('border-gray-3');
+                mapCards[index].classList.add('border-red-base', 'bg-red-base/10');
+            }
+        });
+        
+        // Verifica se já está selecionado no carregamento da página
+        if (radio.checked) {
+            mapCards[index].classList.remove('border-gray-3');
+            mapCards[index].classList.add('border-red-base', 'bg-red-base/10');
+        }
+    });
+});
+</script>
 
 <?php
 // Limpar os dados das sessões após utiliza-los
