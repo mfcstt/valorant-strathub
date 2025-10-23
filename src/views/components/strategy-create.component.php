@@ -23,7 +23,15 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
         <span class="mt-3 text-gray-5 font-nunito">Upload de Imagem</span>
         <span class="text-xs text-gray-4 font-nunito">PNG, JPG até 5MB</span>
 
-        <input type="file" name="capa" accept="image/*" class="absolute inset-0 z-[-1] opacity-0">
+        <input type="file" name="capa" accept="image/*" class="absolute inset-0 z-[-1] opacity-0" id="image-input">
+      </div>
+
+      <!-- Aviso de upload pendente para imagem -->
+      <div id="image-upload-warning" class="mt-2 hidden">
+        <div class="flex gap-1.5 items-center justify-center text-yellow-600 bg-yellow-50 border border-yellow-200 rounded-lg p-2">
+          <i class="ph ph-clock text-base"></i>
+          <span class="text-xs">Arquivo selecionado. Clique em "Salvar" para fazer o upload.</span>
+        </div>
       </div>
 
       <?php if (isset($validationsMessages["capa"])): ?>
@@ -49,7 +57,15 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
         <span class="mt-3 text-gray-5 font-nunito">Upload de Vídeo</span>
         <span class="text-xs text-gray-4 font-nunito">MP4, WEBM até 100MB</span>
 
-        <input type="file" name="video" accept="video/*" class="absolute inset-0 z-[-1] opacity-0">
+        <input type="file" name="video" accept="video/*" class="absolute inset-0 z-[-1] opacity-0" id="video-input">
+      </div>
+
+      <!-- Aviso de upload pendente para vídeo -->
+      <div id="video-upload-warning" class="mt-2 hidden">
+        <div class="flex gap-1.5 items-center justify-center text-yellow-600 bg-yellow-50 border border-yellow-200 rounded-lg p-2">
+          <i class="ph ph-clock text-base"></i>
+          <span class="text-xs">Arquivo selecionado. Clique em "Salvar" para fazer o upload.</span>
+        </div>
       </div>
 
       <?php if (isset($validationsMessages["video"])): ?>
@@ -248,6 +264,43 @@ document.addEventListener('DOMContentLoaded', function() {
             mapCards[index].classList.add('border-red-base', 'bg-red-base/10');
         }
     });
+
+    // Lógica para avisos de upload pendente
+    const imageInput = document.getElementById('image-input');
+    const videoInput = document.getElementById('video-input');
+    const imageWarning = document.getElementById('image-upload-warning');
+    const videoWarning = document.getElementById('video-upload-warning');
+
+    // Função para mostrar aviso de upload pendente
+    function showUploadWarning(input, warning) {
+        if (input.files && input.files.length > 0) {
+            warning.classList.remove('hidden');
+        } else {
+            warning.classList.add('hidden');
+        }
+    }
+
+    // Event listeners para detectar seleção de arquivos
+    if (imageInput && imageWarning) {
+        imageInput.addEventListener('change', function() {
+            showUploadWarning(this, imageWarning);
+        });
+    }
+
+    if (videoInput && videoWarning) {
+        videoInput.addEventListener('change', function() {
+            showUploadWarning(this, videoWarning);
+        });
+    }
+
+    // Ocultar avisos quando o formulário for enviado
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function() {
+            if (imageWarning) imageWarning.classList.add('hidden');
+            if (videoWarning) videoWarning.classList.add('hidden');
+        });
+    }
 });
 </script>
 
