@@ -76,6 +76,43 @@
           Ver minhas estratégias
         </a>
       </div>
+
+      <div class="mt-10">
+        <h2 class="text-[#E5E2E9] font-rammetto text-xl mb-4">Segurança</h2>
+        <form action="/profile" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <input type="hidden" name="action" value="change_password">
+          <div class="md:col-span-2">
+            <label class="block text-gray-7 font-nunito text-sm mb-2">Senha atual</label>
+            <input type="password" name="senha_atual" class="inpForm w-full" placeholder="Sua senha atual">
+          </div>
+          <div>
+            <label class="block text-gray-7 font-nunito text-sm mb-2">Nova senha</label>
+            <input type="password" name="nova_senha" class="inpForm w-full" placeholder="Mínimo de 8 caracteres">
+          </div>
+          <div>
+            <label class="block text-gray-7 font-nunito text-sm mb-2">Confirmar nova senha</label>
+            <input type="password" name="confirmar_senha" class="inpForm w-full" placeholder="Repita a nova senha">
+          </div>
+          <div class="flex items-end md:col-span-2">
+            <button type="submit" class="px-5 py-2 rounded-md text-white font-nunito bg-red-base outline-none hover:bg-red-light focus:bg-red-light focus:outline-red-base transition-all ease-in-out duration-300">Alterar senha</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="mt-10">
+        <h2 class="text-[#E5E2E9] font-rammetto text-xl mb-2">Apagar conta</h2>
+        <p class="text-gray-6 font-nunito text-sm mb-4">Essa ação é permanente e removerá suas estratégias e avaliações associadas.</p>
+        <form action="/profile" method="post" class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6">
+          <input type="hidden" name="action" value="delete_account">
+          <div>
+            <label class="block text-gray-7 font-nunito text-sm mb-2">Confirme com sua senha</label>
+            <input type="password" name="senha_atual" class="inpForm w-full" placeholder="Digite sua senha">
+          </div>
+          <div class="flex items-end">
+            <button type="submit" class="px-5 py-2 rounded-md text-white font-nunito bg-red-base outline-none hover:bg-red-light focus:bg-red-light focus:outline-red-base transition-all ease-in-out duration-300">Apagar conta</button>
+          </div>
+        </form>
+      </div>
     </div>
   </section>
 </div>

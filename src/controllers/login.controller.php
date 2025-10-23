@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!password_verify($password, $user->password)) {
             flash()->put('formData', $_POST);
             $validation->addValidationMessage('senha', 'Email ou senha incorretos!');
+            flash()->put('error', 'Email ou senha incorretos!');
             header('Location: /login');
             exit();
         }
@@ -64,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         flash()->put('formData', $_POST);
         $validation->addValidationMessage('senha', 'Email ou senha incorretos!');
+        flash()->put('error', 'Email ou senha incorretos!');
         header('Location: /login');
         exit();
     }

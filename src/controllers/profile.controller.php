@@ -62,6 +62,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             flash()->put('message', 'Dados do perfil atualizados com sucesso!');
+        } else if ($action === 'change_password') {
+            // Alterar senha
+            $current = $_POST['senha_atual'] ?? '';
+            $new = $_POST['nova_senha'] ?? '';
+            $confirm = $_POST['confirmar_senha'] ?? '';
+
+            $errors = [];
+            if ($current === '') $errors[] = 'Informe a senha atual.';
+            if ($new === '' || strlen($new) < 8 || strlen($new) > 30) $errors[] = 'A nova senha deve ter entre 8 e 30 caracteres.';
+            if ($new !== $confirm) $errors[] = 'A confirmação da senha não confere.';
+
+            $dbUser = User::get($user_id);
+            if (!$dbUser || !password_verify($current, $dbUser->password)) {
+                $errors[] = 'Senha atual incorreta.';
+            }
+
+            if (!empty($errors)) {
+                flash()->put('error', implode(' ', $errors));
+                header('Location: /profile');
+                exit();
+            }
+
+            $userModel->updatePassword($user_id, $new);
+            flash()->put('message', 'Senha alterada com sucesso!');
+        } else if ($action === 'delete_account') {
+            // Apagar conta (confirmado com senha atual)
+            $current = $_POST['senha_atual'] ?? '';
+            $dbUser = User::get($user_id);
+
+            if ($current === '' || !$dbUser || !password_verify($current, $dbUser->password)) {
+                flash()->put('error', 'Senha atual incorreta para apagar a conta.');
+                header('Location: /profile');
+                exit();
+            }
+
+            // Deletar usuário e limpar sessão
+            $userModel->delete($user_id);
+            unset($_SESSION['auth']);
+            unset($_SESSION['guest']);
+
+            flash()->put('message', 'Sua conta foi apagada com sucesso.');
+            header('Location: /login');
+            exit();
         } else {
             // Atualizar avatar
             $file = $_FILES['avatar'] ?? null;
