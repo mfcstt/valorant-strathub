@@ -24,4 +24,9 @@ $ratings = $database->query(
 
 // Passar estratégia como 'movie' para o componente
 $movie = $estrategia;
-view("app", compact('movie', 'ratings'), "movie");
+
+// Buscar autor da estratégia
+$authorRows = (new User())->query('id = :id', ['id' => $estrategia->user_id]);
+$author = is_array($authorRows) ? ($authorRows[0] ?? null) : $authorRows;
+
+view("app", compact('movie', 'ratings', 'author'), "movie");

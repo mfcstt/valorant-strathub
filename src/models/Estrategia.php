@@ -76,4 +76,42 @@ class Estrategia {
     public static function myEstrategias($user_id) {
         return (new self)->query('e.user_id = :user_id', ['user_id' => $user_id]);
     }
+
+    public static function filter($search = '', $agent_id = null, $map_id = null, $category = null, $user_id = null) {
+        $clauses = [];
+        $params = [];
+
+        if ($user_id !== null) {
+            $clauses[] = 'e.user_id = :user_id';
+            $params['user_id'] = $user_id;
+        }
+
+        if ($search !== '') {
+            $clauses[] = '(LOWER(e.title) LIKE LOWER(:filter) OR LOWER(e.category) LIKE LOWER(:filter) OR LOWER(a.name) LIKE LOWER(:filter) OR LOWER(m.name) LIKE LOWER(:filter))';
+            $params['filter'] = "%$search%";
+        }
+
+        if (!empty($agent_id)) {
+            $clauses[] = 'e.agent_id = :agent_id';
+            $params['agent_id'] = $agent_id;
+        }
+
+        if (!empty($map_id)) {
+            $clauses[] = 'e.map_id = :map_id';
+            $params['map_id'] = $map_id;
+        }
+
+        if (!empty($category)) {
+            $clauses[] = 'LOWER(e.category) = LOWER(:category)';
+            $params['category'] = $category;
+        }
+
+        if (empty($clauses)) {
+            $clauses[] = '1=1';
+        }
+
+        return (new self)->query(implode(' AND ', $clauses), $params);
+    }
 }
+
+?>
