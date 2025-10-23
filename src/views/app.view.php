@@ -18,7 +18,7 @@
           </a>
         </li>
         <li>
-          <a href="myStrategy" class="flex items-center gap-2 px-3 py-2 rounded-md outline-none hover:bg-gray-2 focus:outline-red-base transition-all duration-300 <?php if ($component == 'myStrategy')
+          <a href="myStrategy" class="flex items-center gap-2 px-3 py-2 rounded-md outline-none hover:bg-gray-2 focus:outline-red-base transition-all duração-300 <?php if ($component == 'myStrategy')
             echo 'componentActive'; ?>">
             <i class="ph ph-film-slate text-xl"></i>
             Minhas estratégias
@@ -28,16 +28,25 @@
     </nav>
 
     <div class="flex">
-      <div class="flex items-center gap-3 pr-3 border-r border-gray-3">
-        <span class="text-gray-6 text-sm leading-[160%] capitalize">Olá, <?= auth() ? auth()->name : 'Visitante' ?>
+      <div class="flex items-center gap-2 pr-3 border-r border-gray-3">
+        <span class="text-gray-6 text-sm leading-[160%] capitalize flex items-center gap-3">Olá,
+          <?= auth() ? auth()->name : 'Visitante' ?>
+          <?php if (auth() && (auth()->elo ?? null)): ?>
+            <img src="/assets/images/elos/<?= strtolower(auth()->elo) ?>.png" alt="Elo" class="w-8 h-8"
+              title="Elo: <?= ucfirst(strtolower(auth()->elo)) ?>">
+          <?php endif; ?>
         </span>
 
-        <?php if (auth()) : ?>
-          <a href="/profile" title="Abrir perfil" class="relative rounded-md w-9 h-9 overflow-hidden border border-[#7435DB] bg-gray-3">
-            <img src="<?= (auth()->avatar && auth()->avatar !== 'avatarDefault.png') ? auth()->avatar : '/assets/images/avatares/avatarDefault.png' ?>" alt="Avatar" class="w-full h-full object-cover">
+        <?php if (auth()): ?>
+          <a href="/profile" title="Abrir perfil"
+            class="relative rounded-md w-9 h-9 overflow-hidden border border-[#7435DB] bg-gray-3">
+            <img
+              src="<?= (auth()->avatar && auth()->avatar !== 'avatarDefault.png') ? auth()->avatar : '/assets/images/avatares/avatarDefault.png' ?>"
+              alt="Avatar" class="w-full h-full object-cover">
           </a>
-        <?php else : ?>
-          <a href="/login" title="Fazer login" class="relative rounded-md w-9 h-9 overflow-hidden border border-gray-3 bg-gray-3">
+        <?php else: ?>
+          <a href="/login" title="Fazer login"
+            class="relative rounded-md w-9 h-9 overflow-hidden border border-gray-3 bg-gray-3">
             <img src="/assets/images/avatares/avatarDefault.png" alt="Avatar" class="w-full h-full object-cover">
           </a>
         <?php endif; ?>

@@ -17,9 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         if ($action === 'update_info') {
-            // Atualizar nome e email
+            // Atualizar nome, email e elo
             $name = trim($_POST['name'] ?? '');
             $email = trim($_POST['email'] ?? '');
+            $elo = strtolower(trim($_POST['elo'] ?? ''));
+
+            $allowedElos = ['ferro','bronze','prata','ouro','platina','diamante','ascendente','imortal','radiante'];
 
             // Validação simples
             $errors = [];
@@ -29,10 +32,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors[] = 'Informe um email válido.';
             }
+            if ($elo === '' || !in_array($elo, $allowedElos, true)) {
+                $errors[] = 'Selecione um elo válido.';
+            }
 
             if (!empty($errors)) {
                 flash()->put('error', implode(' ', $errors));
-                flash()->put('formData', ['name' => $name, 'email' => $email]);
+                flash()->put('formData', ['name' => $name, 'email' => $email, 'elo' => $elo]);
                 header('Location: /profile');
                 exit();
             }
@@ -44,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $existing = User::getByEmail($email);
                 if ($existing && (int)$existing->id !== (int)$user_id) {
                     flash()->put('error', 'Este e-mail já está em uso.');
-                    flash()->put('formData', ['name' => $name, 'email' => $email]);
+                    flash()->put('formData', ['name' => $name, 'email' => $email, 'elo' => $elo]);
                     header('Location: /profile');
                     exit();
                 }
@@ -56,9 +62,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'avatar' => $currentUser->avatar ?? 'avatarDefault.png'
             ]);
 
+            // Atualizar elo
+            $updatedEloUser = $userModel->updateElo($user_id, $elo);
+
             if ($updated && isset($_SESSION['auth'])) {
                 $_SESSION['auth']->name = $updated->name;
                 $_SESSION['auth']->email = $updated->email;
+            }
+            if ($updatedEloUser && isset($_SESSION['auth'])) {
+                $_SESSION['auth']->elo = $updatedEloUser->elo;
             }
 
             flash()->put('message', 'Dados do perfil atualizados com sucesso!');

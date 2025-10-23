@@ -71,9 +71,15 @@ $formData = flash()->get("formData")["comentario"] ?? '';
         <div class="flex items-center gap-3 mt-3">
           <span class="text-gray-6 font-nunito"><span class="font-bold">Postado por:</span></span>
           <?php if (isset($author) && $author): ?>
-            <img
-              src="<?= ($author->avatar && $author->avatar !== 'avatarDefault.png') ? $author->avatar : '/assets/images/avatares/avatarDefault.png' ?>"
-              alt="Avatar do autor" class="w-8 h-8 rounded-md border border-[#7435DB]">
+            <div class="relative w-8 h-8">
+              <img
+                src="<?= ($author->avatar && $author->avatar !== 'avatarDefault.png') ? $author->avatar : '/assets/images/avatares/avatarDefault.png' ?>"
+                alt="Avatar do autor" class="w-8 h-8 rounded-md border border-[#7435DB]">
+              <?php if (!empty($author->elo)): ?>
+                <img src="/assets/images/elos/<?= htmlspecialchars($author->elo) ?>.png" alt="Elo do autor"
+                  class="absolute -bottom-1 -right-2 w-5 h-5 rounded-full border border-gray-3 bg-gray-2">
+              <?php endif; ?>
+            </div>
             <span class="text-gray-7 font-rajdhani font-bold capitalize"><?= $author->name ?></span>
           <?php else: ?>
             <span class="text-gray-6 font-nunito">Usuário desconhecido</span>
@@ -156,9 +162,15 @@ $formData = flash()->get("formData")["comentario"] ?? '';
       <?php foreach ($ratings as $rating): ?>
         <article class="flex gap-12 p-8 rounded-xl bg-gray-2">
           <div class="flex gap-4 w-[216px]">
-            <img
-              src="<?= ($rating->user_avatar && $rating->user_avatar !== 'avatarDefault.png') ? $rating->user_avatar : '/assets/images/avatares/avatarDefault.png' ?>"
-              alt="Avatar perfil" class="w-12 h-12 rounded-md border border-[#7435DB]">
+            <div class="relative w-12 h-12">
+              <img
+                src="<?= ($rating->user_avatar && $rating->user_avatar !== 'avatarDefault.png') ? $rating->user_avatar : '/assets/images/avatares/avatarDefault.png' ?>"
+                alt="Avatar perfil" class="w-12 h-12 rounded-md border border-[#7435DB]">
+              <?php if (!empty($rating->user_elo)): ?>
+                <img src="/assets/images/elos/<?= htmlspecialchars($rating->user_elo) ?>.png" alt="Elo do usuário"
+                  class="absolute -bottom-2 -right-3 w-7 h-7 rounded-full border border-gray-3 bg-gray-2">
+              <?php endif; ?>
+            </div>
 
             <div>
               <h3 class="text-gray-7 font-bold font-rajdhani capitalize">

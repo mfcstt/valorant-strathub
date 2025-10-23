@@ -55,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userSession->name = $user->name;
         $userSession->email = $user->email;
         $userSession->avatar = $user->avatar;
+        $userSession->elo = $user->elo ?? 'ferro';
         $userSession->created_at = $user->created_at;
         $userSession->updated_at = $user->updated_at;
         
