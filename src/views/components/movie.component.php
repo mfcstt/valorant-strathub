@@ -8,10 +8,7 @@ $formData = flash()->get("formData")["comentario"] ?? '';
 <div class="modalBlur w-full h-full">
   <!-- Infos do Filme -->
   <section class="relative min-h-[618px] flex items-start justify-center">
-    <!-- Background imagem -->
-    <div
-      class="absolute z-[-1] w-full h-full bg-[url(<?= $movie->cover_image_url ?: '/assets/images/thumb.png' ?>)] bg-center bg-cover opacity-[5%] shadingThumb">
-    </div>
+    <!-- Background imagem removida -->
 
     <article class="flex gap-12">
       <div class="w-96">

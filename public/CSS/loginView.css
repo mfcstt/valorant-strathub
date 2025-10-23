@@ -1,20 +1,21 @@
 /* Checked e Focus dos botões da tela de Login e Cadastro */
 .checkbox:focus ~ label {
-  outline: 2px solid #E55566;
+  outline: 2px solid #e55566;
 }
 
 .checkbox:checked ~ label {
-  color: #F77980;
+  color: #f77980;
   background-color: #1a1b2d;
 }
 
 /* Animação para alterar os containers Login e Cadastro */
-#login {
-  transition: all 0.2s ease-in-out;
+#login, #register {
+  transition: opacity 0.4s ease-in-out;
+  opacity: 1;
 }
 
-#login.disabled {
-  margin-left: -665px;
+#login.disabled, #register.disabled {
+  opacity: 0;
 }
 
 #message {

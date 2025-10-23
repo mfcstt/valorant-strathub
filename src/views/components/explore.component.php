@@ -1,5 +1,5 @@
 <div class="px-4 md:px-8 lg:px-16 xl:px-24 pt-16 pb-5"> 
-  <form class="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8" method="post" novalidate>
+  <form class="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8" method="get" novalidate>
     <h1 class="font-rammetto text-2xl text-[#E5E2E9]">Explorar Estratégias</h1>
 
     <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto relative">
