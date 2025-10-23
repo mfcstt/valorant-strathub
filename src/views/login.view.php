@@ -16,7 +16,7 @@ if (flash()->get('validations_login') ?? []) {
 <section class="h-full flex p-4">
   <!-- Thumb -->
   <div class="flex flex-col justify-between w-2/4 p-8 rounded-[18px] bg-thumb bg-cover bg-no-repeat">
-  </div
+  </div>
 
   <!-- Forms -->
   <div class="w-2/4 text-gray-5 pt-[135px]">
@@ -43,7 +43,7 @@ if (flash()->get('validations_login') ?? []) {
         </div>
       </header>
 
-      <div class="flex justify-center gap-80 ml-4 overflow-hidden">
+      <div class="flex justify-center gap-80 overflow-hidden">
         <!-- Login -->
         <section id="login" class="text-center w-[328px] <?php if (isset($formRegister)) echo 'hidden disabled'; ?> ">
           <h1 class="w-[328px] mt-[52px] mb-5 text-2xl text-gray-7 text-start font-rammetto">Acesse sua conta</h1>
@@ -79,7 +79,7 @@ if (flash()->get('validations_login') ?? []) {
 
       <!-- Entrar como visitante -->
       <div class="mt-8 w-[328px] mx-auto text-center">
-        <a href="/guest" class="inline-flex items-center gap-2 px-5 py-3 rounded-md text-gray-7 bg-gray-3 outline-none hover:bg-gray-2 focus:outline-red-base transition-all duration-300">
+        <a href="/guest" class="flex w-full items-center justify-center gap-2 px-5 py-3 rounded-md bg-gray-3 text-gray-7 outline-none hover:bg-gray-2 focus:outline-red-base transition-all duration-300">
           <i class="ph ph-eye text-xl"></i>
           Entrar como visitante
         </a>

@@ -12,20 +12,26 @@ if (!auth()) {
 $search = $_REQUEST['pesquisar'] ?? '';
 $order = $_REQUEST['ordenar'] ?? 'recentes';
 
-$estrategias = $search ? Estrategia::all($search) : Estrategia::myEstrategias(auth()->id);
+$filter_agent = $_REQUEST['filtro_agente'] ?? '';
+$filter_map = $_REQUEST['filtro_mapa'] ?? '';
+$filter_category = $_REQUEST['filtro_categoria'] ?? '';
+
+$agents = Agent::all();
+$maps = Map::all();
+$categories = ['defesa', 'ataque', 'pós plant', 'retake'];
+
+$estrategias = Estrategia::filter($search, $filter_agent ?: null, $filter_map ?: null, $filter_category ?: null, auth()->id);
 
 // Ordenação dinâmica conforme seleção do usuário
 if (is_array($estrategias)) {
     usort($estrategias, function($a, $b) use ($order) {
         switch ($order) {
             case 'mais_avaliadas':
-                // Mais avaliações primeiro; desempate por maior média
                 if ($a->ratings_count === $b->ratings_count) {
                     return $b->rating_average <=> $a->rating_average;
                 }
                 return $b->ratings_count <=> $a->ratings_count;
             case 'recentes':
-                // Mais recentes primeiro; desempate por maior média
                 $aTime = strtotime($a->created_at);
                 $bTime = strtotime($b->created_at);
                 if ($aTime === $bTime) {
@@ -33,14 +39,12 @@ if (is_array($estrategias)) {
                 }
                 return $bTime <=> $aTime;
             case 'menos_estrelas':
-                // Menor média primeiro; desempate por menos avaliações
                 if ($a->rating_average === $b->rating_average) {
                     return $a->ratings_count <=> $b->ratings_count;
                 }
                 return $a->rating_average <=> $b->rating_average;
             case 'mais_estrelas':
             default:
-                // Maior média primeiro; desempate por mais avaliações
                 if ($a->rating_average === $b->rating_average) {
                     return $b->ratings_count <=> $a->ratings_count;
                 }
@@ -49,4 +53,4 @@ if (is_array($estrategias)) {
     });
 }
 
-view("app", compact('estrategias', 'search', 'order'), "myStrategy");
+view("app", compact('estrategias', 'search', 'order', 'agents', 'maps', 'categories', 'filter_agent', 'filter_map', 'filter_category'), "myStrategy");

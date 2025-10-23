@@ -83,6 +83,48 @@
     <?php unset($_SESSION["flash_message"]); ?>
   <?php endif; ?>
 
+  <?php if ($error = flash()->get('error')): ?>
+    <div id="error" class="fixed bottom-8 right-[-400px] z-10 w-max flex flex-col pb-1 px-1 text-white border border-red-base rounded-md bg-gray-1">
+      <div class="flex items-center gap-2 px-8 pt-4 pb-3">
+        <i class="ph ph-warning text-red-base text-2xl"></i>
+        <span class="text-lg"><?= $error ?></span>
+      </div>
+
+      <div class="w-full h-0.5 bg-gray-3 rounded-xl">
+        <div class="progress-error h-full bg-red-light"></div>
+      </div>
+    </div>
+
+    <script>
+      function errorToast() {
+        const msg = document.getElementById("error");
+        const progress = document.querySelector(".progress-error");
+
+        setTimeout(() => { msg.style.right = "32px"; }, 200);
+
+        let containerWidth = msg.offsetWidth - 8;
+        let count = 4;
+        let x = (containerWidth / 100) * count;
+
+        const loading = setInterval(animate, 50);
+        function animate() {
+          if (count == 100) {
+            clearInterval(loading);
+          } else {
+            x += containerWidth / 100;
+            count++;
+            progress.style.width = `${Math.trunc(x)}px`;
+          }
+        }
+
+        setTimeout(() => { msg.style.right = "-400px"; }, 4700);
+      }
+      document.addEventListener("DOMContentLoaded", errorToast);
+    </script>
+    
+    <?php unset($_SESSION["flash_error"]); ?>
+  <?php endif; ?>
+
   <script src="/JS/globalScripts.js" defer></script>
   <script src="/JS/<?= $view ?>ViewScripts.js" defer></script>
 </body>

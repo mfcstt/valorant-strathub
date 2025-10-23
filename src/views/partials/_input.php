@@ -11,8 +11,12 @@ if ($name != 'pesquisar' && !$validationsMessages) {
   $formData = [];
 }
 
+// Determina o valor do input a partir do flash ou da requisição
+$valueRaw = $formData[$name] ?? ($_REQUEST[$name] ?? '');
+$value = is_string($valueRaw) ? $valueRaw : '';
+
 // Ativar o botão de limpar o campo se campo estiver preenchido
-$hidden = ($formData[$name] ?? '') ? '' : 'hidden';
+$hidden = ($value !== '') ? '' : 'hidden';
 ?>
 
 <div>
@@ -21,7 +25,7 @@ $hidden = ($formData[$name] ?? '') ? '' : 'hidden';
       type="<?= $type ?>"
       name="<?= $name ?>"
       placeholder="<?= $placeholder ?>"
-      value="<?= htmlspecialchars($formData[$name] ?? '') ?>"
+      value="<?= htmlspecialchars($value) ?>"
       class="
         inpForm 
         <?php if ((!isset($validationsMessages["$name"]) && !isset($sessionLoginValidations)) || $name == 'pesquisar') echo 'valid'; ?>
@@ -44,8 +48,8 @@ $hidden = ($formData[$name] ?? '') ? '' : 'hidden';
       icon text-xl absolute left-4 pointer-events-none">
     </i>
 
-    <button type="button" class=" <?= $hidden ?> cleanBtn flex absolute right-4 text-gray-4 hover:text-red-base outline-none focus:text-red-base cursor-pointer" />
-    <i class="ph-fill ph-x-circle text-xl"></i>
+    <button type="button" class=" <?= $hidden ?> cleanBtn flex absolute right-4 text-gray-4 hover:text-red-base outline-none focus:text-red-base cursor-pointer">
+      <i class="ph-fill ph-x-circle text-xl"></i>
     </button>
   </div> 
 
