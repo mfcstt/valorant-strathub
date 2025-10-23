@@ -14,6 +14,7 @@ $ratings = $database->query(
         r.*, 
         u.name as user_name, 
         u.avatar as user_avatar, 
+        u.elo as user_elo,
         (SELECT COUNT(*) FROM ratings countR WHERE countR.user_id = r.user_id) AS rated_movies
      FROM ratings r
      LEFT JOIN users u ON u.id = r.user_id

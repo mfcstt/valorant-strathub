@@ -70,6 +70,29 @@ if (flash()->get('validations_login') ?? []) {
               <?php input('email', 'email', 'E-mail', 'ph ph-envelope', $formRegister); ?>
 
               <?php input('password', 'senha', 'Senha', 'ph ph-password', $formRegister); ?>
+
+              <?php 
+                $selectedElo = '';
+                if (isset($formRegister)) {
+                  $fd = flash()->get('formData') ?? [];
+                  $selectedElo = strtolower(trim($fd['elo'] ?? ''));
+                }
+                $elos = ['ferro','bronze','prata','ouro','platina','diamante','ascendente','imortal','radiante'];
+                $iconClass = 'ph ph-shield-star';
+                $validationsRegister = flash()->get('validations_register') ?? [];
+              ?>
+              <div class="relative flex items-center">
+                <i class="<?= $iconClass ?> text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Elo"></i>
+                <select name="elo" class="inpForm pl-10 w-full">
+                  <option value="" <?= $selectedElo === '' ? 'selected' : '' ?>>Selecione seu elo</option>
+                  <?php foreach ($elos as $e): ?>
+                    <option value="<?= $e ?>" <?= $selectedElo === $e ? 'selected' : '' ?>><?= ucfirst($e) ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <?php if (!empty($validationsRegister['elo'] ?? [])): ?>
+                <p class="text-red-base text-sm text-start"><?= implode('<br>', $validationsRegister['elo']) ?></p>
+              <?php endif; ?>
             </div>
 
             <button type="submit" class="submit w-full mt-8 px-5 py-3 rounded-md bg-red-base text-white hover:bg-red-light hover:shadow-buttonHover focus:bg-red-light focus:shadow-buttonHover outline-none">Criar</button>

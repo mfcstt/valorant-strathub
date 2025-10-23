@@ -6,6 +6,7 @@ class User {
     public $email;
     public $password;
     public $avatar;
+    public $elo;
     public $created_at;
     public $updated_at;
 
@@ -18,7 +19,7 @@ class User {
     // Consulta genérica
     public function query($where = '1=1', $params = []) {
         return $this->database->query(
-            "SELECT id, name, email, password, avatar, created_at, updated_at
+            "SELECT id, name, email, password, avatar, elo, created_at, updated_at
              FROM users
              WHERE $where",
             self::class,
@@ -46,22 +47,23 @@ class User {
     // Criar novo usuário
     public function create($data) {
         $stmt = $this->database->prepare(
-            "INSERT INTO users (name, email, password, avatar) 
-             VALUES (:name, :email, :password, :avatar)
+            "INSERT INTO users (name, email, password, avatar, elo) 
+             VALUES (:name, :email, :password, :avatar, :elo)
              RETURNING *"
         );
         $stmt->execute([
             ':name' => $data['name'],
             ':email' => $data['email'],
             ':password' => $data['password'], // já hash, se necessário
-            ':avatar' => $data['avatar'] ?? 'avatarDefault.png'
+            ':avatar' => $data['avatar'] ?? 'avatarDefault.png',
+            ':elo' => $data['elo'] ?? 'ferro',
         ]);
 
         $result = $stmt->fetchAll(PDO::FETCH_CLASS, self::class);
         return $result[0] ?? null;
     }
 
-    // Atualizar usuário
+    // Atualizar usuário (nome/email/avatar)
     public function update($id, $data) {
         // Executa o UPDATE usando a API de query do Database
         $this->database->query(
@@ -79,7 +81,7 @@ class User {
 
         // Busca o usuário atualizado
         return $this->database->fetchOne(
-            "SELECT id, name, email, password, avatar, created_at, updated_at
+            "SELECT id, name, email, password, avatar, elo, created_at, updated_at
              FROM users WHERE id = :id",
             self::class,
             [':id' => $id]
@@ -98,7 +100,25 @@ class User {
         );
     
         return $this->database->fetchOne(
-            "SELECT id, name, email, password, avatar, created_at, updated_at
+            "SELECT id, name, email, password, avatar, elo, created_at, updated_at
+             FROM users WHERE id = :id",
+            self::class,
+            [':id' => $id]
+        );
+    }
+
+    public function updateElo($id, $elo) {
+        $this->database->query(
+            "UPDATE users SET elo = :elo WHERE id = :id",
+            null,
+            [
+                ':elo' => $elo,
+                ':id' => $id,
+            ]
+        );
+
+        return $this->database->fetchOne(
+            "SELECT id, name, email, password, avatar, elo, created_at, updated_at
              FROM users WHERE id = :id",
             self::class,
             [':id' => $id]
