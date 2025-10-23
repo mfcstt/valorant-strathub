@@ -85,4 +85,31 @@ class User {
             [':id' => $id]
         );
     }
+
+    public function updatePassword($id, $plainPassword) {
+        $hashed = password_hash($plainPassword, PASSWORD_BCRYPT);
+        $this->database->query(
+            "UPDATE users SET password = :password WHERE id = :id",
+            null,
+            [
+                ':password' => $hashed,
+                ':id' => $id
+            ]
+        );
+    
+        return $this->database->fetchOne(
+            "SELECT id, name, email, password, avatar, created_at, updated_at
+             FROM users WHERE id = :id",
+            self::class,
+            [':id' => $id]
+        );
+    }
+
+    public function delete($id) {
+        $this->database->query(
+            "DELETE FROM users WHERE id = :id",
+            null,
+            [':id' => $id]
+        );
+    }
 }
