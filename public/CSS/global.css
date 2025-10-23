@@ -136,7 +136,7 @@
 /* Select dropdown (dark theme) */
 select.inpForm {
   background-color: transparent;
-  color: #1a1b2d; /* texto escuro para legibilidade em box branca */
+  color: #e4e5ec; /* texto claro para legibilidade em caixa de fundo escuro */
   border: 1px solid #1a1b2d;
   padding: 0.75rem 2.5rem 0.75rem 2.75rem; /* mais espaço à direita para a seta */
   -webkit-appearance: none;
