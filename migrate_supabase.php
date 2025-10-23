@@ -173,7 +173,7 @@ try {
     // ----------------------
     $agents = [
         ['Brimstone', 'brim.png'],
-        ['Cypher', 'chypher.png'],
+        ['Cypher', 'cypher.png'],
         ['Jett', 'jett.png'],
         ['Killjoy', 'killjoy.png'],
         ['Omen', 'omen.png'],

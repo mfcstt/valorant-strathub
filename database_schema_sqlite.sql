@@ -80,17 +80,34 @@ CREATE TABLE IF NOT EXISTS ratings (
 
 -- Inserir agentes padrão
 INSERT OR IGNORE INTO agents (name, photo) VALUES
-('Brimstone', 'brim.png'),
-('Cypher', 'chypher.png'),
+('Astra', 'astra.png'),
+('Breach', 'breach.png'),
+('Brimstone', 'brimstone.png'),
+('Chamber', 'chamber.png'),
+('Clove', 'clove.png'),
+('Cypher', 'cypher.png'),
+('Deadlock', 'deadlock.png'),
+('Fade', 'fade.png'),
+('Gekko', 'gekko.png'),
+('Harbor', 'harbor.png'),
+('Iso', 'iso.png'),
 ('Jett', 'jett.png'),
+('KAY/O', 'kayo.png'),
 ('Killjoy', 'killjoy.png'),
+('Neon', 'neon.png'),
 ('Omen', 'omen.png'),
 ('Phoenix', 'phoenix.png'),
 ('Raze', 'raze.png'),
 ('Reyna', 'reyna.png'),
 ('Sage', 'sage.png'),
+('Skye', 'skye.png'),
 ('Sova', 'sova.png'),
-('Viper', 'viper.png');
+('Tejo', 'tejo.png'),
+('Veto', 'veto.png'),
+('Viper', 'viper.png'),
+('Vyse', 'vyse.png'),
+('Waylay', 'waylay.png'),
+('Yoru', 'yoru.png');
 
 -- Índices para melhor performance
 CREATE INDEX IF NOT EXISTS idx_images_user_id ON images(user_id);

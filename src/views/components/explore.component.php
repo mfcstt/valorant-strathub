@@ -39,34 +39,43 @@
 
       <div id="filtersPanelExplore" class="hidden absolute top-full right-0 z-50 w-[92vw] max-w-md p-4 rounded-md bg-gray-3 border border-gray-4 shadow-xl">
         <div class="flex flex-col gap-4">
-          <div class="w-full relative flex items-center">
-            <i class="ph ph-tag text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Categoria"></i>
-            <select name="filtro_categoria" class="inpForm pl-10 w-full">
-              <option value="" <?= empty($filter_category ?? '') ? 'selected' : '' ?>>Todas categorias</option>
-              <?php foreach ($categories as $cat): ?>
-                <option value="<?= $cat ?>" <?= ($filter_category ?? '') === $cat ? 'selected' : '' ?>><?= ucfirst($cat) ?></option>
-              <?php endforeach; ?>
-            </select>
+          <div class="w-full">
+            <label class="block text-gray-7 font-nunito text-sm mb-2">Por categoria</label>
+            <div class="relative flex items-center">
+              <i class="ph ph-tag text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Categoria"></i>
+              <select name="filtro_categoria" class="inpForm pl-10 w-full">
+                <option value="" <?= empty($filter_category ?? '') ? 'selected' : '' ?>>Todas categorias</option>
+                <?php foreach ($categories as $cat): ?>
+                  <option value="<?= $cat ?>" <?= ($filter_category ?? '') === $cat ? 'selected' : '' ?>><?= ucfirst($cat) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
           </div>
 
-          <div class="w-full relative flex items-center">
-            <i class="ph ph-user text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Agente"></i>
-            <select name="filtro_agente" class="inpForm pl-10 w-full">
-              <option value="" <?= empty($filter_agent ?? '') ? 'selected' : '' ?>>Todos agentes</option>
-              <?php foreach ($agents as $agent): ?>
-                <option value="<?= $agent->id ?>" <?= ($filter_agent ?? '') == $agent->id ? 'selected' : '' ?>><?= $agent->name ?></option>
-              <?php endforeach; ?>
-            </select>
+          <div class="w-full">
+            <label class="block text-gray-7 font-nunito text-sm mb-2">Por agente</label>
+            <div class="relative flex items-center">
+              <i class="ph ph-user text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Agente"></i>
+              <select name="filtro_agente" class="inpForm pl-10 w-full">
+                <option value="" <?= empty($filter_agent ?? '') ? 'selected' : '' ?>>Todos agentes</option>
+                <?php foreach ($agents as $agent): ?>
+                  <option value="<?= $agent->id ?>" <?= ($filter_agent ?? '') == $agent->id ? 'selected' : '' ?>><?= $agent->name ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
           </div>
 
-          <div class="w-full relative flex items-center">
-            <i class="ph ph-mappin text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Mapa"></i>
-            <select name="filtro_mapa" class="inpForm pl-10 w-full">
-              <option value="" <?= empty($filter_map ?? '') ? 'selected' : '' ?>>Todos mapas</option>
-              <?php foreach ($maps as $map): ?>
-                <option value="<?= $map->id ?>" <?= ($filter_map ?? '') == $map->id ? 'selected' : '' ?>><?= $map->name ?></option>
-              <?php endforeach; ?>
-            </select>
+          <div class="w-full">
+            <label class="block text-gray-7 font-nunito text-sm mb-2">Por mapa</label>
+            <div class="relative flex items-center">
+              <i class="ph ph-map-trifold text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Mapa"></i>
+              <select name="filtro_mapa" class="inpForm pl-10 w-full">
+                <option value="" <?= empty($filter_map ?? '') ? 'selected' : '' ?>>Todos mapas</option>
+                <?php foreach ($maps as $map): ?>
+                  <option value="<?= $map->id ?>" <?= ($filter_map ?? '') == $map->id ? 'selected' : '' ?>><?= $map->name ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
           </div>
 
           <div class="flex flex-wrap items-center gap-3">
