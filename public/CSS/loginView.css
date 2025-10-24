@@ -21,3 +21,6 @@
 #message {
   transition: all 0.5s ease-in-out;
 }
+#error {
+  transition: all 0.5s ease-in-out;
+}

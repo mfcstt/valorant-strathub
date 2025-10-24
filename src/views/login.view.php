@@ -13,13 +13,13 @@ if (flash()->get('validations_login') ?? []) {
 ?>
 
 <!-- Login e Cadastro-->
-<section class="min-h-screen flex p-4">
+<section class="min-h-screen flex p-4 md:items-stretch md:justify-start items-center justify-center">
   <!-- Thumb -->
-  <div class="flex flex-col justify-between w-2/4 p-8 rounded-[18px] bg-thumb bg-cover bg-no-repeat bg-center">
+  <div class="hidden md:flex md:flex-col justify-between md:w-2/4 md:h-full p-8 rounded-[18px] bg-thumb bg-cover bg-no-repeat bg-center">
   </div>
 
   <!-- Forms -->
-  <div class="w-2/4 text-gray-5 pt-[135px]">
+  <div class="w-full md:w-2/4 text-gray-5 md:pt-[135px] pt-0 flex items-center justify-center">
     <div class="flex flex-col font-nunito">
       <header class="flex gap-1 w-[328px] mx-auto p-1 rounded-[10px] bg-gray-2 text-center">
         <div class="relative flex-1 rounded-md">
@@ -43,7 +43,7 @@ if (flash()->get('validations_login') ?? []) {
         </div>
       </header>
 
-      <div class="flex justify-center gap-80 overflow-hidden">
+      <div class="flex justify-center md:gap-80 gap-0 overflow-hidden">
         <!-- Login -->
         <section id="login" class="text-center w-[328px] <?php if (isset($formRegister)) echo 'hidden disabled'; ?> ">
           <h1 class="w-[328px] mt-[52px] mb-5 text-2xl text-gray-7 text-start font-rammetto">Acesse sua conta</h1>

@@ -31,6 +31,7 @@ $hidden = ($value !== '') ? '' : 'hidden';
         <?php if ((!isset($validationsMessages["$name"]) && !isset($sessionLoginValidations)) || $name == 'pesquisar') echo 'valid'; ?>
         <?php if ($type == 'number') echo 'no-spinner'; ?>
       "
+      <?= $name === 'titulo' ? 'maxlength="100"' : '' ?>
       required />
     <i class="
       <?php
