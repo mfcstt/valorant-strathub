@@ -13,7 +13,7 @@ Este guia cobre o setup local e a migração das imagens do armazenamento local 
 ## Migração de Banco (Postgres)
 - Para criar tabelas e índices no Postgres:
   ```bash
-  php migrate_supabase.php
+  php scripts/migrate_supabase.php
   ```
 
 ## Migração de Imagens para Supabase
@@ -22,7 +22,7 @@ Este guia cobre o setup local e a migração das imagens do armazenamento local 
    - Políticas: leitura pública (recomendado) ou conforme sua necessidade
 2. Execute a migração de imagens locais:
    ```bash
-   php migrate_images_to_supabase.php
+   php scripts/migrate_images_to_supabase.php
    ```
    O script irá:
    - Criar a tabela `images` se necessário
