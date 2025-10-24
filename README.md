@@ -28,13 +28,20 @@ Aplicação PHP simples para cadastro e exploração de estratégias de Valorant
   Acesse `http://localhost:8000`.
 
 ## Migrações
-- `migrate_supabase.php`: cria tabelas e índices no Postgres.
-- `migrate_images_to_supabase.php`: migra imagens locais para o Supabase Storage e associa à tabela `images`.
+- `scripts/migrate_supabase.php`: cria tabelas e índices no Postgres.
+- `scripts/migrate_images_to_supabase.php`: migra imagens locais para o Supabase Storage e associa à tabela `images`.
+- Execute via CLI a partir da raiz do projeto:
+  ```bash
+  php scripts/migrate_supabase.php
+  php scripts/migrate_images_to_supabase.php
+  ```
 - Consulte `MIGRATION_GUIDE.md` para detalhes.
 
 ## Segurança
 - Nunca faça commit de `.env` ou segredos. O repositório contém `.env.example` com placeholders.
 - `.gitignore` foi configurado para ignorar `.env`, `vendor/`, `public/database.sqlite` e artefatos locais.
+- Use `APP_DEBUG` no `.env` para controlar logs e utilitários (padrão `false`); não habilite em produção.
+- Scripts de utilidade residem em `scripts/` e devem ser executados via CLI; não exponha via navegador.
 
 ## Estrutura
 - `src/models`: modelos (Estrategia, Image, etc.)
@@ -42,6 +49,7 @@ Aplicação PHP simples para cadastro e exploração de estratégias de Valorant
 - `src/controllers`: controladores das rotas
 - `src/views`: templates e componentes
 - `public`: assets, index e servidor local
+- `scripts`: utilitários de migração, debug e verificação (execução via CLI)
 
 ## Suporte
 Problemas ou dúvidas? Abra uma issue no GitHub após subir o repositório.
