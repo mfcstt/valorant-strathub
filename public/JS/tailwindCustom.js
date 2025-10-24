@@ -23,7 +23,7 @@ tailwind.config = {
         'nunito': ["Nunito Sans", "sans-serif"],
       },
       backgroundImage: {
-        'thumb': "url('assets/images/thumb.png')",
+        'thumb': "url('/assets/images/thumb.png')",
       },
       boxShadow: {
         'buttonHover': '0px 15px 6px #E5556605, 0px 9px 5px #E5556614, 0px 4px 4px #E5556621, 0px 1px 2px #E5556626',

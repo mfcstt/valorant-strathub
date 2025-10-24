@@ -15,7 +15,7 @@ if (flash()->get('validations_login') ?? []) {
 <!-- Login e Cadastro-->
 <section class="min-h-screen flex p-4 md:items-stretch md:justify-start items-center justify-center">
   <!-- Thumb -->
-  <div class="hidden md:flex md:flex-col justify-between md:w-2/4 md:h-full p-8 rounded-[18px] bg-thumb bg-cover bg-no-repeat bg-center">
+  <div class="hidden md:flex md:flex-col justify-between md:w-2/4 md:min-h-screen p-8 rounded-[18px] bg-thumb bg-cover bg-no-repeat bg-center">
   </div>
 
   <!-- Forms -->
