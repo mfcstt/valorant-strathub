@@ -7,58 +7,68 @@ $formData = flash()->get("formData")["comentario"] ?? '';
 
 <div class="modalBlur w-full h-full">
   <!-- Infos do Filme -->
-  <section class="relative min-h-[618px] flex items-start justify-center">
-    <!-- Background imagem removida -->
-
-    <article class="flex gap-12">
-      <div class="w-96">
-        <?php if ($movie->cover_image_url): ?>
-          <img src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia"
-            class="w-full h-96 object-cover rounded-[18px]">
-        <?php elseif ($movie->video_url): ?>
-          <div class="relative w-full h-96 bg-gray-800 rounded-[18px] overflow-hidden">
-            <video controls class="w-full h-full object-cover" preload="metadata" playsinline>
-              <source src="<?= $movie->video_url ?>" type="video/mp4">
-              <source src="<?= $movie->video_url ?>" type="video/webm">
-              <source src="<?= $movie->video_url ?>" type="video/ogg">
-              Seu navegador não suporta a reprodução de vídeos.
-            </video>
-            <?php if ($movie->video_duration): ?>
-              <div class="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
-                <?= $movie->video_duration ?>
-              </div>
-            <?php endif; ?>
-          </div>
-        <?php else: ?>
-          <div class="w-full h-96 bg-gray-800 flex items-center justify-center rounded-[18px]">
-            <span class="text-gray-500">Sem imagem</span>
-          </div>
-        <?php endif; ?>
-      </div>
-
-      <div class="w-[644px]">
+  <section class="relative min-h-[618px] flex items-start justify-center px-4 md:px-0">
+    <article class="flex flex-col md:flex-row gap-6 md:gap-12 w-full max-w-[1366px]">
+      <div class="w-full lg:hidden mb-4">
         <div class="flex items-center justify-between">
-          <button type="button"
-            class="flex items-center gap-2 text-gray-5 font-nunito outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300"
-            onclick="window.history.back()">
-            <i class="ph ph-arrow-left text-xl"></i> Voltar
-          </button>
+          <a href="/explore" class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
+            <i class="ph ph-caret-left text-xl"></i>
+            Voltar
+          </a>
 
-          <?php if (auth() && auth()->id === $movie->user_id): ?>
-            <form id="delete-form-<?= $movie->id ?>" method="post" action="/strategy-delete" class="hidden">
-              <input type="hidden" name="estrategia_id" value="<?= $movie->id ?>">
+          <?php if (auth() && $author && auth()->id == $author->id): ?>
+            <form id="delete-form-<?= htmlspecialchars($movie->id) ?>" method="post" action="/strategy-delete" class="inline">
+              <input type="hidden" name="estrategia_id" value="<?= htmlspecialchars($movie->id) ?>">
+              <button type="submit" onclick="return confirm('Excluir esta estratégia? Esta ação é irreversível.')" class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
+                <i class="ph ph-trash text-xl"></i>
+                Excluir
+              </button>
             </form>
-            <button type="button"
-              class="flex items-center gap-2 px-3 py-1.5 bg-gray-1/80 border border-gray-3 rounded-md text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all ease-in-out duration-300"
-              onclick="if (confirm('Excluir esta estratégia? Esta ação é irreversível.')) document.getElementById('delete-form-<?= $movie->id ?>').submit();"
-              title="Excluir estratégia">
-              <i class="ph ph-trash text-base"></i>
-              <span class="text-sm font-nunito">Excluir</span>
-            </button>
           <?php endif; ?>
         </div>
 
-        <h1 class="mt-5 text-[2rem] text-gray-7 font-bold font-rajdhani"><?= $movie->title ?></h1>
+        <h1 class="text-[2rem] text-gray-7 font-bold font-rajdhani whitespace-normal break-all"><?= $movie->title ?></h1>
+      </div>
+      <div class="w-full md:w-96">
+         <div>
+           <?php if ($movie->cover_image_url): ?>
+             <img src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia" class="w-full h-56 sm:h-72 md:h-96 object-cover rounded-[18px]">
+           <?php elseif ($movie->video_url): ?>
+             <video controls class="w-full h-56 sm:h-72 md:h-96 object-cover rounded-[18px]" preload="metadata">
+               <source src="<?= $movie->video_url ?>" type="video/mp4">
+               <source src="<?= $movie->video_url ?>" type="video/webm">
+               <source src="<?= $movie->video_url ?>" type="video/ogg">
+               Seu navegador não suporta a reprodução de vídeos.
+             </video>
+           <?php else: ?>
+             <div class="w-full h-56 sm:h-72 md:h-96 bg-gray-800 flex items-center justify-center rounded-[18px]">
+               <span class="text-gray-500 text-xs">Sem imagem</span>
+             </div>
+           <?php endif; ?>
+         </div>
+
+
+      </div>
+
+      <div class="w-full md:w-[644px]">
+        <div class="hidden lg:flex items-center justify-between">
+          <a href="/explore" class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
+            <i class="ph ph-caret-left text-xl"></i>
+            Voltar
+          </a>
+
+          <?php if (auth() && $author && auth()->id == $author->id): ?>
+            <form id="delete-form-lg-<?= htmlspecialchars($movie->id) ?>" method="post" action="/strategy-delete" class="inline">
+              <input type="hidden" name="estrategia_id" value="<?= htmlspecialchars($movie->id) ?>">
+              <button type="submit" onclick="return confirm('Excluir esta estratégia? Esta ação é irreversível.')" class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
+                <i class="ph ph-trash text-xl"></i>
+                Excluir
+              </button>
+            </form>
+          <?php endif; ?>
+        </div>
+
+        <h1 class="hidden lg:block mt-5 text-[2rem] text-gray-7 font-bold font-rajdhani whitespace-normal break-all"><?= $movie->title ?></h1>
 
         <div class="text-gray-6 font-nunito leading-[160%] mt-4">
           <p><span class="font-bold">Categoria:</span> <?= $movie->category ?></p>
@@ -130,7 +140,7 @@ $formData = flash()->get("formData")["comentario"] ?? '';
           </p>
         </div>
 
-        <p class="mt-20 text-gray-6 leading-[160%] font-nunito">
+        <p class="mt-8 md:mt-20 text-gray-6 leading-[160%] font-nunito break-words">
           <?= $movie->description ?>
         </p>
       </div>
@@ -138,7 +148,7 @@ $formData = flash()->get("formData")["comentario"] ?? '';
   </section>
 
   <!-- Avaliações -->
-  <section class="px-4 px-[9.25rem] pt-20 pb-28">
+  <section class="px-4 md:px-[9.25rem] pt-12 md:pt-20 pb-20 md:pb-28">
     <div class="w-full flex justify-between items_center mb-10">
       <h2 class="font-rajdhani text-2xl font-bold text-[#E5E2E9] self-end">Avaliações</h2>
 
@@ -160,27 +170,32 @@ $formData = flash()->get("formData")["comentario"] ?? '';
     <!-- CARDS AVALIAÇÕES -->
     <div class="flex flex-col-reverse gap-3">
       <?php foreach ($ratings as $rating): ?>
-        <article class="flex gap-12 p-8 rounded-xl bg-gray-2">
-          <div class="flex gap-4 w-[216px]">
-            <div class="relative w-12 h-12">
+        <article class="relative p-6 md:p-8 rounded-xl bg-gray-2">
+          <!-- Nota (canto superior direito) -->
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 flex items-center gap-1.5 px-2.5 py-1 text-base md:text-xl text-gray-7 font-bold font-rajdhani bg-gray-3 rounded-md">
+            <p><?= $rating->rating ?> <span class="text-xs font-normal">/ 5</span></p>
+            <i class="ph-fill ph-star text-base text-red-light"></i>
+          </div>
+
+          <!-- Header: avatar + nome + estatísticas (lado esquerdo) -->
+          <div class="flex items-center gap-4">
+            <div class="relative w-12 h-12 shrink-0">
               <img
                 src="<?= ($rating->user_avatar && $rating->user_avatar !== 'avatarDefault.png') ? $rating->user_avatar : '/assets/images/avatares/avatarDefault.png' ?>"
-                alt="Avatar perfil" class="w-12 h-12 rounded-md border border-[#7435DB]">
+                alt="Avatar perfil" class="w-12 h-12 object-cover rounded-md border border-[#7435DB]">
               <?php if (!empty($rating->user_elo)): ?>
                 <img src="/assets/images/elos/<?= htmlspecialchars($rating->user_elo) ?>.png" alt="Elo do usuário"
                   class="absolute -bottom-2 -right-3 w-7 h-7 rounded-full border border-gray-3 bg-gray-2">
               <?php endif; ?>
             </div>
 
-            <div>
+            <div class="flex flex-col">
               <h3 class="text-gray-7 font-bold font-rajdhani capitalize">
                 <?= $rating->user_name ?>
                 <?php if (auth() && $rating->user_id == auth()->id): ?>
-                  <span
-                    class="px-1.5 ml-2 bg-red-base rounded-full text-xs font-bold font-nunito leading-[160%]">você</span>
+                  <span class="px-1.5 ml-2 bg-red-base rounded-full text-xs font-bold font-nunito leading-[160%]">você</span>
                 <?php endif; ?>
               </h3>
-
               <p class="text-gray-5 text-sm font-nunito leading-[160%] mt-1">
                 <?= $rating->rated_movies ?>
                 <?= $rating->rated_movies == 1 ? "estratégia avaliada" : "estratégias avaliadas" ?>
@@ -188,15 +203,10 @@ $formData = flash()->get("formData")["comentario"] ?? '';
             </div>
           </div>
 
-          <p class="flex-1 pl-12 border-l border-gray-3 text-gray-5 font-nunito leading-[160%]">
+          <!-- Comentário: destaque e largura total abaixo -->
+          <p class="mt-3 md:mt-4 text-gray-7 font-nunito leading-[170%] break-all">
             <?= $rating->comment ?>
           </p>
-
-          <div
-            class="flex items-center gap-1.5 self-start px-2.5 py-0.5 text-xl text-gray-7 font-bold font-rajdhani bg-gray-3 rounded-md">
-            <p><?= $rating->rating ?> <span class="text-xs font-normal">/ 5</span></p>
-            <i class="ph-fill ph-star text-base text-red-light"></i>
-          </div>
         </article>
       <?php endforeach; ?>
     </div>
@@ -232,7 +242,7 @@ $formData = flash()->get("formData")["comentario"] ?? '';
 <!-- MODAL AVALIAR -->
 <div>
   <dialog
-    class="modal fixed z-[10] inset-0 w-[600px] p-10 bg-gray-1 border border-gray-3 rounded-[18px] <?php if ($validationsMessages)
+    class="modal fixed z-[10] inset-0 w-[90vw] max-w-[600px] p-6 md:p-10 bg-gray-1 border border-gray-3 rounded-[18px] <?php if ($validationsMessages)
       echo 'open' ?>">
       <button
         class="closeModal absolute top-5 right-5 h-8 p-1.5 rounded-md text-gray-5 bg-gray-3 outline-none hover:text-red-light focus:text-red-light focus:outline-red-base transition-all ease-in-out duration-300">
@@ -245,7 +255,7 @@ $formData = flash()->get("formData")["comentario"] ?? '';
         <!-- Enviar o estrategia_id para o POST -->
         <input type="hidden" name="estrategia_id" value="<?= $movie->id ?>">
 
-      <div class="flex gap-8 mt-8">
+      <div class="flex flex-col md:flex-row gap-6 md:gap-8 mt-6 md:mt-8">
         <?php if ($movie->cover_image_url): ?>
           <img src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia" class="w-[137px] rounded-md">
         <?php else: ?>
@@ -279,7 +289,7 @@ $formData = flash()->get("formData")["comentario"] ?? '';
       </div>
 
       <div>
-        <textarea name="comentario" placeholder="Comentário"
+        <textarea name="comentario" placeholder="Comentário" maxlength="300"
           class="resize-none w-full h-40 bg-gray-1 border border-gray-3 rounded-md px-4 py-3 text-gray-7 font-nunito leading-6 placeholder:text-gray-5 outline-none hover:outline-purple-base focus:outline-red-base"><?= htmlspecialchars($formData) ?></textarea>
 
         <?php if ($validationsMessages): ?>

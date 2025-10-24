@@ -11,7 +11,7 @@
 
     <div class="pb-5 px-5 mb-2 text-gray-6 text-sm leading-[160%] font-nunito overflow-hidden">
       <div class="mb-[-75px] group-hover:mb-[0px] group-focus:mb-[0px] transition-all ease-in-out duration-[400ms]">
-        <h2 class="text-gray-7 text-xl font-bold font-rajdhani"><?= $estrategia->title ?></h2>
+        <h2 class="text-gray-7 text-xl font-bold font-rajdhani whitespace-normal break-all line-clamp-2"><?= $estrategia->title ?></h2>
 
         <h3 class="flex items-center gap-1.5 font-bold mt-1"><?= $estrategia->category ?> <span class="text-[10px]">•</span> <?= $estrategia->agent_name ?? 'Agente não definido' ?></h3>
 

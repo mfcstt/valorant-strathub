@@ -10,11 +10,11 @@ $formDataAll = flash()->get("formData") ?? [];
 $hidden = ($formData ?? '') ? '' : 'hidden';
 ?>
 
-<form action="/strategy-create" method="post" class="w-max flex gap-12 mx-auto mt-20 pb-8" enctype="multipart/form-data" novalidate>
-  <div class="flex flex-col gap-6">
+<form action="/strategy-create" method="post" class="w-full max-w-[1366px] flex flex-col gap-6 mx-auto px-4 mt-10 pb-8 md:w-max md:flex-row md:gap-12 md:px-0 md:mt-20 md:max-w-none" enctype="multipart/form-data" novalidate>
+  <div class="flex flex-col gap-6 w-full md:w-auto">
     <!-- Upload de Imagem -->
     <label>
-      <div id="image-upload-box" class="relative overflow-hidden cursor-pointer w-[381px] h-[240px] flex flex-col items-center justify-center rounded-[18px] bg-gray-3 border-2 border-gray-3 hover:border-2 hover:border-red-base focus-within:border-2 focus-within:border-red-base transition-all ease-in-out duration-300">
+      <div id="image-upload-box" class="relative overflow-hidden cursor-pointer w-full max-w-[381px] h-44 sm:h-[240px] md:w-[381px] md:h-[240px] flex flex-col items-center justify-center rounded-[18px] bg-gray-3 border-2 border-gray-3 hover:border-2 hover:border-red-base focus-within:border-2 focus-within:border-red-base transition-all ease-in-out duration-300">
         <div class="upload-placeholder flex flex-col items-center justify-center pointer-events-none">
           <i class="
             ph ph-image text-[40px] 
@@ -53,7 +53,7 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
 
     <!-- Upload de Vídeo -->
     <label>
-      <div id="video-upload-box" class="relative overflow-hidden cursor-pointer w-[381px] h-[240px] flex flex-col items-center justify-center rounded-[18px] bg-gray-3 border-2 border-gray-3 hover:border-2 hover:border-red-base focus-within:border-2 focus-within:border-red-base transition-all ease-in-out duration-300">
+      <div id="video-upload-box" class="relative overflow-hidden cursor-pointer w-full max-w-[381px] h-44 sm:h-[240px] md:w-[381px] md:h-[240px] flex flex-col items-center justify-center rounded-[18px] bg-gray-3 border-2 border-gray-3 hover:border-2 hover:border-red-base focus-within:border-2 focus-within:border-red-base transition-all ease-in-out duration-300">
         <div class="upload-placeholder flex flex-col items-center justify-center pointer-events-none">
           <i class="
             ph ph-video text-[40px] 
@@ -96,9 +96,9 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
     </label>
   </div>
 
-  <div class="flex flex-col justify-between">
+  <div class="flex flex-col justify-between w-full mt-6 md:mt-0">
     <div>
-      <h2 class="font-rajdhani font-bold text-xl text-gray-7">Nova estratégia</h2>
+      <h2 class="font-rajdhani font-bold text-2xl md:text-xl text-gray-7">Nova estratégia</h2>
 
       <div class="flex flex-col gap-4 mt-6">
 
@@ -132,7 +132,7 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
          <div>
            <label class="block text-gray-7 font-nunito text-sm mb-2">Agente</label>
            <div class="relative">
-             <div class="agent-selection-container flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-4 scrollbar-track-gray-2 w-full max-w-[500px]" style="scrollbar-width: thin;">
+             <div class="agent-selection-container flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-4 scrollbar-track-gray-2 w-full max-w-[500px] md:w-[700px]" style="scrollbar-width: thin;">
                <?php foreach ($agents as $agent): ?>
                  <label class="agent-option cursor-pointer group flex-shrink-0">
                    <input type="radio" name="agente" value="<?= $agent->id ?>" class="hidden agent-radio" <?= (($formDataAll['agente'] ?? '') == $agent->id) ? 'checked' : '' ?>>
@@ -163,7 +163,7 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
          <div>
            <label class="block text-gray-7 font-nunito text-sm mb-2">Mapa</label>
            <div class="relative">
-             <div class="map-selection-container flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-4 scrollbar-track-gray-2 w-full max-w-[500px]" style="scrollbar-width: thin;">
+             <div class="map-selection-container flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-4 scrollbar-track-gray-2 w-full max-w-[500px] md:w-[700px]" style="scrollbar-width: thin;">
                <?php foreach ($maps as $map): ?>
                  <label class="map-option flex-shrink-0 cursor-pointer group">
                    <input type="radio" name="mapa" value="<?= $map->id ?>" class="hidden map-radio" <?= (($formDataAll['mapa'] ?? '') == $map->id) ? 'checked' : '' ?>>
@@ -193,7 +193,7 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
 
         <div>
           <div class="relative">
-            <textarea name="descricao" placeholder="Descrição" class="inpForm resize-none w-full h-[200px] bg-gray-1 border border-gray-3 rounded-md px-4 py-3 text-gray-7 font-nunito leading-6 placeholder:text-gray-5 outline-none hover:outline-red-base focus:outline-red-base"><?= htmlspecialchars($formData) ?></textarea>
+            <textarea name="descricao" placeholder="Descrição" class="inpForm resize-none w-full h-[200px] bg-gray-1 border border-gray-3 rounded-md px-4 py-3 text-gray-7 font-nunito leading-6 placeholder:text-gray-5 outline-none hover:outline-red-base focus:outline-red-base" maxlength="500"><?= htmlspecialchars($formData) ?></textarea>
 
             <button type="button" class="<?= $hidden ?> cleanBtn flex absolute top-4 right-4 text-gray-4 hover:text-red-base outline-none focus:text-red-base cursor-pointer" />
             <i class="ph-fill ph-x-circle text-xl"></i>

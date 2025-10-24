@@ -28,7 +28,7 @@
     <!-- Conteúdo principal -->
     <div class="flex-1 flex flex-col justify-end p-4">
       <div class="space-y-3">
-        <h2 class="text-gray-7 text-2xl font-bold font-rajdhani leading-tight"><?= $estrategia->title ?></h2>
+        <h2 class="text-gray-7 text-2xl font-bold font-rajdhani leading-tight whitespace-normal break-all line-clamp-2"><?= $estrategia->title ?></h2>
         
         <div class="flex items-center gap-2 text-gray-5 text-sm font-nunito">
           <i class="ph ph-user text-base"></i>

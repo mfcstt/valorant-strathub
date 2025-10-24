@@ -20,7 +20,7 @@ $comment = $_POST['comentario'] ?? '';
 
 $validation = Validation::validate([
     'avaliacao' => ['required'],
-    'comentario' => ['required']
+    'comentario' => ['required', 'max:300']
 ], $_POST);
 
 if ($validation->notPassed()) {

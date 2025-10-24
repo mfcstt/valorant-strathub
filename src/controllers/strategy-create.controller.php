@@ -26,9 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validar dados
     $validation = Validation::validate([
-        'titulo' => ['required', 'min:3', 'max:255'],
+        'titulo' => ['required', 'min:3', 'max:100'],
         'categoria' => ['required'],
-        'descricao' => ['required', 'min:10'],
+        'descricao' => ['required', 'min:10', 'max:500'],
         'agente' => ['required'],
         'mapa' => ['required']
     ], $_POST);
