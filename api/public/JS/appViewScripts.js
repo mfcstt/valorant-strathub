@@ -192,35 +192,48 @@ function initVideoCovers() {
 
   videos.forEach((video) => {
     try {
-      video.preload = 'metadata';
       video.muted = true;
       video.playsInline = true;
 
       const seekToStart = () => {
-        try {
-          // Use a small offset to ensure a decodable frame
-          video.currentTime = 0.01;
-        } catch (e) {}
+        try { video.currentTime = 0.01; } catch (e) {}
       };
 
-      // When metadata is available, try seeking to the start
-      video.addEventListener('loadedmetadata', () => {
-        seekToStart();
-      });
-
-      // Once a frame is loaded, pause to keep it static
-      video.addEventListener('loadeddata', () => {
-        try { video.pause(); } catch (e) {}
-      });
-
-      // If already loaded enough, apply immediately
-      if (video.readyState >= 1) {
-        seekToStart();
-      }
-    } catch (e) {
-      // Silently ignore issues to avoid breaking the feed
-    }
+      video.addEventListener('loadedmetadata', seekToStart);
+      video.addEventListener('loadeddata', () => { try { video.pause(); } catch (e) {} });
+      if (video.readyState >= 1) { seekToStart(); }
+    } catch (e) {}
   });
 }
 
-document.addEventListener('DOMContentLoaded', initVideoCovers);
+// Lazy load para vídeos nas listas (adiar definir o src até entrar na viewport)
+function lazyLoadVideos() {
+  const lazyVideos = document.querySelectorAll('video.lazy-video[data-src]');
+  if (!('IntersectionObserver' in window)) {
+    // Fallback: carrega imediatamente
+    lazyVideos.forEach(v => { v.src = v.dataset.src; v.removeAttribute('data-src'); v.preload = 'metadata'; });
+    initVideoCovers();
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const v = entry.target;
+        try {
+          v.src = v.dataset.src;
+          v.removeAttribute('data-src');
+          v.preload = 'metadata';
+        } catch (e) {}
+        observer.unobserve(v);
+        // Reaplicar comportamento de capa quando carregar
+        v.addEventListener('loadedmetadata', () => { try { v.currentTime = 0.01; } catch (e) {} });
+        v.addEventListener('loadeddata', () => { try { v.pause(); } catch (e) {} });
+      }
+    });
+  }, { rootMargin: '200px 0px' });
+
+  lazyVideos.forEach(v => observer.observe(v));
+}
+
+document.addEventListener('DOMContentLoaded', lazyLoadVideos);

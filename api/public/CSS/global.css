@@ -160,3 +160,19 @@ select.inpForm option {
 select.inpForm option[disabled] {
   color: #7a7b9f;
 }
+
+/* Performance: evitar custo de renderização fora da viewport */
+.estrategiaCard {
+  content-visibility: auto;
+  contain-intrinsic-size: 360px; /* altura aproximada do card */
+}
+
+/* Otimizar mídia dos cards */
+.estrategiaCard img,
+.estrategiaCard video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  content-visibility: auto;
+  contain-intrinsic-size: 360px;
+}

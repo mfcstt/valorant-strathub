@@ -100,7 +100,7 @@
   <section class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto">
     <?php
       foreach ($estrategias as $estrategia) {
-        require "../src/views/partials/_cardEstrategia.php";
+      require __DIR__ . "/../partials/_cardEstrategia.php";
       }
     ?>
 
