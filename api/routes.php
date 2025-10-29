@@ -6,8 +6,8 @@ $controller = trim($rawPath, '/');
 
 if ($controller === '') $controller = 'login';
 
-if (!file_exists("../src/controllers/{$controller}.controller.php")) {
+if (!file_exists(__DIR__ . "/src/controllers/{$controller}.controller.php")) {
   abort(404, 'Página não encontrada.');
 }
 
-require "../src/controllers/{$controller}.controller.php";
+require __DIR__ . "/src/controllers/{$controller}.controller.php";

@@ -137,7 +137,7 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
                  <label class="agent-option cursor-pointer group flex-shrink-0">
                    <input type="radio" name="agente" value="<?= $agent->id ?>" class="hidden agent-radio" <?= (($formDataAll['agente'] ?? '') == $agent->id) ? 'checked' : '' ?>>
                    <div class="agent-card w-20 h-20 flex flex-col items-center justify-center rounded-lg bg-gray-1 border-2 border-gray-3 group-hover:border-red-base transition-all duration-300">
-                     <img src="assets/images/agents/<?= $agent->photo ?>" 
+              <img src="/assets/images/agents/<?= $agent->photo ?>"
                           alt="<?= $agent->name ?>" 
                           class="w-12 h-12 object-cover rounded-md mb-1">
                      <span class="text-xs text-gray-6 font-nunito text-center"><?= $agent->name ?></span>
@@ -168,7 +168,7 @@ $hidden = ($formData ?? '') ? '' : 'hidden';
                  <label class="map-option flex-shrink-0 cursor-pointer group">
                    <input type="radio" name="mapa" value="<?= $map->id ?>" class="hidden map-radio" <?= (($formDataAll['mapa'] ?? '') == $map->id) ? 'checked' : '' ?>>
                    <div class="map-card w-20 h-20 flex flex-col items-center justify-center rounded-lg bg-gray-1 border-2 border-gray-3 group-hover:border-red-base transition-all duration-300">
-                     <img src="assets/images/maps/<?= $map->image ?? (strtolower($map->name) . '.png') ?>" 
+              <img src="/assets/images/maps/<?= $map->image ?? (strtolower($map->name) . '.png') ?>"
                           alt="<?= $map->name ?>" 
                           class="w-12 h-12 object-cover rounded-md mb-1">
                      <span class="text-xs text-gray-6 font-nunito text-center"><?= $map->name ?></span>

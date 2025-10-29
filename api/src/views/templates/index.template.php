@@ -29,10 +29,10 @@
 
 <body class="bg-gray-1 min-h-screen flex flex-col">
   <div class="relative flex-1 modalOverFlow">
-    <?php require "../src/views/{$view}.view.php"; ?>
+    <?php require __DIR__ . "/../{$view}.view.php"; ?>
   </div>
 
-  <?php require "../src/views/partials/_footer.php"; ?>
+  <?php require __DIR__ . "/../partials/_footer.php"; ?>
 
   <?php if ($message = flash()->get('message')): ?>
     <div id="message"

@@ -1,7 +1,7 @@
 <header class="modalBlur border-b border-gray-2 bg-gray-1 overflow-hidden z-10">
   <div class="max-w-[1366px] h-20 flex justify-between items-center px-6 mx-auto font-nunito">
     <a href="/explore" class="flex items-center gap-3">
-      <img src="assets/icons/logo.svg" class="w-12" alt="Logo Valorant Strathub">
+      <img src="/assets/icons/logo.svg" class="w-12" alt="Logo Valorant Strathub">
       <div class="flex flex-col">
         <span class="text-gray-7 font-rajdhani text-lg font-bold leading-5">Valorant</span>
         <span class="text-gray-5 font-rajdhani text-lg font-bold leading-5">Strathub</span>
@@ -65,7 +65,7 @@
         <i class="ph ph-target text-xl"></i>
         Explorar
       </a>
-      <a href="myStrategy" class="flex items-center gap-2 px-4 py-3 text-gray-6 hover:bg-gray-2">
+      <a href="/myStrategy" class="flex items-center gap-2 px-4 py-3 text-gray-6 hover:bg-gray-2">
         <i class="ph ph-film-slate text-xl"></i>
         Minhas estratégias
       </a>
@@ -98,7 +98,7 @@
 
 <main>
   <div class="max-w-[1366px] mx-auto pt-14 md:pt-16">
-    <?php require "../src/views/components/{$component}.component.php"; ?>
+    <?php require __DIR__ . "/components/{$component}.component.php"; ?>
   </div>
 </main>
 
@@ -116,3 +116,4 @@
     }
   })();
 </script>
+<script src="/JS/appViewScripts.js" defer></script>

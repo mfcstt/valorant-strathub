@@ -60,6 +60,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userSession->updated_at = $user->updated_at;
         
         $_SESSION['auth'] = $userSession;
+
+        // Persistir autenticação também em cookies assinados (robusto em ambientes serverless)
+        $secret = $_ENV['APP_SECRET'] ?? 'strathub-fallback-secret';
+        $sig = hash_hmac('sha256', (string)$user->id, $secret);
+        $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+        // 30 dias de validade
+        setcookie('auth_uid', (string)$user->id, [
+            'expires' => time() + 60*60*24*30,
+            'path' => '/',
+            'secure' => $isSecure,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+        setcookie('auth_sig', $sig, [
+            'expires' => time() + 60*60*24*30,
+            'path' => '/',
+            'secure' => $isSecure,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
         flash()->put('message', 'Seja bem-vindo(a), ' . "<span class='text-red-light capitalize'>{$user->name}</span>");
         header('Location: /explore');
         exit();
