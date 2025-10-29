@@ -107,6 +107,28 @@
     <!-- Descrição agora usa line-clamp-3 para truncar -->
   </section>
 
+  <?php if (($total_pages ?? 1) > 1): ?>
+    <?php
+      // Preservar filtros na paginação
+      $queryBase = [
+        'pesquisar' => $search ?? '',
+        'ordenar' => $order ?? 'mais_estrelas',
+        'filtro_agente' => $filter_agent ?? '',
+        'filtro_mapa' => $filter_map ?? '',
+        'filtro_categoria' => $filter_category ?? ''
+      ];
+      $prevPage = max(1, ($page ?? 1) - 1);
+      $nextPage = min($total_pages, ($page ?? 1) + 1);
+      $prevQuery = http_build_query(array_merge($queryBase, ['page' => $prevPage]));
+      $nextQuery = http_build_query(array_merge($queryBase, ['page' => $nextPage]));
+    ?>
+    <nav class="mt-6 flex items-center justify-center gap-3">
+      <a href="/myStrategy?<?= $prevQuery ?>" class="px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all">Anterior</a>
+      <span class="px-3 py-2 text-gray-6">Página <?= $page ?? 1 ?> de <?= $total_pages ?></span>
+      <a href="/myStrategy?<?= $nextQuery ?>" class="px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all">Próxima</a>
+    </nav>
+  <?php endif; ?>
+
   <?php if (!$estrategias && !empty($search)): ?>
     <div class="flex flex-col gap-5 items-center text-center font-nunito">
       <i class="ph ph-target text-gray-4 text-[44px]"></i>
