@@ -87,7 +87,7 @@ $categories = ['defesa', 'ataque', 'pós plant', 'retake'];
 
 // Paginação
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-$per_page = 12;
+$per_page = 10;
 $offset = ($page - 1) * $per_page;
 
 // Buscar estratégias paginadas

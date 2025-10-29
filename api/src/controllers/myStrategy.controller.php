@@ -20,7 +20,25 @@ $agents = Agent::all();
 $maps = Map::all();
 $categories = ['defesa', 'ataque', 'pós plant', 'retake'];
 
-$estrategias = Estrategia::filter($search, $filter_agent ?: null, $filter_map ?: null, $filter_category ?: null, auth()->id);
+// Paginação
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$per_page = 10;
+$offset = ($page - 1) * $per_page;
+
+// Buscar estratégias paginadas do usuário
+$estrategias = Estrategia::filterPaginated(
+    $search,
+    $filter_agent ?: null,
+    $filter_map ?: null,
+    $filter_category ?: null,
+    auth()->id,
+    $per_page,
+    $offset
+);
+
+// Total para paginação
+$total = Estrategia::countFiltered($search, $filter_agent ?: null, $filter_map ?: null, $filter_category ?: null, auth()->id);
+$total_pages = max(1, (int)ceil($total / $per_page));
 
 // Ordenação dinâmica conforme seleção do usuário
 if (is_array($estrategias)) {
@@ -53,4 +71,4 @@ if (is_array($estrategias)) {
     });
 }
 
-view("app", compact('estrategias', 'search', 'order', 'agents', 'maps', 'categories', 'filter_agent', 'filter_map', 'filter_category'), "myStrategy");
+view("app", compact('estrategias', 'search', 'order', 'agents', 'maps', 'categories', 'filter_agent', 'filter_map', 'filter_category', 'page', 'total_pages'), "myStrategy");
