@@ -128,4 +128,11 @@ if (is_array($estrategias)) {
     });
 }
 
+// Marcar favoritas se autenticado
+if (auth() && is_array($estrategias)) {
+    foreach ($estrategias as $e) {
+        $e->is_favorite = Favorite::isFavorite(auth()->id, $e->id);
+    }
+}
+
 view('app', compact('message', 'estrategias', 'search', 'order', 'agents', 'maps', 'categories', 'filter_agent', 'filter_map', 'filter_category', 'page', 'total_pages'), 'explore');

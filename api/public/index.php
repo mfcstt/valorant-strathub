@@ -42,6 +42,7 @@ require __DIR__ . "/../src/models/Map.php";
 require __DIR__ . "/../src/models/Rating.php";
 require __DIR__ . "/../src/models/Image.php";
 require __DIR__ . "/../src/models/Video.php";
+require __DIR__ . "/../src/models/Favorite.php";
 require __DIR__ . "/../src/services/SupabaseStorageService.php";
 
 session_start();

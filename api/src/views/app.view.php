@@ -18,12 +18,21 @@
           </a>
         </li>
         <li>
-          <a href="myStrategy" class="flex items-center gap-2 px-3 py-2 rounded-md outline-none hover:bg-gray-2 focus:outline-red-base transition-all duração-300 <?php if ($component == 'myStrategy')
+          <a href="/myStrategy" class="flex items-center gap-2 px-3 py-2 rounded-md outline-none hover:bg-gray-2 focus:outline-red-base transition-all duração-300 <?php if ($component == 'myStrategy')
             echo 'componentActive'; ?>">
             <i class="ph ph-film-slate text-xl"></i>
             Minhas estratégias
           </a>
         </li>
+        <?php if (auth()): ?>
+        <li>
+          <a href="/favorites" class="flex items-center gap-2 px-3 py-2 rounded-md outline-none hover:bg-gray-2 focus:outline-red-base transition-all duração-300 <?php if ($component == 'favorites')
+            echo 'componentActive'; ?>">
+            <i class="ph ph-heart text-xl"></i>
+            Favoritas
+          </a>
+        </li>
+        <?php endif; ?>
       </ul>
     </nav>
 
@@ -69,6 +78,12 @@
         <i class="ph ph-film-slate text-xl"></i>
         Minhas estratégias
       </a>
+      <?php if (auth()): ?>
+      <a href="/favorites" class="flex items-center gap-2 px-4 py-3 text-gray-6 hover:bg-gray-2">
+        <i class="ph ph-heart text-xl"></i>
+        Favoritas
+      </a>
+      <?php endif; ?>
       <div class="border-t border-gray-3 my-2"></div>
       <?php if (auth()) : ?>
         <a href="/profile" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-2">

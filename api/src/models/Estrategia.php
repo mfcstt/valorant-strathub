@@ -20,6 +20,7 @@ class Estrategia {
     public $updated_at;
     public $rating_average;
     public $ratings_count;
+    public $is_favorite = false;
 
     private $database;
 

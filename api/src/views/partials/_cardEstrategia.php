@@ -1,4 +1,17 @@
 <a href="/strategy?id=<?= $estrategia->id ?>" class="estrategiaCard group relative w-full h-[280px] rounded-xl outline-none focus:outline-red-base transition-all ease-in-out duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-red-base/20">
+  <?php if (auth()): ?>
+    <form id="fav-form-<?= $estrategia->id ?>" method="post" action="/favorite-toggle" class="hidden">
+      <input type="hidden" name="estrategia_id" value="<?= $estrategia->id ?>">
+      <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/explore') ?>">
+    </form>
+    <button type="button" onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('fav-form-<?= $estrategia->id ?>').submit();" class="absolute z-[4] top-3 right-3 px-3 py-1.5 bg-gray-1/80 border border-gray-3 rounded-md text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all ease-in-out duration-300">
+      <?php if (!empty($estrategia->is_favorite)): ?>
+        <i class="ph-fill ph-heart text-base text-red-light"></i>
+      <?php else: ?>
+        <i class="ph ph-heart text-base"></i>
+      <?php endif; ?>
+    </button>
+  <?php endif; ?>
   <?php if (auth() && auth()->id === $estrategia->user_id): ?>
     <form id="delete-form-<?= $estrategia->id ?>" method="post" action="/strategy-delete" class="hidden">
       <input type="hidden" name="estrategia_id" value="<?= $estrategia->id ?>">
@@ -18,11 +31,8 @@
         <p><?= number_format($estrategia->rating_average, 1, ',', '.') ?> <span class="text-xs font-medium">/ 5</span> <span class="text-xs font-medium">• <?= $estrategia->ratings_count ?> <?= $estrategia->ratings_count == 1 ? 'avaliação' : 'avaliações' ?></span></p>
         <i class="ph-fill ph-star text-sm"></i>
       </div>
-      
-      <!-- Badge de categoria -->
-      <div class="px-3 py-1.5 bg-red-base/80 text-white text-xs font-bold font-nunito rounded-full backdrop-blur-sm">
-        <?= $estrategia->category ?>
-      </div>
+      <!-- Espaço reservado à direita para evitar sobreposição com o botão de favorito -->
+      <div class="w-8"></div>
     </div>
 
     <!-- Conteúdo principal -->
@@ -38,6 +48,9 @@
         <div class="flex items-center gap-2 text-gray-5 text-sm font-nunito">
           <i class="ph ph-map-trifold text-base"></i>
           <span><?= $estrategia->map_name ?? 'Mapa não definido' ?></span>
+          <span class="ml-2 px-2 py-0.5 bg-red-base/80 text-white text-[10px] font-bold rounded-full backdrop-blur-sm">
+            <?= $estrategia->category ?>
+          </span>
         </div>
 
         <p class="description text-gray-6 text-sm leading-relaxed font-nunito line-clamp-3">
