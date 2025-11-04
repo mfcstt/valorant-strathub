@@ -30,4 +30,7 @@ $movie = $estrategia;
 $authorRows = (new User())->query('id = :id', ['id' => $estrategia->user_id]);
 $author = is_array($authorRows) ? ($authorRows[0] ?? null) : $authorRows;
 
-view("app", compact('movie', 'ratings', 'author'), "movie");
+// Status de favorito para usuário autenticado
+$is_favorite = auth() ? Favorite::isFavorite(auth()->id, $estrategia->id) : false;
+
+view("app", compact('movie', 'ratings', 'author', 'is_favorite'), "movie");

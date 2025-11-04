@@ -129,3 +129,15 @@ CREATE INDEX IF NOT EXISTS idx_maps_name_lower ON maps(lower(name));
 CREATE INDEX IF NOT EXISTS idx_ratings_estrategia_id ON ratings(estrategia_id);
 CREATE INDEX IF NOT EXISTS idx_ratings_user_id ON ratings(user_id);
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+
+-- Favoritos: relação usuário <-> estratégia
+CREATE TABLE IF NOT EXISTS favorites (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  estrategia_id INTEGER NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id, estrategia_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_favorites_user_id ON favorites(user_id);
+CREATE INDEX IF NOT EXISTS idx_favorites_estrategia_id ON favorites(estrategia_id);

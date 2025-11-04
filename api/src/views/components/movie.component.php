@@ -47,6 +47,27 @@ $formData = flash()->get("formData")["comentario"] ?? '';
            <?php endif; ?>
          </div>
 
+          <?php if (auth()): ?>
+            <form id="fav-detail-form-<?= htmlspecialchars($movie->id) ?>" method="post" action="/favorite-toggle" class="mt-3">
+              <input type="hidden" name="estrategia_id" value="<?= htmlspecialchars($movie->id) ?>">
+              <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/strategy?id=' . $movie->id) ?>">
+              <button type="submit" class="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all">
+                <?php if (!empty($is_favorite)): ?>
+                  <i class="ph-fill ph-heart text-xl text-red-light"></i>
+                  <span>Remover das favoritas</span>
+                <?php else: ?>
+                  <i class="ph ph-heart text-xl"></i>
+                  <span>Adicionar às favoritas</span>
+                <?php endif; ?>
+              </button>
+            </form>
+          <?php else: ?>
+            <a href="/login" class="mt-3 flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light focus:text-red-light focus:outline-red-base transition-all">
+              <i class="ph ph-heart text-xl"></i>
+              <span>Faça login para favoritar</span>
+            </a>
+          <?php endif; ?>
+
 
       </div>
 
