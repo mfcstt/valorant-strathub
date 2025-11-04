@@ -11,15 +11,18 @@ $formData = flash()->get("formData")["comentario"] ?? '';
     <article class="flex flex-col md:flex-row gap-6 md:gap-12 w-full max-w-[1366px]">
       <div class="w-full lg:hidden mb-4">
         <div class="flex items-center justify-between">
-          <a href="/explore" class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
+          <a href="/explore"
+            class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
             <i class="ph ph-caret-left text-xl"></i>
             Voltar
           </a>
 
           <?php if (auth() && $author && auth()->id == $author->id): ?>
-            <form id="delete-form-<?= htmlspecialchars($movie->id) ?>" method="post" action="/strategy-delete" class="inline">
+            <form id="delete-form-<?= htmlspecialchars($movie->id) ?>" method="post" action="/strategy-delete"
+              class="inline">
               <input type="hidden" name="estrategia_id" value="<?= htmlspecialchars($movie->id) ?>">
-              <button type="submit" onclick="return confirm('Excluir esta estratégia? Esta ação é irreversível.')" class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
+              <button type="submit" onclick="return confirm('Excluir esta estratégia? Esta ação é irreversível.')"
+                class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
                 <i class="ph ph-trash text-xl"></i>
                 Excluir
               </button>
@@ -27,80 +30,87 @@ $formData = flash()->get("formData")["comentario"] ?? '';
           <?php endif; ?>
         </div>
 
-        <h1 class="text-[2rem] text-gray-7 font-bold font-rajdhani whitespace-normal break-all"><?= $movie->title ?></h1>
+        <h1 class="mt-4 text-[2rem] text-gray-7 font-bold font-rajdhani whitespace-normal break-all">
+          <?= $movie->title ?>
+        </h1>
       </div>
       <div class="w-full md:w-96">
-         <div>
-           <?php if ($movie->cover_image_url): ?>
-             <img src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia" class="w-full h-56 sm:h-72 md:h-96 object-cover rounded-[18px]">
-           <?php elseif ($movie->video_url): ?>
-             <video controls class="w-full h-56 sm:h-72 md:h-96 object-cover rounded-[18px]" preload="metadata">
-               <source src="<?= $movie->video_url ?>" type="video/mp4">
-               <source src="<?= $movie->video_url ?>" type="video/webm">
-               <source src="<?= $movie->video_url ?>" type="video/ogg">
-               Seu navegador não suporta a reprodução de vídeos.
-             </video>
-           <?php else: ?>
-             <div class="w-full h-56 sm:h-72 md:h-96 bg-gray-800 flex items-center justify-center rounded-[18px]">
-               <span class="text-gray-500 text-xs">Sem imagem</span>
-             </div>
-           <?php endif; ?>
-         </div>
-
-          <?php if (auth()): ?>
-            <div class="mt-3 flex items-center gap-2 w-full">
-              <form id="fav-detail-form-<?= htmlspecialchars($movie->id) ?>" method="post" action="/favorite-toggle">
-                <input type="hidden" name="estrategia_id" value="<?= htmlspecialchars($movie->id) ?>">
-                <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/strategy?id=' . $movie->id) ?>">
-                <button type="submit" class="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all">
-                  <?php if (!empty($is_favorite)): ?>
-                    <i class="ph-fill ph-heart text-xl text-red-light"></i>
-                    <span>Desfavoritar</span>
-                  <?php else: ?>
-                    <i class="ph ph-heart text-xl"></i>
-                    <span>Favoritar</span>
-                  <?php endif; ?>
-                </button>
-              </form>
-
-              <button type="button" 
-                      class="share-btn ml-auto flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all"
-                      data-id="<?= htmlspecialchars($movie->id) ?>"
-                      data-title="<?= htmlspecialchars($movie->title) ?>">
-                <i class="ph ph-share-network text-xl"></i>
-                <span>Compartilhar</span>
-              </button>
-            </div>
+        <div>
+          <?php if ($movie->cover_image_url): ?>
+            <img src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia"
+              class="w-full h-56 sm:h-72 md:h-96 object-cover rounded-[18px]">
+          <?php elseif ($movie->video_url): ?>
+            <video controls class="w-full h-56 sm:h-72 md:h-96 object-cover rounded-[18px]" preload="metadata">
+              <source src="<?= $movie->video_url ?>" type="video/mp4">
+              <source src="<?= $movie->video_url ?>" type="video/webm">
+              <source src="<?= $movie->video_url ?>" type="video/ogg">
+              Seu navegador não suporta a reprodução de vídeos.
+            </video>
           <?php else: ?>
-            <div class="mt-3 flex items-center gap-2 w-full">
-              <a href="/login" class="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light focus:text-red-light focus:outline-red-base transition-all">
-                <i class="ph ph-heart text-xl"></i>
-                <span>Faça login para favoritar</span>
-              </a>
-              <button type="button" 
-                      class="share-btn ml-auto flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all"
-                      data-id="<?= htmlspecialchars($movie->id) ?>"
-                      data-title="<?= htmlspecialchars($movie->title) ?>">
-                <i class="ph ph-share-network text-xl"></i>
-                <span>Compartilhar</span>
-              </button>
+            <div class="w-full h-56 sm:h-72 md:h-96 bg-gray-800 flex items-center justify-center rounded-[18px]">
+              <span class="text-gray-500 text-xs">Sem imagem</span>
             </div>
           <?php endif; ?>
+        </div>
+
+        <?php if (auth()): ?>
+          <div class="mt-3 flex items-center gap-2 w-full">
+            <form id="fav-detail-form-<?= htmlspecialchars($movie->id) ?>" method="post" action="/favorite-toggle">
+              <input type="hidden" name="estrategia_id" value="<?= htmlspecialchars($movie->id) ?>">
+              <input type="hidden" name="redirect"
+                value="<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/strategy?id=' . $movie->id) ?>">
+              <button type="submit"
+                class="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all">
+                <?php if (!empty($is_favorite)): ?>
+                  <i class="ph-fill ph-heart text-xl text-red-light"></i>
+                  <span>Desfavoritar</span>
+                <?php else: ?>
+                  <i class="ph ph-heart text-xl"></i>
+                  <span>Favoritar</span>
+                <?php endif; ?>
+              </button>
+            </form>
+
+            <button type="button"
+              class="share-btn ml-auto flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all"
+              data-id="<?= htmlspecialchars($movie->id) ?>" data-title="<?= htmlspecialchars($movie->title) ?>">
+              <i class="ph ph-share-network text-xl"></i>
+              <span>Compartilhar</span>
+            </button>
+          </div>
+        <?php else: ?>
+          <div class="mt-3 flex items-center gap-2 w-full">
+            <a href="/login"
+              class="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light focus:text-red-light focus:outline-red-base transition-all">
+              <i class="ph ph-heart text-xl"></i>
+              <span>Faça login para favoritar</span>
+            </a>
+            <button type="button"
+              class="share-btn ml-auto flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all"
+              data-id="<?= htmlspecialchars($movie->id) ?>" data-title="<?= htmlspecialchars($movie->title) ?>">
+              <i class="ph ph-share-network text-xl"></i>
+              <span>Compartilhar</span>
+            </button>
+          </div>
+        <?php endif; ?>
 
 
       </div>
 
       <div class="w-full md:w-[644px]">
         <div class="hidden lg:flex items-center justify-between">
-          <a href="/explore" class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
+          <a href="/explore"
+            class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
             <i class="ph ph-caret-left text-xl"></i>
             Voltar
           </a>
 
           <?php if (auth() && $author && auth()->id == $author->id): ?>
-            <form id="delete-form-lg-<?= htmlspecialchars($movie->id) ?>" method="post" action="/strategy-delete" class="inline">
+            <form id="delete-form-lg-<?= htmlspecialchars($movie->id) ?>" method="post" action="/strategy-delete"
+              class="inline">
               <input type="hidden" name="estrategia_id" value="<?= htmlspecialchars($movie->id) ?>">
-              <button type="submit" onclick="return confirm('Excluir esta estratégia? Esta ação é irreversível.')" class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
+              <button type="submit" onclick="return confirm('Excluir esta estratégia? Esta ação é irreversível.')"
+                class="flex items-center gap-2 text-gray-5 outline-none hover:text-red-light focus:text-red-light transition-all ease-in-out duration-300">
                 <i class="ph ph-trash text-xl"></i>
                 Excluir
               </button>
@@ -108,7 +118,9 @@ $formData = flash()->get("formData")["comentario"] ?? '';
           <?php endif; ?>
         </div>
 
-        <h1 class="hidden lg:block mt-5 text-[2rem] text-gray-7 font-bold font-rajdhani whitespace-normal break-all"><?= $movie->title ?></h1>
+        <h1 class="hidden lg:block mt-5 text-[2rem] text-gray-7 font-bold font-rajdhani whitespace-normal break-all">
+          <?= $movie->title ?>
+        </h1>
 
         <div class="text-gray-6 font-nunito leading-[160%] mt-4">
           <p><span class="font-bold">Categoria:</span> <?= $movie->category ?></p>
@@ -208,11 +220,12 @@ $formData = flash()->get("formData")["comentario"] ?? '';
     </div>
 
     <!-- CARDS AVALIAÇÕES -->
-    <div class="flex flex-col-reverse gap-3">
+    <div class="flex flex-col gap-3">
       <?php foreach ($ratings as $rating): ?>
         <article class="relative p-6 md:p-8 rounded-xl bg-gray-2">
           <!-- Nota (canto superior direito) -->
-          <div class="absolute top-4 right-4 md:top-6 md:right-6 flex items-center gap-1.5 px-2.5 py-1 text-base md:text-xl text-gray-7 font-bold font-rajdhani bg-gray-3 rounded-md">
+          <div
+            class="absolute top-4 right-4 md:top-6 md:right-6 flex items-center gap-1.5 px-2.5 py-1 text-base md:text-xl text-gray-7 font-bold font-rajdhani bg-gray-3 rounded-md">
             <p><?= $rating->rating ?> <span class="text-xs font-normal">/ 5</span></p>
             <i class="ph-fill ph-star text-base text-red-light"></i>
           </div>
@@ -233,7 +246,8 @@ $formData = flash()->get("formData")["comentario"] ?? '';
               <h3 class="text-gray-7 font-bold font-rajdhani capitalize">
                 <?= $rating->user_name ?>
                 <?php if (auth() && $rating->user_id == auth()->id): ?>
-                  <span class="px-1.5 ml-2 bg-red-base rounded-full text-xs font-bold font-nunito leading-[160%]">você</span>
+                  <span
+                    class="px-1.5 ml-2 bg-red-base rounded-full text-xs font-bold font-nunito leading-[160%]">você</span>
                 <?php endif; ?>
               </h3>
               <p class="text-gray-5 text-sm font-nunito leading-[160%] mt-1">
@@ -250,6 +264,23 @@ $formData = flash()->get("formData")["comentario"] ?? '';
         </article>
       <?php endforeach; ?>
     </div>
+
+    <?php if (!empty($total_pages) && $total_pages > 1): ?>
+      <?php
+      $prevPage = max(1, ($page ?? 1) - 1);
+      $nextPage = min($total_pages, ($page ?? 1) + 1);
+      $base = '/strategy?id=' . urlencode($movie->id);
+      $prevUrl = $base . '&page=' . $prevPage;
+      $nextUrl = $base . '&page=' . $nextPage;
+      ?>
+      <nav class="mt-6 flex items-center justify-center gap-3">
+        <a href="<?= $prevUrl ?>"
+          class="px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all">Anterior</a>
+        <span class="px-3 py-2 text-gray-6">Página <?= $page ?? 1 ?> de <?= $total_pages ?></span>
+        <a href="<?= $nextUrl ?>"
+          class="px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all">Próxima</a>
+      </nav>
+    <?php endif; ?>
 
     <!-- SE NÃO EXISTIR AVALIAÇÕES... -->
     <?php if (!$ratings): ?>
@@ -281,9 +312,8 @@ $formData = flash()->get("formData")["comentario"] ?? '';
 
 <!-- MODAL AVALIAR -->
 <div>
-  <dialog
-    class="modal fixed z-[10] inset-0 w-[90vw] max-w-[600px] p-6 md:p-10 bg-gray-1 border border-gray-3 rounded-[18px] <?php if ($validationsMessages)
-      echo 'open' ?>">
+  <dialog class="modal fixed z-[10] inset-0 w-[90vw] max-w-[600px] p-6 md:p-10 bg-gray-1 border border-gray-3 rounded-[18px] <?php if ($validationsMessages)
+    echo 'open' ?>">
       <button
         class="closeModal absolute top-5 right-5 h-8 p-1.5 rounded-md text-gray-5 bg-gray-3 outline-none hover:text-red-light focus:text-red-light focus:outline-red-base transition-all ease-in-out duration-300">
         <i class="ph ph-x text-xl leading-[0]"></i>
@@ -357,10 +387,10 @@ $formData = flash()->get("formData")["comentario"] ?? '';
 </div>
 
 <script>
-  (function() {
+  (function () {
     const buttons = document.querySelectorAll('.share-btn');
     buttons.forEach((btn) => {
-      btn.addEventListener('click', function(ev) {
+      btn.addEventListener('click', function (ev) {
         ev.preventDefault();
         ev.stopPropagation();
         const id = this.dataset.id;
@@ -368,7 +398,7 @@ $formData = flash()->get("formData")["comentario"] ?? '';
         const url = `${window.location.origin}/strategy?id=${encodeURIComponent(id)}`;
 
         if (navigator.share) {
-          navigator.share({ title, url }).catch(() => {});
+          navigator.share({ title, url }).catch(() => { });
         } else if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(url)
             .then(() => alert('Link copiado para a área de transferência!'))
