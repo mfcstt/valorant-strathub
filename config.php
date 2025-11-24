@@ -1,6 +1,5 @@
 <?php
 
-// Load environment variables from .env file if it exists
 if (file_exists(__DIR__ . '/.env')) {
     $lines = file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($lines as $line) {
@@ -11,11 +10,7 @@ if (file_exists(__DIR__ . '/.env')) {
     }
 }
 
-// Check if we should use SQLite fallback
-$useSqlite = false;
-if (isset($_ENV['USE_SQLITE']) && $_ENV['USE_SQLITE'] === 'true') {
-    $useSqlite = true;
-}
+$useSqlite = (($_ENV['USE_SQLITE'] ?? getenv('USE_SQLITE')) === 'true');
 
 return [
     'database' => $useSqlite ? [
@@ -23,11 +18,11 @@ return [
         'database' => __DIR__ . '/public/database.sqlite'
     ] : [
         'driver' => 'pgsql',
-        'host' => $_ENV['DB_HOST'] ?? 'YOUR_DB_HOST',
-        'port' => $_ENV['DB_PORT'] ?? '5432',
-        'dbname' => $_ENV['DB_NAME'] ?? 'postgres',
-        'user' => $_ENV['DB_USER'] ?? 'postgres',
-        'password' => $_ENV['DB_PASSWORD'] ?? 'YOUR_DB_PASSWORD',
+        'host' => $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?? 'YOUR_DB_HOST',
+        'port' => $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?? '5432',
+        'dbname' => $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?? 'postgres',
+        'user' => $_ENV['DB_USER'] ?? getenv('DB_USER') ?? 'postgres',
+        'password' => $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?? 'YOUR_DB_PASSWORD',
         'sslmode' => 'require',
     ],
 ];

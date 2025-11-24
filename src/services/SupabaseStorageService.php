@@ -9,9 +9,8 @@ class SupabaseStorageService
 
     public function __construct()
     {
-        $this->supabaseUrl = $_ENV['SUPABASE_URL'] ?? 'https://YOUR_PROJECT_REF.supabase.co';
-        // Usar service key para uploads (tem permissões administrativas para contornar RLS)
-        $this->supabaseKey = $_ENV['SUPABASE_SERVICE_KEY'] ?? $_ENV['SUPABASE_ANON_KEY'] ?? 'YOUR_ANON_PUBLIC_KEY';
+        $this->supabaseUrl = $_ENV['SUPABASE_URL'] ?? getenv('SUPABASE_URL') ?? 'https://YOUR_PROJECT_REF.supabase.co';
+        $this->supabaseKey = $_ENV['SUPABASE_SERVICE_KEY'] ?? getenv('SUPABASE_SERVICE_KEY') ?? $_ENV['SUPABASE_ANON_KEY'] ?? getenv('SUPABASE_ANON_KEY') ?? 'YOUR_ANON_PUBLIC_KEY';
         $this->imageBucketName = 'strategy-covers';
         $this->videoBucketName = 'strategy-videos';
     }
