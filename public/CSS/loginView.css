@@ -9,12 +9,14 @@
 }
 
 /* Animação para alterar os containers Login e Cadastro */
-#login, #register {
+#login,
+#register {
   transition: opacity 0.4s ease-in-out;
   opacity: 1;
 }
 
-#login.disabled, #register.disabled {
+#login.disabled,
+#register.disabled {
   opacity: 0;
 }
 

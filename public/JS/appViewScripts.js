@@ -29,8 +29,9 @@ function Modal() {
       div.classList.add("blur-sm");
     });
 
-    divOverFlow.classList.toggle("overflow-hidden");
-    overlay.classList.toggle("hidden");
+    divOverFlow.classList.add("overflow-hidden");
+    if (overlay) overlay.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
   }
 
   const focusableElements = "button, [href], textarea";
@@ -42,11 +43,12 @@ function Modal() {
       modal.show();
 
       divBlur.forEach((div) => {
-        div.classList.toggle("blur-sm");
+        div.classList.add("blur-sm");
       });
 
-      divOverFlow.classList.toggle("overflow-hidden");
-      overlay.classList.toggle("hidden");
+      divOverFlow.classList.add("overflow-hidden");
+      if (overlay) overlay.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
 
       // Começar evento de focar apenas elementos do modal
       const focusableContent = modal.querySelectorAll(focusableElements);
@@ -64,11 +66,12 @@ function Modal() {
     modal.close();
 
     divBlur.forEach((div) => {
-      div.classList.toggle("blur-sm");
+      div.classList.remove("blur-sm");
     });
 
-    divOverFlow.classList.toggle("overflow-hidden");
-    overlay.classList.toggle("hidden");
+    divOverFlow.classList.remove("overflow-hidden");
+    if (overlay) overlay.classList.add("hidden");
+    document.body.style.overflow = "";
 
     // Remover evento para focar apenas elementos do modal
     document.removeEventListener("keydown", trapFocus);
