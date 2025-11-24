@@ -409,17 +409,72 @@ $formData = flash()->get("formData")["comentario"] ?? '';
         const title = this.dataset.title || 'Estratégia Valorant';
         const url = `${window.location.origin}/strategy?id=${encodeURIComponent(id)}`;
 
-        if (navigator.share) {
-          navigator.share({ title, url }).catch(() => { });
-        } else if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url)
-            .then(() => alert('Link copiado para a área de transferência!'))
-            .catch(() => {
-              // Fallback final caso clipboard falhe
-              window.prompt('Copie o link abaixo:', url);
-            });
+        const showShareToast = (text) => {
+          const pad = 32;
+          const container = document.createElement('div');
+          container.id = 'shareMessage';
+          container.className = 'fixed bottom-8 right-[-400px] z-10 w-auto max-w-[90vw] md:max-w-[480px] break-words flex flex-col pb-1 px-1 text-white border border-red-base rounded-md bg-gray-1 shadow-buttonHover';
+          container.innerHTML = `
+            <div class="flex items-center gap-2 px-8 pt-4 pb-3">
+              <i class="ph ph-share-network text-red-base text-2xl"></i>
+              <span class="text-lg">${text}</span>
+            </div>
+            <div class="w-full h-0.5 bg-gray-3 rounded-xl">
+              <div class="progress-share h-full bg-red-light"></div>
+            </div>
+          `;
+          document.body.appendChild(container);
+          container.style.right = `-${container.offsetWidth + pad}px`;
+          setTimeout(() => { container.style.right = `${pad}px`; }, 200);
+          const progress = container.querySelector('.progress-share');
+          let containerWidth = container.offsetWidth - 8;
+          let count = 4;
+          let x = (containerWidth / 100) * count;
+          const loading = setInterval(() => {
+            if (count >= 100) { clearInterval(loading); }
+            else { x += containerWidth / 100; count++; if (progress) progress.style.width = `${Math.trunc(x)}px`; }
+          }, 50);
+          setTimeout(() => {
+            container.style.right = `-${container.offsetWidth + pad}px`;
+            setTimeout(() => { container.remove(); }, 600);
+          }, 4700);
+        };
+
+        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const copyWithFallback = () => {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url)
+              .then(() => { showShareToast('Link copiado para a área de transferência!'); })
+              .catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = url;
+                ta.style.position = 'fixed';
+                ta.style.top = '-9999px';
+                document.body.appendChild(ta);
+                ta.focus();
+                ta.select();
+                try { document.execCommand('copy'); showShareToast('Link copiado!'); } catch (e) { showShareToast('Não foi possível copiar o link'); }
+                document.body.removeChild(ta);
+              });
+          } else {
+            const ta = document.createElement('textarea');
+            ta.value = url;
+            ta.style.position = 'fixed';
+            ta.style.top = '-9999px';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            try { document.execCommand('copy'); showShareToast('Link copiado!'); } catch (e) { showShareToast('Não foi possível copiar o link'); }
+            document.body.removeChild(ta);
+          }
+        };
+
+        if (isMobile && navigator.share) {
+          navigator.share({ title, url })
+            .then(() => { showShareToast('Compartilhado!'); })
+            .catch(() => { });
         } else {
-          window.prompt('Copie o link abaixo:', url);
+          copyWithFallback();
         }
       });
     });
