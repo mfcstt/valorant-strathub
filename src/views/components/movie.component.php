@@ -398,50 +398,9 @@ $formData = flash()->get("formData")["comentario"] ?? '';
   <div class="overlay fixed inset-0 w-full h-full z-[1] bg-[#04040799] hidden"></div>
 </div>
 
-<div id="shareMessage"
-  class="fixed bottom-8 right-[-400px] z-10 w-auto max-w-[90vw] md:max-w-[480px] break-words flex flex-col pb-1 px-1 text-white border border-red-base rounded-md bg-gray-1 shadow-buttonHover">
-  <div class="flex items-center gap-2 px-8 pt-4 pb-3">
-    <i class="ph ph-check-circle text-red-base text-2xl"></i>
-    <span class="text-lg">Link copiado</span>
-  </div>
-  <div class="w-full h-0.5 bg-gray-3 rounded-xl">
-    <div class="progress-share h-full bg-red-light"></div>
-  </div>
-</div>
-
 <script>
   (function () {
     const buttons = document.querySelectorAll('.share-btn');
-    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    const showShareCard = (text) => {
-      const msg = document.getElementById('shareMessage');
-      if (!msg) return;
-      const label = msg.querySelector('span.text-lg');
-      if (label) label.textContent = text || 'Link copiado';
-      const progress = msg.querySelector('.progress-share');
-      const pad = 32;
-      msg.style.right = `-${msg.offsetWidth + pad}px`;
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          msg.style.right = `${pad}px`;
-        });
-      });
-      let containerWidth = msg.offsetWidth - 8;
-      let count = 4;
-      let x = (containerWidth / 100) * count;
-      const loading = setInterval(() => {
-        if (count >= 100) {
-          clearInterval(loading);
-        } else {
-          x += containerWidth / 100;
-          count++;
-          if (progress) progress.style.width = `${Math.trunc(x)}px`;
-        }
-      }, 50);
-      setTimeout(() => {
-        msg.style.right = `-${msg.offsetWidth + pad}px`;
-      }, 4700);
-    };
     buttons.forEach((btn) => {
       btn.addEventListener('click', function (ev) {
         ev.preventDefault();
@@ -450,32 +409,18 @@ $formData = flash()->get("formData")["comentario"] ?? '';
         const title = this.dataset.title || 'Estratégia Valorant';
         const url = `${window.location.origin}/strategy?id=${encodeURIComponent(id)}`;
 
-        if (isMobile && navigator.share) {
+        if (navigator.share) {
           navigator.share({ title, url }).catch(() => { });
-          return;
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url)
+            .then(() => alert('Link copiado para a área de transferência!'))
+            .catch(() => {
+              // Fallback final caso clipboard falhe
+              window.prompt('Copie o link abaixo:', url);
+            });
+        } else {
+          window.prompt('Copie o link abaixo:', url);
         }
-
-        (async () => {
-          try {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              await navigator.clipboard.writeText(url);
-              showShareCard('Link copiado');
-            } else {
-              const ta = document.createElement('textarea');
-              ta.value = url;
-              ta.setAttribute('readonly', '');
-              ta.style.position = 'absolute';
-              ta.style.left = '-9999px';
-              document.body.appendChild(ta);
-              ta.select();
-              document.execCommand('copy');
-              document.body.removeChild(ta);
-              showShareCard('Link copiado');
-            }
-          } catch (e) {
-            window.prompt('Copie o link abaixo:', url);
-          }
-        })();
       });
     });
   })();
