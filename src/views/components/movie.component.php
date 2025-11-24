@@ -37,8 +37,8 @@ $formData = flash()->get("formData")["comentario"] ?? '';
       <div class="w-full md:w-96">
         <div>
           <?php if ($movie->cover_image_url): ?>
-            <img src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia"
-              class="w-full h-56 sm:h-72 md:h-96 object-cover rounded-[18px]">
+            <img id="strategyCoverImage" src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia"
+              class="w-full h-56 sm:h-72 md:h-96 object-cover rounded-[18px] cursor-zoom-in">
           <?php elseif ($movie->video_url): ?>
             <video controls class="w-full h-56 sm:h-72 md:h-96 object-cover rounded-[18px]" preload="metadata">
               <source src="<?= $movie->video_url ?>" type="video/mp4">
@@ -310,6 +310,16 @@ $formData = flash()->get("formData")["comentario"] ?? '';
   </section>
 </div>
 
+<div id="imageLightbox" class="fixed inset-0 z-[20] hidden">
+  <div id="imageLightboxBackdrop" class="absolute inset-0 w-full h-full bg-[#000000e6]"></div>
+  <div class="relative flex items-center justify-center w-full h-full">
+    <img id="imageLightboxImg" src="" alt="Imagem da estratégia" class="max-w-[95vw] max-h-[95vh] object-contain rounded-md border border-gray-3 bg-gray-1 shadow-2xl">
+    <button type="button" id="closeImageLightbox" class="absolute top-6 right-6 h-9 px-3 rounded-md text-gray-5 bg-gray-3 outline-none hover:text-red-light focus:text-red-light focus:outline-red-base transition-all ease-in-out duration-300">
+      <i class="ph ph-x text-xl"></i>
+    </button>
+  </div>
+</div>
+
 <!-- MODAL AVALIAR -->
 <div>
   <dialog class="modal fixed z-[10] inset-0 w-[90vw] max-w-[600px] p-6 md:p-10 bg-gray-1 border border-gray-3 rounded-[18px] <?php if ($validationsMessages)
@@ -411,6 +421,31 @@ $formData = flash()->get("formData")["comentario"] ?? '';
         }
       });
     });
+  })();
+</script>
+
+<script>
+  (function () {
+    const img = document.getElementById('strategyCoverImage');
+    const box = document.getElementById('imageLightbox');
+    const full = document.getElementById('imageLightboxImg');
+    const closeBtn = document.getElementById('closeImageLightbox');
+    const backdrop = document.getElementById('imageLightboxBackdrop');
+    if (img && box && full && closeBtn && backdrop) {
+      const open = () => {
+        full.src = img.src;
+        box.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      };
+      const close = () => {
+        box.classList.add('hidden');
+        document.body.style.overflow = '';
+      };
+      img.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); open(); });
+      closeBtn.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); close(); });
+      backdrop.addEventListener('click', function () { close(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !box.classList.contains('hidden')) close(); });
+    }
   })();
 </script>
 
