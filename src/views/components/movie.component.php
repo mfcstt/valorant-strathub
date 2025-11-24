@@ -324,7 +324,7 @@ $formData = flash()->get("formData")["comentario"] ?? '';
 
 <!-- MODAL AVALIAR -->
 <div>
-  <dialog class="modal fixed z-[10] inset-0 w-[90vw] max-w-[600px] p-6 md:p-10 bg-gray-1 border border-gray-3 rounded-[18px] <?php if ($validationsMessages)
+  <dialog class="modal fixed z-[50] inset-0 w-[90vw] max-w-[600px] p-6 md:p-10 bg-gray-1 border border-gray-3 rounded-[18px] <?php if ($validationsMessages)
     echo 'open' ?>">
       <button
         class="closeModal absolute top-5 right-5 h-8 p-1.5 rounded-md text-gray-5 bg-gray-3 outline-none hover:text-red-light focus:text-red-light focus:outline-red-base transition-all ease-in-out duration-300">
@@ -337,11 +337,11 @@ $formData = flash()->get("formData")["comentario"] ?? '';
         <!-- Enviar o estrategia_id para o POST -->
         <input type="hidden" name="estrategia_id" value="<?= $movie->id ?>">
 
-      <div class="flex flex-col md:flex-row gap-6 md:gap-8 mt-6 md:mt-8">
+      <div class="flex flex-col gap-6 mt-6 md:mt-8">
         <?php if ($movie->cover_image_url): ?>
-          <img src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia" class="w-[137px] rounded-md">
+          <img src="<?= $movie->cover_image_url ?>" alt="Capa da estratégia" class="mx-auto w-[75%] max-w-[420px] h-28 sm:h-36 object-cover rounded-md">
         <?php else: ?>
-          <div class="w-[137px] h-20 bg-gray-800 flex items-center justify-center rounded-md">
+          <div class="mx-auto w-[75%] max-w-[420px] h-28 sm:h-36 bg-gray-800 flex items-center justify-center rounded-md">
             <span class="text-gray-500 text-xs">Sem imagem</span>
           </div>
         <?php endif; ?>
@@ -372,7 +372,7 @@ $formData = flash()->get("formData")["comentario"] ?? '';
 
       <div>
         <textarea name="comentario" placeholder="Comentário" maxlength="300"
-          class="resize-none w-full h-40 bg-gray-1 border border-gray-3 rounded-md px-4 py-3 text-gray-7 font-nunito leading-6 placeholder:text-gray-5 outline-none hover:outline-purple-base focus:outline-red-base"><?= htmlspecialchars($formData) ?></textarea>
+          class="resize-none w-full h-28 bg-gray-1 border border-gray-3 rounded-md px-4 py-3 text-gray-7 font-nunito leading-6 placeholder:text-gray-5 outline-none hover:outline-purple-base focus:outline-red-base"><?= htmlspecialchars($formData) ?></textarea>
 
         <?php if ($validationsMessages): ?>
           <ul class="ml-1 flex flex-wrap gap-x-3">
@@ -395,7 +395,7 @@ $formData = flash()->get("formData")["comentario"] ?? '';
     </form>
   </dialog>
 
-  <div class="overlay fixed inset-0 w-full h-full z-[1] bg-[#04040799] hidden"></div>
+  <div class="overlay fixed inset-0 w-full h-full z-[40] bg-[#000000e6] hidden"></div>
 </div>
 
 <script>
