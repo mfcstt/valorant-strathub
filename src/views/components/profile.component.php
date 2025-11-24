@@ -39,13 +39,19 @@
         <input type="hidden" name="action" value="update_info">
         <div>
           <label class="block text-gray-7 font-nunito text-sm mb-2">Nome</label>
-          <input type="text" name="name"
-            value="<?= htmlspecialchars((flash()->get('formData')['name'] ?? $user->name)) ?>" class="inpForm w-full">
+          <div class="relative">
+            <i class="ph ph-user text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Nome"></i>
+            <input type="text" name="name"
+              value="<?= htmlspecialchars((flash()->get('formData')['name'] ?? $user->name)) ?>" class="inpForm w-full">
+          </div>
         </div>
         <div>
           <label class="block text-gray-7 font-nunito text-sm mb-2">Email</label>
-          <input type="text" name="email"
-            value="<?= htmlspecialchars((flash()->get('formData')['email'] ?? $user->email)) ?>" class="inpForm w-full">
+          <div class="relative">
+            <i class="ph ph-envelope text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Email"></i>
+            <input type="text" name="email"
+              value="<?= htmlspecialchars((flash()->get('formData')['email'] ?? $user->email)) ?>" class="inpForm w-full">
+          </div>
         </div>
         <div>
           <label class="block text-gray-7 font-nunito text-sm mb-2">Elo</label>
@@ -67,8 +73,11 @@
         </div>
         <div>
           <label class="block text-gray-7 font-nunito text-sm mb-2">Conta criada em</label>
-          <input type="text" value="<?= htmlspecialchars(date('d/m/Y', strtotime($user->created_at))) ?>"
-            class="inpForm w-full" disabled>
+          <div class="relative">
+            <i class="ph ph-calendar text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Data de criação"></i>
+            <input type="text" value="<?= htmlspecialchars(date('d/m/Y', strtotime($user->created_at))) ?>"
+              class="inpForm w-full" disabled>
+          </div>
         </div>
         <div class="flex items-end">
           <button type="submit"
@@ -111,15 +120,24 @@
           <input type="hidden" name="action" value="change_password">
           <div class="md:col-span-2">
             <label class="block text-gray-7 font-nunito text-sm mb-2">Senha atual</label>
-            <input type="password" name="senha_atual" class="inpForm w-full" placeholder="Sua senha atual">
+            <div class="relative">
+              <i class="ph ph-lock text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Senha atual"></i>
+              <input type="password" name="senha_atual" class="inpForm w-full" placeholder="Sua senha atual">
+            </div>
           </div>
           <div>
             <label class="block text-gray-7 font-nunito text-sm mb-2">Nova senha</label>
-            <input type="password" name="nova_senha" class="inpForm w-full" placeholder="Mínimo de 8 caracteres">
+            <div class="relative">
+              <i class="ph ph-lock text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Nova senha"></i>
+              <input type="password" name="nova_senha" class="inpForm w-full" placeholder="Mínimo de 8 caracteres">
+            </div>
           </div>
           <div>
             <label class="block text-gray-7 font-nunito text-sm mb-2">Confirmar nova senha</label>
-            <input type="password" name="confirmar_senha" class="inpForm w-full" placeholder="Repita a nova senha">
+            <div class="relative">
+              <i class="ph ph-lock text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Confirmar nova senha"></i>
+              <input type="password" name="confirmar_senha" class="inpForm w-full" placeholder="Repita a nova senha">
+            </div>
           </div>
           <div class="flex items-end md:col-span-2">
             <button type="submit"
@@ -137,7 +155,10 @@
           <input type="hidden" name="action" value="delete_account">
           <div>
             <label class="block text-gray-7 font-nunito text-sm mb-2">Confirme com sua senha</label>
-            <input type="password" name="senha_atual" class="inpForm w-full" placeholder="Digite sua senha">
+            <div class="relative">
+              <i class="ph ph-lock text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5" title="Senha"></i>
+              <input type="password" name="senha_atual" class="inpForm w-full" placeholder="Digite sua senha">
+            </div>
           </div>
           <div class="flex items-end">
             <button type="submit"
