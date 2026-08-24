@@ -36,5 +36,6 @@ Thumbs.db
 # Assets de terceiros copiados pelo build
 public/vendor/
 
-# Mídia enviada com o driver de storage local
-public/uploads/
+# Mídia enviada com o driver de storage local (mantém o diretório, ignora o conteúdo)
+public/uploads/*
+!public/uploads/.gitkeep

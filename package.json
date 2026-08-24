@@ -1,0 +1,18 @@
+{
+    "name": "valorant-strathub",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Assets de front-end do Valorant StratHub.",
+    "scripts": {
+        "assets:vendor": "node scripts/copy-vendor-assets.mjs",
+        "build:css": "tailwindcss -i ./resources/css/tailwind.css -o ./public/CSS/tailwind.build.css --minify",
+        "build": "npm run assets:vendor && npm run build:css",
+        "dev": "npm run assets:vendor && tailwindcss -i ./resources/css/tailwind.css -o ./public/CSS/tailwind.build.css --watch"
+    },
+    "devDependencies": {
+        "tailwindcss": "^3.4.17"
+    },
+    "dependencies": {
+        "@phosphor-icons/web": "^2.1.1"
+    }
+}

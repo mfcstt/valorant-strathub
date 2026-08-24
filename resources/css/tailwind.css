@@ -1,0 +1,10 @@
+/**
+ * Entrada da compilação do Tailwind.
+ *
+ * Gera public/CSS/tailwind.build.css (arquivo de build, não versionado).
+ * Os estilos escritos à mão continuam em public/CSS/global.css.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
