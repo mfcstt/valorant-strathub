@@ -33,6 +33,10 @@
         "check": [
             "@analyse",
             "@test"
+        ],
+        "vercel": [
+            "npm install",
+            "npm run build"
         ]
     },
     "config": {

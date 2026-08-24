@@ -1,0 +1,23 @@
+# Segredos nunca sobem — mas também nunca estão no Git, isto é defesa extra
+.env
+.env.*
+
+# Reinstalado do zero pelo hook "vercel" do composer.json durante o build
+vendor/
+
+# Nada disso é necessário para servir a aplicação
+.git
+.github
+tests/
+phpunit.xml
+phpstan.neon
+.editorconfig
+docker/
+Dockerfile
+docker-compose.yml
+.dockerignore
+database/*.sqlite
+*.md
+LICENSE
+docs/
+.playwright-mcp/
