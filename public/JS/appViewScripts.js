@@ -481,6 +481,24 @@ function initEloPreview() {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Rótulo de input de arquivo customizado                                     */
+/* -------------------------------------------------------------------------- */
+
+function initFileLabels() {
+  document.querySelectorAll('[data-file-input]').forEach((input) => {
+    const label = input.closest('label')?.querySelector('[data-file-label]')
+      ?? document.querySelector(`label[for="${input.id}"] [data-file-label]`)
+    if (!label) return
+
+    const defaultText = label.textContent
+
+    input.addEventListener('change', () => {
+      label.textContent = input.files?.[0]?.name ?? defaultText
+    })
+  })
+}
+
+/* -------------------------------------------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu()
@@ -495,4 +513,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initImageLightbox()
   initShareButtons()
   initEloPreview()
+  initFileLabels()
 })

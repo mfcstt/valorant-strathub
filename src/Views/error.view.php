@@ -5,9 +5,15 @@ declare(strict_types=1);
 /**
  * Página de erro HTTP.
  *
+ * Inclui o mesmo cabeçalho das páginas internas: sem ele, quem já está logado
+ * e cai numa URL inválida perdia o acesso direto a Perfil, Minhas estratégias
+ * e Favoritas, restando só o botão "Explorar estratégias".
+ *
  * @var int    $code
  * @var string $message
  */
+
+require __DIR__ . '/partials/_header.php';
 
 $titles = [
     403 => 'Acesso negado',

@@ -86,14 +86,14 @@ $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
           </div>
         <?php endif; ?>
 
-        <div class="mt-3 flex items-center gap-2 w-full">
+        <div class="mt-3 flex flex-wrap items-center gap-2 w-full">
           <?php if (Auth::check()): ?>
             <form method="post" action="/favorite-toggle">
               <?= csrf_field() ?>
               <input type="hidden" name="strategy_id" value="<?= e($strategy->id) ?>">
               <input type="hidden" name="redirect" value="<?= e($detailUrl) ?>">
               <button type="submit"
-                class="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all">
+                class="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none whitespace-nowrap hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all">
                 <i class="<?= $strategy->isFavorite() ? 'ph-fill ph-heart text-red-light' : 'ph ph-heart' ?> text-xl"
                   aria-hidden="true"></i>
                 <span><?= $strategy->isFavorite() ? 'Desfavoritar' : 'Favoritar' ?></span>
@@ -101,7 +101,7 @@ $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
             </form>
           <?php else: ?>
             <a href="/login"
-              class="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light focus:text-red-light focus:outline-red-base transition-all">
+              class="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none whitespace-nowrap hover:text-red-light focus:text-red-light focus:outline-red-base transition-all">
               <i class="ph ph-heart text-xl" aria-hidden="true"></i>
               <span>Entre para favoritar</span>
             </a>
@@ -110,7 +110,7 @@ $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
           <button type="button" data-share
             data-share-url="<?= e($detailUrl) ?>"
             data-share-title="<?= e($strategy->title) ?>"
-            class="ml-auto flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all">
+            class="ml-auto flex items-center gap-2 px-4 py-2 rounded-md bg-gray-1/80 border border-gray-3 text-gray-5 outline-none whitespace-nowrap hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all">
             <i class="ph ph-share-network text-xl" aria-hidden="true"></i>
             <span>Compartilhar</span>
           </button>
@@ -165,7 +165,7 @@ $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
           <span class="text-gray-6 font-nunito font-bold">Postado por:</span>
           <?php if ($author !== null): ?>
             <span class="relative w-8 h-8">
-              <img src="<?= e($authorAvatar) ?>" alt="" class="w-8 h-8 rounded-md border border-[#7435DB] object-cover">
+              <img src="<?= e($authorAvatar) ?>" alt="" class="w-8 h-8 rounded-md border border-gray-4 object-cover">
               <?php if ($author->elo): ?>
                 <img src="/assets/images/elos/<?= e(strtolower((string) $author->elo)) ?>.png"
                   alt="Elo <?= e($author->elo) ?>"
@@ -270,7 +270,7 @@ $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
             <div class="flex items-center gap-4">
               <span class="relative w-12 h-12 shrink-0">
                 <img src="<?= e($rating->avatarUrl()) ?>" alt=""
-                  class="w-12 h-12 object-cover rounded-md border border-[#7435DB]">
+                  class="w-12 h-12 object-cover rounded-md border border-gray-4">
                 <?php if ($rating->user_elo): ?>
                   <img src="/assets/images/elos/<?= e(strtolower((string) $rating->user_elo)) ?>.png"
                     alt="Elo <?= e($rating->user_elo) ?>"
@@ -339,7 +339,7 @@ $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
 
 <!-- Lightbox da capa -->
 <div id="imageLightbox" class="fixed inset-0 z-[20] hidden">
-  <div id="imageLightboxBackdrop" class="absolute inset-0 w-full h-full bg-[#000000e6]"></div>
+  <div id="imageLightboxBackdrop" class="absolute inset-0 w-full h-full bg-black/90"></div>
   <div class="relative flex items-center justify-center w-full h-full">
     <img id="imageLightboxImg" src="" alt="Capa ampliada"
       class="max-w-[95vw] max-h-[95vh] object-contain rounded-md border border-gray-3 bg-gray-1 shadow-2xl">
@@ -393,6 +393,8 @@ $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
                       : $star === Rating::MIN; ?>
                   <label class="star-icon <?= $star === Rating::MIN ? 'firstStar' : '' ?> <?= $isSelected ? 'starActive' : '' ?>">
                     <span class="sr-only"><?= e($star) ?> de 5</span>
+                    <i class="ph-fill ph-star star-fill text-red-light text-xl" aria-hidden="true"></i>
+                    <i class="ph ph-star star-regular text-red-light text-xl" aria-hidden="true"></i>
                     <input type="radio" name="avaliacao" class="hidden" value="<?= e($star) ?>"
                       <?= $isSelected ? 'checked' : '' ?>>
                   </label>
@@ -428,7 +430,7 @@ $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
       </form>
     </dialog>
 
-    <div class="overlay fixed inset-0 w-full h-full z-[40] bg-[#000000e6] hidden"></div>
+    <div class="overlay fixed inset-0 w-full h-full z-[40] bg-black/90 hidden"></div>
   </div>
 <?php endif; ?>
 

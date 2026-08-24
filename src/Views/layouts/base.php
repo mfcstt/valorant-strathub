@@ -38,8 +38,8 @@ $error = flash()->get('error');
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Rajdhani:wght@300;400;500;600;700&family=Rammetto+One&display=swap">
 
-  <link rel="stylesheet" href="/CSS/tailwind.build.css">
-  <link rel="stylesheet" href="/CSS/global.css">
+  <link rel="stylesheet" href="<?= e(asset_version('/CSS/tailwind.build.css')) ?>">
+  <link rel="stylesheet" href="<?= e(asset_version('/CSS/global.css')) ?>">
 
   <!-- Ícones servidos do próprio domínio (npm run assets:vendor), em vez de CDN -->
   <link rel="stylesheet" href="/vendor/phosphor/regular/style.css">
@@ -84,7 +84,7 @@ $error = flash()->get('error');
     </div>
   <?php endif; ?>
 
-  <script src="/JS/globalScripts.js" defer></script>
+  <script src="<?= e(asset_version('/JS/globalScripts.js')) ?>" defer></script>
 
   <?php
   // Cada view pode ter o seu próprio script. A checagem evita um 404 no console
@@ -92,7 +92,7 @@ $error = flash()->get('error');
   $viewScript = "/JS/{$view}ViewScripts.js";
   if (is_file(dirname(__DIR__, 3) . '/public' . $viewScript)):
       ?>
-    <script src="<?= e($viewScript) ?>" defer></script>
+    <script src="<?= e(asset_version($viewScript)) ?>" defer></script>
   <?php endif; ?>
 </body>
 

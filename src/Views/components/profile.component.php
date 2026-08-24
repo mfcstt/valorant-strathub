@@ -43,7 +43,7 @@ $activity = [
     <!-- Avatar -->
     <div class="p-6 rounded-[18px] bg-gray-2">
       <div class="flex flex-col items-center gap-4">
-        <div class="relative w-32 h-32 rounded-md overflow-hidden border border-[#7435DB] bg-gray-3 shadow-buttonHover">
+        <div class="relative w-32 h-32 rounded-md overflow-hidden border border-gray-4 bg-gray-3 shadow-buttonHover">
           <img src="<?= e($avatarUrl) ?>" alt="Seu avatar" class="w-full h-full object-cover">
         </div>
 
@@ -58,9 +58,13 @@ $activity = [
           <?= csrf_field() ?>
           <input type="hidden" name="action" value="update_avatar">
 
-          <label for="avatar" class="block text-gray-7 font-nunito text-sm mb-2">Alterar avatar</label>
+          <label for="avatar"
+            class="flex items-center gap-3 px-4 py-3 rounded-md bg-gray-3 border border-gray-3 text-gray-6 font-nunito text-sm cursor-pointer outline-none hover:border-red-base focus-within:border-red-base transition-all ease-in-out duration-300">
+            <i class="ph ph-upload-simple text-xl text-red-light" aria-hidden="true"></i>
+            <span data-file-label>Alterar avatar</span>
+          </label>
           <input type="file" id="avatar" name="avatar" accept="image/jpeg,image/png,image/webp,image/avif"
-            class="w-full text-gray-6 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-nunito file:bg-gray-3 file:text-gray-6 hover:file:bg-gray-4">
+            data-file-input class="sr-only">
           <p class="mt-2 text-xs text-gray-5 font-nunito">JPG, PNG ou WebP até <?= e($maxImageMb) ?> MB.</p>
 
           <button type="submit"

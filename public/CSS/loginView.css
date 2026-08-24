@@ -1,6 +1,9 @@
 /* Checked e Focus dos botões da tela de Login e Cadastro */
 .checkbox:focus ~ label {
+  /* outline-offset negativo: sem isso, o anel ficava fora do bloco colorido
+     da aba ativa, dando a impressão de uma borda dupla e desalinhada. */
   outline: 2px solid #e55566;
+  outline-offset: -2px;
 }
 
 .checkbox:checked ~ label {

@@ -22,10 +22,15 @@ $selectedElo = strtolower(trim(old('elo')));
 <!-- Login e cadastro -->
 <section class="min-h-screen flex p-4 md:items-stretch md:justify-start items-center justify-center">
   <!-- Arte lateral -->
-  <div class="hidden md:flex md:flex-col justify-between md:w-2/4 md:min-h-screen p-8 rounded-[18px] bg-thumb bg-cover bg-no-repeat bg-center"></div>
+  <!-- bg-left-top, e não bg-center: a imagem tem a logo "VALORANT" colada no
+       canto superior esquerdo — centralizar o recorte cortava o próprio texto. -->
+  <div class="hidden md:flex md:flex-col justify-between md:w-2/4 md:min-h-screen p-8 rounded-[18px] bg-thumb bg-cover bg-no-repeat bg-left-top"></div>
 
   <!-- Formulários -->
-  <div class="w-full md:w-2/4 text-gray-5 md:pt-[135px] pt-0 flex items-center justify-center">
+  <!-- Sem padding-top fixo: o flex items-center abaixo já centraliza o
+       formulário verticalmente. Um `pt-[135px]` fixo empurrava o conteúdo
+       para além do centro, deixando um vão vazio desproporcional no topo. -->
+  <div class="w-full md:w-2/4 text-gray-5 flex items-center justify-center">
     <div class="flex flex-col font-nunito">
       <header class="flex gap-1 w-[328px] mx-auto p-1 rounded-[10px] bg-gray-2 text-center">
         <div class="relative flex-1 rounded-md">
@@ -73,6 +78,10 @@ $selectedElo = strtolower(trim(old('elo')));
               <?php input('email', 'email', 'E-mail', 'ph ph-envelope', 'register'); ?>
               <?php input('password', 'senha', 'Senha', 'ph ph-password', 'register'); ?>
 
+              <p class="-mt-2 text-xs text-gray-5 text-start leading-relaxed">
+                A senha deve ter no mínimo 8 caracteres e incluir ao menos um caractere especial.
+              </p>
+
               <div class="relative flex items-center">
                 <i class="ph ph-shield-star text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5"
                   aria-hidden="true"></i>
@@ -97,10 +106,6 @@ $selectedElo = strtolower(trim(old('elo')));
                   <?php endforeach; ?>
                 </ul>
               <?php endif; ?>
-
-              <p class="text-xs text-gray-5 text-start leading-relaxed">
-                A senha deve ter no mínimo 8 caracteres e incluir ao menos um caractere especial.
-              </p>
             </div>
 
             <button type="submit"

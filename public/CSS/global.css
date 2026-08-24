@@ -77,6 +77,14 @@
   scroll-behavior: smooth;
 }
 
+/* Indicador de que dá pra rolar mais: sem isso, o card ficava cortado exatamente
+   na borda do container, sem nenhuma pista visual de que havia mais opções. */
+.agent-selection-container,
+.map-selection-container {
+  mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent 100%);
+}
+
 /* Map Selection Styles */
 .map-option {
   position: relative;

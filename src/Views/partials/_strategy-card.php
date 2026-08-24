@@ -61,7 +61,7 @@ $returnTo = $queryString !== '' ? $currentUrl . '?' . $queryString : $currentUrl
   <!-- Conteúdo -->
   <div class="relative z-[4] h-full flex flex-col justify-between p-4 pointer-events-none">
     <div class="flex items-start">
-      <p class="flex items-center gap-1.5 px-3 py-1.5 text-lg text-gray-7 font-bold font-rajdhani bg-[#0f0f1acc] rounded-full backdrop-blur-sm">
+      <p class="flex items-center gap-1.5 px-3 py-1.5 text-lg text-gray-7 font-bold font-rajdhani bg-gray-1/80 rounded-full backdrop-blur-sm">
         <?= e(number_format($strategy->ratingAverage(), 1, ',', '.')) ?>
         <span class="text-xs font-medium">/ 5</span>
         <span class="text-xs font-medium">

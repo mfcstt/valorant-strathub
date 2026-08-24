@@ -55,6 +55,25 @@ if (!function_exists('input')) {
     }
 }
 
+if (!function_exists('asset_version')) {
+    /**
+     * Sufixo de cache-busting para um asset estático, baseado na data de
+     * modificação do arquivo.
+     *
+     * `public/static.php` serve CSS/JS com `Cache-Control: immutable,
+     * max-age=31536000` — o navegador nunca revalida essa URL. Sem um sufixo
+     * que mude junto com o conteúdo, uma correção de CSS ou JS não chegaria a
+     * quem já visitou o site antes do deploy, por até um ano.
+     */
+    function asset_version(string $publicPath): string
+    {
+        $file = dirname(__DIR__, 2) . '/public' . $publicPath;
+        $mtime = is_file($file) ? filemtime($file) : false;
+
+        return $publicPath . '?v=' . ($mtime !== false ? $mtime : '0');
+    }
+}
+
 if (!function_exists('field_errors')) {
     /**
      * Desenha a lista de erros de um campo.

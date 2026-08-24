@@ -51,17 +51,13 @@
   overflow: hidden;
 }
 
-.shadingThumb::after {
-  position: absolute;
-  content: "";
-
-  width: 100%;
-  height: 100%;
-
-  background: linear-gradient(180deg, rgb(18, 18, 33, 0) 0%, #131320 100%);
-}
-
-/* Estilos das avaliações */
+/* Estilos das avaliações
+ *
+ * Antes trocava o `content` de um `::before` entre dois SVGs crus
+ * (Star-Fill.svg / Star-Regular.svg) — o único lugar do app fora do sistema
+ * de ícones Phosphor usado em todo o resto da interface. Agora cada estrela
+ * já nasce com os dois ícones Phosphor (preenchido e contorno) e a mesma
+ * cadeia de seletores por estado alterna qual dos dois fica visível. */
 .star-icon {
   cursor: pointer;
 
@@ -78,22 +74,38 @@
   padding-right: 0;
 }
 
-.star-icon::before {
-  content: url("/assets/icons/Star-Fill.svg");
+.star-icon .star-regular {
+  display: none;
 }
 
-.star-icon.firstStar::before {
-  content: url("/assets/icons/Star-Regular.svg");
+.star-icon.firstStar .star-fill {
+  display: none;
 }
 
-.star-icon.starActive ~ .star-icon::before {
-  content: url("/assets/icons/Star-Regular.svg");
+.star-icon.firstStar .star-regular {
+  display: block;
 }
 
-.boxRating:hover .star-icon::before {
-  content: url("/assets/icons/Star-Fill.svg");
+.star-icon.starActive ~ .star-icon .star-fill {
+  display: none;
 }
 
-.star-icon:hover ~ .star-icon::before {
-  content: url("/assets/icons/Star-Regular.svg");
+.star-icon.starActive ~ .star-icon .star-regular {
+  display: block;
+}
+
+.boxRating:hover .star-icon .star-fill {
+  display: block;
+}
+
+.boxRating:hover .star-icon .star-regular {
+  display: none;
+}
+
+.star-icon:hover ~ .star-icon .star-fill {
+  display: none;
+}
+
+.star-icon:hover ~ .star-icon .star-regular {
+  display: block;
 }
