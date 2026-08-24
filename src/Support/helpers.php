@@ -57,20 +57,26 @@ if (!function_exists('input')) {
 
 if (!function_exists('asset_version')) {
     /**
-     * Sufixo de cache-busting para um asset estático, baseado na data de
-     * modificação do arquivo.
+     * Sufixo de cache-busting para um asset estático, baseado no conteúdo do
+     * arquivo.
      *
      * `public/static.php` serve CSS/JS com `Cache-Control: immutable,
      * max-age=31536000` — o navegador nunca revalida essa URL. Sem um sufixo
      * que mude junto com o conteúdo, uma correção de CSS ou JS não chegaria a
      * quem já visitou o site antes do deploy, por até um ano.
+     *
+     * Usa um hash do conteúdo, não `filemtime()`: o empacotamento serverless
+     * da Vercel normaliza a data de modificação de todo arquivo para um valor
+     * fixo (a mesma data em qualquer deploy), o que tornaria esse cache-busting
+     * inofensivo na aparência e inútil na prática.
      */
     function asset_version(string $publicPath): string
     {
         $file = dirname(__DIR__, 2) . '/public' . $publicPath;
-        $mtime = is_file($file) ? filemtime($file) : false;
+        $contents = is_file($file) ? file_get_contents($file) : false;
+        $hash = $contents !== false ? substr(md5($contents), 0, 10) : '0';
 
-        return $publicPath . '?v=' . ($mtime !== false ? $mtime : '0');
+        return $publicPath . '?v=' . $hash;
     }
 }
 
