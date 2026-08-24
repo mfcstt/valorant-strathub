@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http;
 
+use App\Models\Image;
 use App\Models\User;
+use App\Models\Video;
 use App\Services\Storage;
 use App\Services\UploadValidator;
 use App\Support\Auth;
+use App\Support\Config;
 use App\Support\Validation;
 
 /**
@@ -140,11 +143,74 @@ final class ProfileActions
             return;
         }
 
+        // Apagados antes do usuário, e não depois: o `ON DELETE CASCADE` do
+        // banco remove as linhas de `images`/`videos` automaticamente, mas não
+        // sabe nada sobre o Supabase Storage. Sem este passo, o arquivo
+        // continua público e acessível indefinidamente — órfão, sem nenhuma
+        // linha no banco que aponte para ele.
+        $this->deleteOwnedMediaFiles();
+
         User::delete($this->userId);
         Auth::logout();
 
         flash()->put('message', 'Sua conta foi apagada.');
         redirect('/login');
+    }
+
+    /**
+     * Remove do Supabase Storage toda mídia pertencente a este usuário.
+     *
+     * Melhor esforço: uma falha de rede ao apagar um arquivo não pode impedir
+     * a exclusão da conta em si — a pessoa pediu para sair, e um objeto órfão
+     * no bucket é um problema bem menor do que uma conta presa sem poder ser
+     * apagada.
+     */
+    private function deleteOwnedMediaFiles(): void
+    {
+        $storage = Storage::disk();
+
+        foreach (Image::forUser($this->userId) as $image) {
+            try {
+                $storage->deleteImage((string) $image->file_path);
+            } catch (\Throwable $e) {
+                error_log('[strathub] falha ao apagar imagem órfã na exclusão de conta: ' . $e->getMessage());
+            }
+        }
+
+        foreach (Video::forUser($this->userId) as $video) {
+            try {
+                $storage->deleteVideo((string) $video->file_path);
+            } catch (\Throwable $e) {
+                error_log('[strathub] falha ao apagar vídeo órfão na exclusão de conta: ' . $e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * Apaga do Storage o avatar anterior, se ele for um arquivo nosso.
+     *
+     * `avatarDefault.png` e uma string vazia (conta sem avatar ainda) não
+     * apontam para nada no bucket — nesses casos não há o que apagar.
+     */
+    private function deletePreviousAvatar(string $previousAvatarUrl): void
+    {
+        if ($previousAvatarUrl === '' || $previousAvatarUrl === 'avatarDefault.png') {
+            return;
+        }
+
+        $prefix = (string) Config::get('storage.image_prefix', '');
+
+        if ($prefix === '' || !str_starts_with($previousAvatarUrl, $prefix)) {
+            return;
+        }
+
+        $filePath = substr($previousAvatarUrl, strlen($prefix));
+
+        try {
+            Storage::disk()->deleteImage($filePath);
+        } catch (\Throwable $e) {
+            error_log('[strathub] falha ao apagar avatar anterior: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -166,6 +232,13 @@ final class ProfileActions
             return;
         }
 
+        // Guardado antes do upload: é o que permite apagar o arquivo antigo do
+        // Storage depois de confirmado que o novo já está no lugar. Sem isso,
+        // cada troca de avatar deixa o arquivo anterior órfão no bucket — o
+        // registro em `users.avatar` é sobrescrito, mas o objeto em si nunca
+        // é removido.
+        $previousAvatar = (string) ($_SESSION['auth']->avatar ?? '');
+
         $result = Storage::disk()->uploadImage((array) $file, $this->userId);
 
         if (!$result->ok || $result->file === null) {
@@ -181,6 +254,8 @@ final class ProfileActions
 
             return;
         }
+
+        $this->deletePreviousAvatar($previousAvatar);
 
         Auth::refresh(['avatar' => $updated->avatar]);
 
