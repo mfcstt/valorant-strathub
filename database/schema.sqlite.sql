@@ -89,6 +89,15 @@ CREATE TABLE IF NOT EXISTS ratings (
     UNIQUE (user_id, strategy_id)
 );
 
+-- Sessões (mesmo motivo do schema PostgreSQL — ver DatabaseSessionHandler).
+CREATE TABLE IF NOT EXISTS sessions (
+    id             VARCHAR(128) PRIMARY KEY,
+    payload        TEXT NOT NULL,
+    last_activity  INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_sessions_last_activity ON sessions (last_activity);
+
 CREATE TABLE IF NOT EXISTS favorites (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,

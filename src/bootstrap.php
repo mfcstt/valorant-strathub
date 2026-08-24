@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 
 use App\Support\Config;
+use App\Support\Database;
+use App\Support\DatabaseSessionHandler;
 use App\Support\Router;
 use App\Support\View;
 
@@ -52,6 +54,13 @@ if (session_status() === PHP_SESSION_NONE) {
     // fixação de sessão por link com id plantado.
     ini_set('session.use_strict_mode', '1');
     ini_set('session.use_only_cookies', '1');
+
+    // Sessão no banco, não em arquivo — ver DatabaseSessionHandler para o porquê.
+    // register_shutdown_function garante que a escrita aconteça antes do PHP
+    // começar a destruir objetos no fim do script, incluindo a própria conexão
+    // com o banco de que o handler depende.
+    session_set_save_handler(new DatabaseSessionHandler(Database::connection()), true);
+    register_shutdown_function('session_write_close');
 
     session_name('strathub_session');
     session_start();

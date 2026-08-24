@@ -39,3 +39,6 @@ public/vendor/
 # Mídia enviada com o driver de storage local (mantém o diretório, ignora o conteúdo)
 public/uploads/*
 !public/uploads/.gitkeep
+
+# Artefatos de sessões do Playwright MCP
+.playwright-mcp/
