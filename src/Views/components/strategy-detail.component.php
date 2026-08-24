@@ -38,7 +38,7 @@ $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
 ?>
 
 <div class="modalBlur w-full h-full">
-  <section class="relative min-h-[618px] flex items-start justify-center px-4 md:px-0">
+  <section class="relative flex items-start justify-center px-4 md:px-0">
     <article class="flex flex-col md:flex-row gap-6 md:gap-12 w-full max-w-[1366px]">
 
       <!-- Cabeçalho mobile -->
