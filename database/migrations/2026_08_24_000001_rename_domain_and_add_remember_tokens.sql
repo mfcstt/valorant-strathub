@@ -81,7 +81,36 @@ CREATE INDEX IF NOT EXISTS idx_remember_tokens_user    ON remember_tokens (user_
 CREATE INDEX IF NOT EXISTS idx_remember_tokens_expires ON remember_tokens (expires_at);
 
 -- 7. Fotos de agentes que apontavam para arquivos inexistentes ---------------
+-- O banco guardava 'brim.png' e 'chypher.png'; os arquivos no repositório
+-- passaram a se chamar 'brimstone.png' e 'cypher.png'. As duas imagens estavam
+-- quebradas na aplicação.
 UPDATE agents SET photo = 'brimstone.png' WHERE name = 'Brimstone' AND photo <> 'brimstone.png';
 UPDATE agents SET photo = 'cypher.png'    WHERE name = 'Cypher'    AND photo <> 'cypher.png';
+
+-- 8. Triggers de updated_at ---------------------------------------------------
+-- Renomear a tabela mantém a trigger funcionando, mas com o nome antigo. E
+-- `ratings` ganhou a coluna updated_at no passo 3, então precisa da sua trigger.
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $fn$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$fn$ LANGUAGE plpgsql;
+
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM information_schema.triggers
+                WHERE trigger_schema = 'public'
+                  AND trigger_name = 'update_estrategias_updated_at')
+    THEN
+        ALTER TRIGGER update_estrategias_updated_at ON strategies
+            RENAME TO update_strategies_updated_at;
+    END IF;
+END $$;
+
+DROP TRIGGER IF EXISTS update_ratings_updated_at ON ratings;
+CREATE TRIGGER update_ratings_updated_at BEFORE UPDATE ON ratings
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 COMMIT;

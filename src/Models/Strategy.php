@@ -68,6 +68,33 @@ final class Strategy
     public const DEFAULT_ORDER = 'mais_estrelas';
 
     /**
+     * Cláusula ESCAPE das buscas com LIKE.
+     *
+     * Sem declarar um caractere de escape, nem PostgreSQL nem SQLite tratam
+     * `%` e `_` escapados como literais, e uma busca por "100%" traria a tabela
+     * inteira.
+     *
+     * O caractere é `!`, e não a barra invertida, por causa de um detalhe do
+     * PDO: para o driver pgsql ele reescreve os parâmetros nomeados para `$1`,
+     * `$2`… varrendo a consulta em busca de literais de string. A sequência
+     * `'\'` faz esse scanner interpretar `\'` como aspa escapada, então ele
+     * considera o resto da consulta como parte de um literal e para de
+     * substituir — as ocorrências seguintes de `:search` chegam cruas ao banco
+     * e o Postgres devolve erro de sintaxe. Com `!` o problema não existe.
+     *
+     * O SQLite aceita os dois, então o bug só aparecia em produção.
+     */
+    private const LIKE_ESCAPE = "ESCAPE '!'";
+
+    /**
+     * Escapa os curingas do LIKE usando `!` como caractere de escape.
+     */
+    private static function escapeLikeWildcards(string $value): string
+    {
+        return str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $value);
+    }
+
+    /**
      * @return list<string>
      */
     public static function orderOptions(): array
@@ -276,20 +303,14 @@ final class Strategy
 
         $search = trim((string) ($filters['search'] ?? ''));
         if ($search !== '') {
-            // A cláusula ESCAPE é obrigatória: sem declará-la, nem SQLite nem
-            // PostgreSQL tratam a barra invertida como caractere de escape, e os
-            // curingas escapados abaixo continuariam funcionando como curingas —
-            // uma busca por "100%" traria a tabela inteira.
-            $escape = " ESCAPE '\\'";
-
             $clauses[] = '('
-                . "LOWER(e.title) LIKE LOWER(:search){$escape}"
-                . " OR LOWER(e.category) LIKE LOWER(:search){$escape}"
-                . " OR LOWER(a.name) LIKE LOWER(:search){$escape}"
-                . " OR LOWER(m.name) LIKE LOWER(:search){$escape}"
+                . 'LOWER(e.title) LIKE LOWER(:search) ' . self::LIKE_ESCAPE
+                . ' OR LOWER(e.category) LIKE LOWER(:search) ' . self::LIKE_ESCAPE
+                . ' OR LOWER(a.name) LIKE LOWER(:search) ' . self::LIKE_ESCAPE
+                . ' OR LOWER(m.name) LIKE LOWER(:search) ' . self::LIKE_ESCAPE
                 . ')';
 
-            $params['search'] = '%' . addcslashes($search, '%_\\') . '%';
+            $params['search'] = '%' . self::escapeLikeWildcards($search) . '%';
         }
 
         if (!empty($filters['agent_id'])) {
