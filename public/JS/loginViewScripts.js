@@ -1,43 +1,47 @@
-/* Animação troca de container Login para Cadastro */
-function animationLoginRegister() {
-  const btnLogin = document.getElementById('btnL');
-  const btnRegister = document.getElementById('btnR');
-  const containerLogin = document.getElementById('login');
-  const containerRegister = document.getElementById('register');
+/**
+ * Alternância entre os painéis de login e cadastro.
+ *
+ * A versão anterior chamava addEventListener sem checar a existência dos
+ * elementos, então qualquer página que carregasse este script sem os dois
+ * painéis quebrava com TypeError e interrompia o restante do arquivo.
+ */
 
-  btnLogin.addEventListener('click', () => {
-    btnLogin.checked = true;
-    btnRegister.checked = false;
+function initAuthPanelSwitch() {
+  const loginTab = document.getElementById('btnL')
+  const registerTab = document.getElementById('btnR')
+  const loginPanel = document.getElementById('login')
+  const registerPanel = document.getElementById('register')
 
-    // Primeiro faz fade out do cadastro, depois mostra login com fade in
-    containerRegister.classList.add('disabled');
+  if (!loginTab || !registerTab || !loginPanel || !registerPanel) return
+
+  const FADE_MS = 400
+
+  const show = (incoming, outgoing) => {
+    outgoing.classList.add('disabled')
+
     setTimeout(() => {
-      containerRegister.style.display = 'none';
+      outgoing.style.display = 'none'
+      outgoing.classList.add('hidden')
 
-      containerLogin.style.display = 'block';
-      containerLogin.classList.add('disabled');
-      setTimeout(() => {
-        containerLogin.classList.remove('disabled');
-      }, 10);
-    }, 400);
-  });
+      incoming.classList.remove('hidden')
+      incoming.style.display = 'block'
+      incoming.classList.add('disabled')
 
-  btnRegister.addEventListener('click', () => {
-    btnRegister.checked = true;
-    btnLogin.checked = false;
+      requestAnimationFrame(() => incoming.classList.remove('disabled'))
+    }, FADE_MS)
+  }
 
-    // Primeiro faz fade out do login, depois mostra cadastro com fade in
-    containerLogin.classList.add('disabled');
-    setTimeout(() => {
-      containerLogin.style.display = 'none';
+  loginTab.addEventListener('click', () => {
+    loginTab.checked = true
+    registerTab.checked = false
+    show(loginPanel, registerPanel)
+  })
 
-      containerRegister.style.display = 'block';
-      containerRegister.classList.add('disabled');
-      setTimeout(() => {
-        containerRegister.classList.remove('disabled');
-      }, 10);
-    }, 400);
-  });
+  registerTab.addEventListener('click', () => {
+    registerTab.checked = true
+    loginTab.checked = false
+    show(registerPanel, loginPanel)
+  })
 }
 
-document.addEventListener('DOMContentLoaded', animationLoginRegister);
+document.addEventListener('DOMContentLoaded', initAuthPanelSwitch)

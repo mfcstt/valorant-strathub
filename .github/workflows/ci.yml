@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Cancela execuções anteriores da mesma branch: só o último commit interessa.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # A versão mínima declarada no composer.json e a estável atual: garante
+        # que o projeto não passa a depender de sintaxe mais nova sem querer.
+        php: ['8.1', '8.3']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: pdo, pdo_sqlite, curl, fileinfo, mbstring
+          coverage: none
+          tools: composer:v2
+
+      - name: Cache do Composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-${{ matrix.php }}-
+
+      - name: Instalar dependências
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Checar sintaxe
+        run: find src public tests -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Análise estática
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=512M
+
+      - name: Testes
+        run: vendor/bin/phpunit --no-coverage
+
+  assets:
+    name: Assets
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Compilar CSS e copiar ícones
+        run: npm run build
+
+      - name: Garantir que o CSS foi gerado
+        run: test -s public/CSS/tailwind.build.css
+
+  docker:
+    name: Imagem Docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build da imagem
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          tags: valorant-strathub:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Subir o container e conferir se a aplicação responde
+        run: |
+          docker run -d --name strathub -p 8080:80 \
+            -e APP_ENV=production \
+            -e APP_SECRET=$(openssl rand -hex 32) \
+            -e USE_SQLITE=true \
+            -e STORAGE_DRIVER=local \
+            valorant-strathub:ci
+
+          # Espera o Apache aceitar conexões antes de afirmar qualquer coisa.
+          for i in $(seq 1 30); do
+            if curl -fsS -o /dev/null http://localhost:8080/login; then
+              echo "aplicação respondeu na tentativa $i"
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "A aplicação não respondeu em 60s. Logs:"
+          docker logs strathub
+          exit 1
