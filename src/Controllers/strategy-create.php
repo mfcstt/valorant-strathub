@@ -89,37 +89,47 @@ if ($validation->fails()) {
 }
 
 $storage = Storage::disk();
-$coverImageId = null;
-$videoId = null;
+$coverResult = null;
+$videoResult = null;
 
 if ($hasCover) {
-    $result = $storage->uploadImage((array) $coverFile, $userId);
+    $coverResult = $storage->uploadImage((array) $coverFile, $userId);
 
-    if (!$result->ok) {
-        $validation->addError('capa', (string) $result->error);
+    if (!$coverResult->ok) {
+        $validation->addError('capa', (string) $coverResult->error);
         $backToForm($validation);
     }
-
-    $coverImageId = $result->id();
 }
 
 if ($hasVideo) {
-    $result = $storage->uploadVideo((array) $videoFile, $userId);
+    $videoResult = $storage->uploadVideo((array) $videoFile, $userId);
 
-    if (!$result->ok) {
-        $validation->addError('video', (string) $result->error);
+    if (!$videoResult->ok) {
+        $validation->addError('video', (string) $videoResult->error);
+
+        // A capa pode ter subido com sucesso antes do vídeo falhar. Sem esta
+        // limpeza, ela ficaria órfã — um arquivo público no Storage e uma
+        // linha em `images` sem nenhuma estratégia apontando para ela, já
+        // que Strategy::create() nunca é alcançado neste caminho.
+        if ($coverResult !== null && $coverResult->file !== null) {
+            try {
+                $storage->deleteImage((string) $coverResult->file->file_path);
+                $coverResult->file->delete();
+            } catch (\Throwable $e) {
+                error_log('[strathub] falha ao limpar capa órfã após vídeo inválido: ' . $e->getMessage());
+            }
+        }
+
         $backToForm($validation);
     }
-
-    $videoId = $result->id();
 }
 
 $strategyId = Strategy::create([
     'title' => $title,
     'category' => $category,
     'description' => $description,
-    'cover_image_id' => $coverImageId,
-    'video_id' => $videoId,
+    'cover_image_id' => $coverResult?->id(),
+    'video_id' => $videoResult?->id(),
     'user_id' => $userId,
     'agent_id' => $agentId,
     'map_id' => $mapId,
