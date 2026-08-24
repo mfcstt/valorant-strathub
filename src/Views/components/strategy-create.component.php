@@ -24,7 +24,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
 ?>
 
 <form action="/strategy-create" method="post" enctype="multipart/form-data" novalidate
-  class="w-full max-w-[1366px] flex flex-col gap-6 mx-auto px-4 mt-10 pb-8 md:w-max md:flex-row md:gap-12 md:px-0 md:mt-20 md:max-w-none">
+  class="w-full max-w-[1366px] flex flex-col gap-6 mx-auto px-4 pb-10 md:w-max md:flex-row md:gap-12 md:px-0 md:max-w-none">
 
   <?= csrf_field() ?>
 

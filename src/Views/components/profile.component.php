@@ -30,7 +30,7 @@ $activity = [
 ];
 ?>
 
-<div class="px-4 md:px-8 lg:px-16 xl:px-24 pt-16 pb-5">
+<div class="px-4 md:px-8 lg:px-16 xl:px-24 pt-4 pb-8">
   <header class="mb-8">
     <h1 class="text-gray-7 font-rammetto text-2xl">Meu perfil</h1>
   </header>

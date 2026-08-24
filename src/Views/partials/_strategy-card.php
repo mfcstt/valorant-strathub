@@ -96,33 +96,35 @@ $returnTo = $queryString !== '' ? $currentUrl . '?' . $queryString : $currentUrl
     </div>
   </div>
 
-  <!-- Ações -->
+  <!-- Ações: agrupadas no topo para não cobrirem o texto do card -->
   <?php if (Auth::check()): ?>
-    <form method="post" action="/favorite-toggle" class="absolute z-[5] top-3 right-3">
-      <?= csrf_field() ?>
-      <input type="hidden" name="strategy_id" value="<?= e($strategy->id) ?>">
-      <input type="hidden" name="redirect" value="<?= e($returnTo) ?>">
+    <div class="absolute z-[5] top-3 right-3 flex items-center gap-2">
+      <form method="post" action="/favorite-toggle">
+        <?= csrf_field() ?>
+        <input type="hidden" name="strategy_id" value="<?= e($strategy->id) ?>">
+        <input type="hidden" name="redirect" value="<?= e($returnTo) ?>">
 
-      <button type="submit"
-        class="px-3 py-1.5 bg-gray-1/80 border border-gray-3 rounded-md text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all ease-in-out duration-300"
-        aria-label="<?= $strategy->isFavorite() ? 'Remover das favoritas' : 'Adicionar às favoritas' ?>">
-        <i class="<?= $strategy->isFavorite() ? 'ph-fill ph-heart text-red-light' : 'ph ph-heart' ?> text-base"
-          aria-hidden="true"></i>
-      </button>
-    </form>
-  <?php endif; ?>
+        <button type="submit"
+          class="flex px-3 py-1.5 bg-gray-1/80 backdrop-blur-sm border border-gray-3 rounded-md text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all ease-in-out duration-300"
+          aria-label="<?= $strategy->isFavorite() ? 'Remover das favoritas' : 'Adicionar às favoritas' ?>">
+          <i class="<?= $strategy->isFavorite() ? 'ph-fill ph-heart text-red-light' : 'ph ph-heart' ?> text-base"
+            aria-hidden="true"></i>
+        </button>
+      </form>
 
-  <?php if ($isOwner): ?>
-    <form method="post" action="/strategy-delete" class="absolute z-[5] bottom-3 right-3"
-      data-confirm="Excluir “<?= e($strategy->title) ?>”? Esta ação é irreversível.">
-      <?= csrf_field() ?>
-      <input type="hidden" name="strategy_id" value="<?= e($strategy->id) ?>">
+      <?php if ($isOwner): ?>
+        <form method="post" action="/strategy-delete"
+          data-confirm="Excluir “<?= e($strategy->title) ?>”? Esta ação é irreversível.">
+          <?= csrf_field() ?>
+          <input type="hidden" name="strategy_id" value="<?= e($strategy->id) ?>">
 
-      <button type="submit"
-        class="px-3 py-1.5 bg-gray-1/80 border border-gray-3 rounded-md text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all ease-in-out duration-300"
-        aria-label="Excluir estratégia">
-        <i class="ph ph-trash text-base" aria-hidden="true"></i>
-      </button>
-    </form>
+          <button type="submit"
+            class="flex px-3 py-1.5 bg-gray-1/80 backdrop-blur-sm border border-gray-3 rounded-md text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all ease-in-out duration-300"
+            aria-label="Excluir estratégia">
+            <i class="ph ph-trash text-base" aria-hidden="true"></i>
+          </button>
+        </form>
+      <?php endif; ?>
+    </div>
   <?php endif; ?>
 </article>

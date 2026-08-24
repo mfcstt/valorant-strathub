@@ -152,7 +152,7 @@ $avatarUrl = ($user !== null && $user->avatar && $user->avatar !== 'avatarDefaul
 </header>
 
 <main id="main-content">
-  <div class="max-w-[1366px] mx-auto pt-14 md:pt-16">
+  <div class="max-w-[1366px] mx-auto pt-6 md:pt-10">
     <?php require __DIR__ . "/components/{$component}.component.php"; ?>
   </div>
 </main>

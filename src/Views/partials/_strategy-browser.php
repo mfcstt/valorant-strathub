@@ -50,7 +50,7 @@ $orderIcon = $orderLabels[$order][1] ?? 'ph-fill ph-star';
 $isFiltered = $search !== '' || $has_active_filters;
 ?>
 
-<div class="px-4 md:px-8 lg:px-16 xl:px-24 pt-16 pb-5">
+<div class="px-4 md:px-8 lg:px-16 xl:px-24 pt-4 pb-8">
   <form class="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8"
     method="get" action="<?= e($browser_route) ?>" novalidate data-strategy-filters>
 
