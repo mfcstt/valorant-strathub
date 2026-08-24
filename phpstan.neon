@@ -1,0 +1,20 @@
+parameters:
+    level: 6
+
+    paths:
+        - src
+        - public
+        - tests
+
+    excludePaths:
+        analyse:
+            # Views são templates: as variáveis vêm do array passado a view(),
+            # o que a análise estática não consegue rastrear.
+            - src/Views
+
+    bootstrapFiles:
+        - vendor/autoload.php
+
+    # As superglobais e os models hidratados por PDO::FETCH_CLASS trafegam
+    # valores sem tipo declarado; `mixed` explícito é honesto quanto a isso.
+    treatPhpDocTypesAsCertain: false

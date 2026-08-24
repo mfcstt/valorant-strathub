@@ -1,0 +1,28 @@
+.git
+.gitignore
+.github
+
+# Segredos nunca entram na imagem
+.env
+.env.*
+
+# Reinstalados/recompilados nos estágios de build
+vendor/
+node_modules/
+public/vendor/
+public/CSS/tailwind.build.css
+
+# Banco local
+database/*.sqlite
+
+# Ferramentas de desenvolvimento
+tests/
+phpunit.xml
+phpstan.neon
+.phpunit.cache/
+build/
+coverage/
+
+# Documentação
+*.md
+docs/
