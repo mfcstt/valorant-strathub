@@ -171,6 +171,36 @@ final class StrategyInteractionTest extends TestCase
     }
 
     #[Test]
+    public function curinga_isolado_na_busca_nao_casa_com_tudo(): void
+    {
+        // Buscar só "%" ou "_" com o escape ausente devolveria a tabela inteira.
+        // Nenhum título dos dados deste teste contém esses caracteres.
+        foreach (['%', '_', '%%', '_%'] as $needle) {
+            $listing = Strategy::paginate(['search' => $needle]);
+
+            $this->assertSame(
+                0,
+                $listing['total'],
+                "A busca por '{$needle}' deveria tratar o curinga como literal.",
+            );
+        }
+    }
+
+    #[Test]
+    public function busca_com_termo_repetido_funciona_em_todos_os_drivers(): void
+    {
+        // Este teste existe por causa de um bug que só aparecia no PostgreSQL: o
+        // parser do PDO, ao reescrever :search para $1, engasgava com a cláusula
+        // ESCAPE que usava barra invertida e deixava as ocorrências seguintes do
+        // parâmetro sem substituir. A consulta usa :search quatro vezes, então
+        // qualquer regressão nesse ponto derruba este teste.
+        $listing = Strategy::paginate(['search' => 'smoke']);
+
+        $this->assertSame(1, $listing['total'], 'driver: ' . $this->currentDriver());
+        $this->assertStringContainsStringIgnoringCase('smoke', (string) $listing['items'][0]->title);
+    }
+
+    #[Test]
     public function busca_encontra_por_titulo_parcial_ignorando_caixa(): void
     {
         $listing = Strategy::paginate(['search' => 'SMOKE']);

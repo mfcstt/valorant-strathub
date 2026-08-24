@@ -53,6 +53,63 @@ jobs:
       - name: Testes
         run: vendor/bin/phpunit --no-coverage
 
+  postgres:
+    name: PHP 8.3 · PostgreSQL
+    runs-on: ubuntu-latest
+
+    # A suíte roda também contra Postgres porque o SQLite não reproduz tudo: um
+    # bug de reescrita de parâmetros nomeados no driver pgsql passou por toda a
+    # suíte em SQLite e só apareceu em produção.
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: strathub_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo, pdo_pgsql, curl, fileinfo, mbstring
+          coverage: none
+          tools: composer:v2
+
+      - name: Instalar dependências
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Testes contra PostgreSQL
+        env:
+          TEST_DB_DRIVER: pgsql
+          TEST_DB_HOST: 127.0.0.1
+          TEST_DB_PORT: '5432'
+          TEST_DB_NAME: strathub_test
+          TEST_DB_USER: postgres
+          TEST_DB_PASSWORD: postgres
+        run: vendor/bin/phpunit --no-coverage
+
+      - name: Migração aplica e é idempotente
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h 127.0.0.1 -U postgres -d strathub_test -v ON_ERROR_STOP=1 \
+            -f database/migrations/2026_08_24_000001_rename_domain_and_add_remember_tokens.sql
+          # Segunda execução não deve falhar: cada passo é condicional.
+          psql -h 127.0.0.1 -U postgres -d strathub_test -v ON_ERROR_STOP=1 \
+            -f database/migrations/2026_08_24_000001_rename_domain_and_add_remember_tokens.sql
+          # E o rollback tem de rodar sobre o resultado.
+          psql -h 127.0.0.1 -U postgres -d strathub_test -v ON_ERROR_STOP=1 \
+            -f database/migrations/2026_08_24_000001_rollback.sql
+
   assets:
     name: Assets
     runs-on: ubuntu-latest

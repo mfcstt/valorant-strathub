@@ -320,10 +320,25 @@ psql "$DATABASE_URL" -f database/seeds.sql
 Para um banco que já roda a versão antiga do schema, use as migrações em `database/migrations/`
 em vez do schema completo.
 
-### Aplicação
+### Aplicação — Vercel
 
-A imagem Docker serve com Apache e `DocumentRoot` em `public/` — adequada para Render, Fly.io ou
-qualquer host que aceite container.
+O `vercel.json` reescreve toda requisição para o front controller, no mesmo formato `?path=` que o
+roteador espera. Variáveis de ambiente a definir no painel do projeto:
+
+| Variável | Valor |
+|---|---|
+| `APP_ENV` | `production` |
+| `APP_SECRET` | saída de `openssl rand -hex 32` |
+| `APP_DEBUG` | `false` |
+| `USE_SQLITE` | `false` |
+| `STORAGE_DRIVER` | `supabase` — o disco da Vercel é efêmero e o driver local perderia os arquivos |
+| `DB_HOST` `DB_PORT` `DB_NAME` `DB_USER` `DB_PASSWORD` | credenciais do pooler do Supabase |
+| `SUPABASE_URL` `SUPABASE_SERVICE_KEY` | projeto e chave de serviço |
+
+### Aplicação — Docker
+
+A imagem serve com Apache e `DocumentRoot` em `public/` — adequada para Render, Fly.io ou qualquer
+host que aceite container.
 
 ```bash
 docker build -t valorant-strathub .
