@@ -1,19 +1,40 @@
-# Composer vendor directory
+# Segredos — NUNCA versionar
+.env
+.env.*
+!.env.example
+
+# Dependências
 vendor/
+node_modules/
 
-# Local databases
+# Assets gerados pelo build
+public/CSS/tailwind.build.css
+
+# Banco local
 public/database.sqlite
+database/*.sqlite
 
-# IDE/editor
+# Cache de ferramentas
+.php-cs-fixer.cache
+.phpunit.result.cache
+.phpunit.cache/
+build/
+coverage/
+
+# IDE / editor
 .idea/
 .vscode/
+*.swp
 
-# OS files
+# Sistema operacional
 .DS_Store
 Thumbs.db
 
 # Logs
 *.log
 
-# Node
-node_modules/
+# Assets de terceiros copiados pelo build
+public/vendor/
+
+# Mídia enviada com o driver de storage local
+public/uploads/
