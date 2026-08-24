@@ -57,9 +57,17 @@ $isFiltered = $search !== '' || $has_active_filters;
     <div>
       <h1 class="font-rammetto text-2xl text-gray-7"><?= e($browser_title) ?></h1>
       <?php if ($total > 0): ?>
+        <?php
+        // As duas palavras concordam em número juntas — "1 estratégia
+        // publicadas" (singular seguido de plural) já apareceu em produção.
+        $isSingular = $total === 1;
+        $noun = $isSingular ? 'estratégia' : 'estratégias';
+        $participle = $isFiltered
+            ? ($isSingular ? 'encontrada' : 'encontradas')
+            : ($isSingular ? 'publicada' : 'publicadas');
+        ?>
         <p class="mt-1 text-sm text-gray-5 font-nunito">
-          <?= e($total) ?> <?= $total === 1 ? 'estratégia' : 'estratégias' ?>
-          <?= $isFiltered ? 'encontradas' : 'publicadas' ?>
+          <?= e($total) ?> <?= $noun ?> <?= $participle ?>
         </p>
       <?php endif; ?>
     </div>

@@ -22,11 +22,15 @@ $selectedElo = strtolower(old('elo', (string) ($user->elo ?? 'ferro')));
 $createdAt = $user->created_at !== null ? strtotime((string) $user->created_at) : false;
 $maxImageMb = intdiv(UploadValidator::MAX_IMAGE_BYTES, 1024 * 1024);
 
+// Sufixo no singular ou plural conforme a contagem — "1 publicadas" (singular
+// seguido de plural) já apareceu em produção.
+$suffix = static fn (int $count, string $singular, string $plural): string => $count === 1 ? $singular : $plural;
+
 /** @var list<array{icon: string, label: string, value: int, suffix: string}> */
 $activity = [
-    ['icon' => 'ph-strategy', 'label' => 'Estratégias', 'value' => $strategies_count, 'suffix' => 'publicadas'],
-    ['icon' => 'ph-star', 'label' => 'Avaliações', 'value' => $ratings_count, 'suffix' => 'enviadas'],
-    ['icon' => 'ph-heart', 'label' => 'Favoritas', 'value' => $favorites_count, 'suffix' => 'salvas'],
+    ['icon' => 'ph-strategy', 'label' => 'Estratégias', 'value' => $strategies_count, 'suffix' => $suffix($strategies_count, 'publicada', 'publicadas')],
+    ['icon' => 'ph-star', 'label' => 'Avaliações', 'value' => $ratings_count, 'suffix' => $suffix($ratings_count, 'enviada', 'enviadas')],
+    ['icon' => 'ph-heart', 'label' => 'Favoritas', 'value' => $favorites_count, 'suffix' => $suffix($favorites_count, 'salva', 'salvas')],
 ];
 ?>
 
@@ -80,7 +84,7 @@ $activity = [
           <div class="relative">
             <i class="ph ph-user text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5"
               aria-hidden="true"></i>
-            <input type="text" id="name" name="name" required maxlength="60"
+            <input type="text" id="name" name="name" required maxlength="60" autocomplete="name"
               value="<?= e(old('name', (string) $user->name)) ?>" class="inpForm pl-10 w-full">
           </div>
         </div>
@@ -90,7 +94,7 @@ $activity = [
           <div class="relative">
             <i class="ph ph-envelope text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5"
               aria-hidden="true"></i>
-            <input type="email" id="email" name="email" required maxlength="255"
+            <input type="email" id="email" name="email" required maxlength="255" autocomplete="email"
               value="<?= e(old('email', (string) $user->email)) ?>" class="inpForm pl-10 w-full">
           </div>
         </div>

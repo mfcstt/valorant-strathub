@@ -122,7 +122,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
         </div>
 
         <!-- Agente -->
-        <fieldset>
+        <fieldset class="min-w-0">
           <legend class="block text-gray-7 font-nunito text-sm mb-2">Agente</legend>
 
           <div class="agent-selection-container flex gap-3 overflow-x-auto pb-2 w-full max-w-[500px] md:w-[700px]">
@@ -143,7 +143,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
         </fieldset>
 
         <!-- Mapa -->
-        <fieldset>
+        <fieldset class="min-w-0">
           <legend class="block text-gray-7 font-nunito text-sm mb-2">Mapa</legend>
 
           <div class="map-selection-container flex gap-3 overflow-x-auto pb-2 w-full max-w-[500px] md:w-[700px]">
