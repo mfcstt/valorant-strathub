@@ -7,11 +7,16 @@
  * (a página não quebra se o CDN cair), elimina a necessidade de Subresource
  * Integrity numa URL sem versão e mantém o projeto funcionando offline.
  *
- * Os arquivos CSS do Phosphor referenciam as fontes por caminho relativo, então
- * cada variante é copiada com o diretório inteiro.
+ * ## Por que só woff2
+ *
+ * O pacote traz cinco formatos da mesma fonte, somando ~12 MB nas duas variantes
+ * usadas. Todo navegador que este projeto suporta lê woff2 — os outros formatos
+ * são fallback para navegadores que não existem mais. Copiar só o woff2 reduz o
+ * diretório para ~300 KB, e as regras `@font-face` são reescritas para apontar
+ * apenas para ele, evitando 404 no console.
  */
 
-import { cp, mkdir, rm, access } from 'node:fs/promises'
+import { cp, mkdir, rm, access, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -31,6 +36,21 @@ async function exists(path) {
   }
 }
 
+/**
+ * Mantém no `src:` apenas a entrada woff2.
+ */
+function keepOnlyWoff2(css) {
+  return css.replace(/src:\s*[^;]+;/g, (declaration) => {
+    const woff2 = declaration.match(/url\("([^"]+\.woff2)"\)(\s*format\("woff2"\))?/)
+
+    if (!woff2) {
+      return declaration
+    }
+
+    return `src: url("${woff2[1]}") format("woff2");`
+  })
+}
+
 async function main() {
   if (!(await exists(phosphorSource))) {
     console.error('✗ @phosphor-icons/web não encontrado. Rode `npm install` primeiro.')
@@ -38,12 +58,24 @@ async function main() {
   }
 
   await rm(phosphorTarget, { recursive: true, force: true })
-  await mkdir(phosphorTarget, { recursive: true })
 
   for (const variant of VARIANTS) {
-    await cp(join(phosphorSource, variant), join(phosphorTarget, variant), {
-      recursive: true,
-    })
+    const targetDir = join(phosphorTarget, variant)
+    await mkdir(targetDir, { recursive: true })
+
+    const woff2 = (await readFile(join(phosphorSource, variant, 'style.css'), 'utf8'))
+      .match(/url\("\.\/([^"]+\.woff2)"\)/)?.[1]
+
+    if (!woff2) {
+      console.error(`✗ nenhum woff2 referenciado em ${variant}/style.css`)
+      process.exit(1)
+    }
+
+    await cp(join(phosphorSource, variant, woff2), join(targetDir, woff2))
+
+    const css = await readFile(join(phosphorSource, variant, 'style.css'), 'utf8')
+    await writeFile(join(targetDir, 'style.css'), keepOnlyWoff2(css))
+
     console.log(`✓ ícones Phosphor (${variant}) → public/vendor/phosphor/${variant}`)
   }
 }
