@@ -42,3 +42,7 @@ public/uploads/*
 
 # Artefatos de sessões do Playwright MCP
 .playwright-mcp/
+
+# Screenshots soltos gerados na raiz durante verificação manual (não devem ser versionados)
+/*.png
+/*.jpg
