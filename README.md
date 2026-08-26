@@ -6,7 +6,7 @@
 
 **Plataforma colaborativa onde jogadores publicam, avaliam e encontram estratégias de Valorant por agente e mapa.**
 
-Trabalho de conclusão de curso — PHP sem framework, do roteamento à autenticação.
+Trabalho de conclusão de curso - PHP sem framework, do roteamento à autenticação.
 
 [![CI](https://github.com/mfcstt/valorant-strathub/actions/workflows/ci.yml/badge.svg)](https://github.com/mfcstt/valorant-strathub/actions/workflows/ci.yml)
 ![PHP](https://img.shields.io/badge/PHP-8.1%2B-777BB4?logo=php&logoColor=white)
@@ -40,20 +40,20 @@ Trabalho de conclusão de curso — PHP sem framework, do roteamento à autentic
 
 ## O que é
 
-Em Valorant, boa parte do conhecimento competitivo — line-ups de granada, timings de fumaça,
-posicionamento de retake — circula em vídeos avulsos e prints em grupos de mensagem. O StratHub
+Em Valorant, boa parte do conhecimento competitivo - line-ups de granada, timings de fumaça,
+posicionamento de retake - circula em vídeos avulsos e prints em grupos de mensagem. O StratHub
 organiza isso: cada estratégia tem agente, mapa, categoria, mídia e uma nota da comunidade.
 
 **O que dá para fazer:**
 
-| | |
-|---|---|
+|                             |                                                                               |
+| --------------------------- | ----------------------------------------------------------------------------- |
 | 🎯 **Publicar estratégias** | Título, descrição, agente, mapa, categoria e mídia (imagem, vídeo ou os dois) |
-| 🔍 **Buscar e filtrar** | Por texto livre, agente, mapa e categoria, com paginação |
-| ⭐ **Avaliar** | Nota de 1 a 5 e comentário; uma avaliação por pessoa, editável |
-| ❤️ **Favoritar** | Lista pessoal para achar rápido depois |
-| 👤 **Perfil** | Avatar, elo do jogo, atividade, troca de senha e exclusão de conta |
-| 👀 **Modo visitante** | Explorar sem criar conta |
+| 🔍 **Buscar e filtrar**     | Por texto livre, agente, mapa e categoria, com paginação                      |
+| ⭐ **Avaliar**              | Nota de 1 a 5 e comentário; uma avaliação por pessoa, editável                |
+| ❤️ **Favoritar**            | Lista pessoal para achar rápido depois                                        |
+| 👤 **Perfil**               | Avatar, elo do jogo, atividade, troca de senha e exclusão de conta            |
+| 👀 **Modo visitante**       | Explorar sem criar conta                                                      |
 
 ---
 
@@ -92,7 +92,7 @@ organiza isso: cada estratégia tem agente, mapa, categoria, mídia e uma nota d
 ## Como funciona
 
 Sem framework: o roteamento, a camada de acesso a dados, a validação, a sessão e a renderização
-são código do projeto. A escolha foi didática — o objetivo do TCC era entender o que um framework
+são código do projeto. A escolha foi didática - o objetivo do TCC era entender o que um framework
 faz por baixo, não usar um.
 
 ```mermaid
@@ -124,13 +124,13 @@ flowchart TD
 
 **O caminho de uma requisição**
 
-1. **Front controller** — todo acesso entra por `public/index.php`. Nada fora de `public/`
+1. **Front controller** - todo acesso entra por `public/index.php`. Nada fora de `public/`
    é alcançável pela web.
-2. **Roteador** — compara o caminho com uma lista fechada de rotas. O que não estiver nela é 404
+2. **Roteador** - compara o caminho com uma lista fechada de rotas. O que não estiver nela é 404
    antes de tocar no disco.
-3. **CSRF** — verificado num ponto único para toda requisição `POST`, e não controller a controller.
-4. **Controller** — valida a entrada, chama os models e escolhe a view.
-5. **View** — layout base, view da página e componente; toda interpolação passa por `e()`.
+3. **CSRF** - verificado num ponto único para toda requisição `POST`, e não controller a controller.
+4. **Controller** - valida a entrada, chama os models e escolhe a view.
+5. **View** - layout base, view da página e componente; toda interpolação passa por `e()`.
 
 ---
 
@@ -173,18 +173,18 @@ php database/seed-demo.php
 
 Cria três usuários e seis estratégias com avaliações. Todos usam a senha `Demo#strathub1`:
 
-| E-mail | Elo |
-|---|---|
-| `marina@strathub.demo` | Imortal |
+| E-mail                 | Elo        |
+| ---------------------- | ---------- |
+| `marina@strathub.demo` | Imortal    |
 | `rafael@strathub.demo` | Ascendente |
-| `bia@strathub.demo` | Ouro |
+| `bia@strathub.demo`    | Ouro       |
 
 ---
 
 ## Testes e qualidade
 
 ```bash
-composer test      # PHPUnit — 74 testes
+composer test      # PHPUnit - 74 testes
 composer analyse   # PHPStan nível 6
 composer check     # os dois
 ```
@@ -192,14 +192,14 @@ composer check     # os dois
 Os testes rodam com um SQLite temporário por caso, sem depender de serviço externo. A cobertura é
 deliberadamente concentrada no que dá errado de forma silenciosa:
 
-| Área | O que é verificado |
-|---|---|
-| **Autenticação** | Token de sessão persistente imprevisível, revogável e com expiração conferida no servidor |
-| **Ordenação** | A melhor avaliada aparece na primeira página, e não apenas no topo da página atual |
-| **Injeção** | `ORDER BY` restrito a allowlist; curingas de `LIKE` escapados |
-| **Redirecionamento** | Destino externo cai no fallback interno |
-| **Upload** | Tipo medido por conteúdo, não pelo `Content-Type` declarado |
-| **Validação** | Contagem multibyte, faixas numéricas, regra desconhecida falha alto |
+| Área                 | O que é verificado                                                                        |
+| -------------------- | ----------------------------------------------------------------------------------------- |
+| **Autenticação**     | Token de sessão persistente imprevisível, revogável e com expiração conferida no servidor |
+| **Ordenação**        | A melhor avaliada aparece na primeira página, e não apenas no topo da página atual        |
+| **Injeção**          | `ORDER BY` restrito a allowlist; curingas de `LIKE` escapados                             |
+| **Redirecionamento** | Destino externo cai no fallback interno                                                   |
+| **Upload**           | Tipo medido por conteúdo, não pelo `Content-Type` declarado                               |
+| **Validação**        | Contagem multibyte, faixas numéricas, regra desconhecida falha alto                       |
 
 A pipeline de CI roda a suíte em PHP 8.1 e 8.3, compila o CSS e sobe a imagem Docker para conferir
 que a aplicação responde de fato.
@@ -212,7 +212,7 @@ que a aplicação responde de fato.
 <summary><strong>Por que PHP sem framework</strong></summary>
 
 O objetivo era aprender o que um framework resolve. Escrever o roteador, a camada de sessão e o
-escape de saída à mão deixa visível o custo de cada um — e por que ninguém deveria escrever de novo
+escape de saída à mão deixa visível o custo de cada um - e por que ninguém deveria escrever de novo
 em produção. Onde a decisão custava segurança, a escolha foi seguir o padrão da indústria em vez de
 inventar: split-token para "continuar conectado", synchronizer token para CSRF, `password_hash` com
 `PASSWORD_DEFAULT`.
@@ -234,7 +234,7 @@ subconsulta `EXISTS`, em vez de uma consulta por card.
 
 Ordenar depois de paginar ordena o recorte, não o conjunto. Com doze estratégias e dez por página, a
 melhor avaliada do site podia estar na página 2 e nunca aparecer no topo de "Mais estrelas". A
-ordenação vive no `ORDER BY`, com as opções restritas a uma allowlist — a cláusula é interpolada na
+ordenação vive no `ORDER BY`, com as opções restritas a uma allowlist - a cláusula é interpolada na
 consulta e não aceita parâmetro vinculado.
 
 </details>
@@ -252,7 +252,7 @@ não sabem a diferença.
 <details>
 <summary><strong>Por que o Tailwind saiu do CDN</strong></summary>
 
-`cdn.tailwindcss.com` compila as classes no navegador a cada carregamento — são centenas de KB de
+`cdn.tailwindcss.com` compila as classes no navegador a cada carregamento - são centenas de KB de
 JavaScript e um flash de conteúdo sem estilo. Compilado com purge, o CSS do projeto tem 24 KB. Os
 ícones seguiram o mesmo caminho: servidos do próprio domínio via npm, em vez de um `<script>` de
 CDN sem versão fixa.
@@ -263,12 +263,12 @@ CDN sem versão fixa.
 <summary><strong>O que eu faria diferente</strong></summary>
 
 Usaria um framework. Não por preguiça: escape de saída, CSRF e sessão segura são problemas
-resolvidos, e resolvê-los à mão significa acertar em cem lugares diferentes — errar em um só já é
+resolvidos, e resolvê-los à mão significa acertar em cem lugares diferentes - errar em um só já é
 suficiente. Este projeto é a demonstração dessa lição, não o contrário dela.
 
-Também começaria com testes. Vários dos defeitos corrigidos aqui — ordenação sobre a página em vez
+Também começaria com testes. Vários dos defeitos corrigidos aqui - ordenação sobre a página em vez
 do conjunto, flash message que nunca era consumida, foto de agente apontando para arquivo
-inexistente — são exatamente o tipo de coisa que um teste pega na primeira execução e que passa
+inexistente - são exatamente o tipo de coisa que um teste pega na primeira execução e que passa
 despercebida num clique manual.
 
 </details>
@@ -280,31 +280,31 @@ despercebida num clique manual.
 O projeto passou por uma revisão de segurança depois da entrega acadêmica. O que foi corrigido está
 detalhado no [CHANGELOG](CHANGELOG.md); em resumo:
 
-- **Sessão** — token persistente no padrão split-token, com validator guardado apenas como hash,
+- **Sessão** - token persistente no padrão split-token, com validator guardado apenas como hash,
   expiração conferida no servidor e revogação por dispositivo. `session_regenerate_id` no login e
   `use_strict_mode` contra fixação de sessão.
-- **CSRF** — synchronizer token verificado num ponto único para todo `POST`.
-- **XSS** — helper `e()` obrigatório em toda interpolação de view; cookie de sessão `HttpOnly`.
-- **Injeção de SQL** — prepared statements em todo acesso; identificadores e cláusulas de ordenação
+- **CSRF** - synchronizer token verificado num ponto único para todo `POST`.
+- **XSS** - helper `e()` obrigatório em toda interpolação de view; cookie de sessão `HttpOnly`.
+- **Injeção de SQL** - prepared statements em todo acesso; identificadores e cláusulas de ordenação
   restritos a allowlists.
-- **Upload** — tipo medido com `finfo`, `is_uploaded_file` conferido, nome de destino gerado.
-- **Vazamento de informação** — mensagens de exceção vão para o log, nunca para a tela.
+- **Upload** - tipo medido com `finfo`, `is_uploaded_file` conferido, nome de destino gerado.
+- **Vazamento de informação** - mensagens de exceção vão para o log, nunca para a tela.
 
 ### Configuração
 
 Copie `.env.example` para `.env`. O arquivo `.env` **nunca** deve ser versionado.
 
-| Variável | Para que serve |
-|---|---|
-| `APP_ENV` | `local` ou `production`. Em produção a aplicação se recusa a subir sem `APP_SECRET` forte |
-| `APP_SECRET` | Segredo da aplicação. Gere com `php -r "echo bin2hex(random_bytes(32));"` |
-| `APP_DEBUG` | Logs verbosos. Sempre `false` em produção |
-| `USE_SQLITE` | `true` usa SQLite local; `false` usa o Postgres configurado abaixo |
-| `STORAGE_DRIVER` | `local` ou `supabase`. Vazio escolhe automaticamente |
-| `SUPABASE_SERVICE_KEY` | Chave administrativa: **ignora RLS**. Trate como senha de root |
+| Variável               | Para que serve                                                                            |
+| ---------------------- | ----------------------------------------------------------------------------------------- |
+| `APP_ENV`              | `local` ou `production`. Em produção a aplicação se recusa a subir sem `APP_SECRET` forte |
+| `APP_SECRET`           | Segredo da aplicação. Gere com `php -r "echo bin2hex(random_bytes(32));"`                 |
+| `APP_DEBUG`            | Logs verbosos. Sempre `false` em produção                                                 |
+| `USE_SQLITE`           | `true` usa SQLite local; `false` usa o Postgres configurado abaixo                        |
+| `STORAGE_DRIVER`       | `local` ou `supabase`. Vazio escolhe automaticamente                                      |
+| `SUPABASE_SERVICE_KEY` | Chave administrativa: **ignora RLS**. Trate como senha de root                            |
 
 > A `SUPABASE_SERVICE_KEY` dá acesso total ao banco e ao storage. Se ela vazar, rotacione no painel
-> do Supabase antes de qualquer outra medida — limpar o histórico do Git não invalida a chave.
+> do Supabase antes de qualquer outra medida - limpar o histórico do Git não invalida a chave.
 
 ---
 
@@ -320,24 +320,24 @@ psql "$DATABASE_URL" -f database/seeds.sql
 Para um banco que já roda a versão antiga do schema, use as migrações em `database/migrations/`
 em vez do schema completo.
 
-### Aplicação — Vercel
+### Aplicação - Vercel
 
 O `vercel.json` reescreve toda requisição para o front controller, no mesmo formato `?path=` que o
 roteador espera. Variáveis de ambiente a definir no painel do projeto:
 
-| Variável | Valor |
-|---|---|
-| `APP_ENV` | `production` |
-| `APP_SECRET` | saída de `openssl rand -hex 32` |
-| `APP_DEBUG` | `false` |
-| `USE_SQLITE` | `false` |
-| `STORAGE_DRIVER` | `supabase` — o disco da Vercel é efêmero e o driver local perderia os arquivos |
-| `DB_HOST` `DB_PORT` `DB_NAME` `DB_USER` `DB_PASSWORD` | credenciais do pooler do Supabase |
-| `SUPABASE_URL` `SUPABASE_SERVICE_KEY` | projeto e chave de serviço |
+| Variável                                              | Valor                                                                          |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `APP_ENV`                                             | `production`                                                                   |
+| `APP_SECRET`                                          | saída de `openssl rand -hex 32`                                                |
+| `APP_DEBUG`                                           | `false`                                                                        |
+| `USE_SQLITE`                                          | `false`                                                                        |
+| `STORAGE_DRIVER`                                      | `supabase` - o disco da Vercel é efêmero e o driver local perderia os arquivos |
+| `DB_HOST` `DB_PORT` `DB_NAME` `DB_USER` `DB_PASSWORD` | credenciais do pooler do Supabase                                              |
+| `SUPABASE_URL` `SUPABASE_SERVICE_KEY`                 | projeto e chave de serviço                                                     |
 
-### Aplicação — Docker
+### Aplicação - Docker
 
-A imagem serve com Apache e `DocumentRoot` em `public/` — adequada para Render, Fly.io ou qualquer
+A imagem serve com Apache e `DocumentRoot` em `public/` - adequada para Render, Fly.io ou qualquer
 host que aceite container.
 
 ```bash
@@ -387,8 +387,9 @@ os arquivos entre invocações.
 <sub>
 
 Projeto acadêmico sem vínculo com a Riot Games. Valorant e todos os ativos relacionados
-— nomes de agentes, mapas, arte e tipografia — são propriedade da Riot Games, Inc.
-Este projeto não é endossado pela Riot Games e não reflete suas opiniões.
+
+- nomes de agentes, mapas, arte e tipografia - são propriedade da Riot Games, Inc.
+  Este projeto não é endossado pela Riot Games e não reflete suas opiniões.
 
 </sub>
 </div>

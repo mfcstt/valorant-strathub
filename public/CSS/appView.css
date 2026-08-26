@@ -54,7 +54,7 @@
 /* Estilos das avaliações
  *
  * Antes trocava o `content` de um `::before` entre dois SVGs crus
- * (Star-Fill.svg / Star-Regular.svg) — o único lugar do app fora do sistema
+ * (Star-Fill.svg / Star-Regular.svg) - o único lugar do app fora do sistema
  * de ícones Phosphor usado em todo o resto da interface. Agora cada estrela
  * já nasce com os dois ícones Phosphor (preenchido e contorno) e a mesma
  * cadeia de seletores por estado alterna qual dos dois fica visível. */

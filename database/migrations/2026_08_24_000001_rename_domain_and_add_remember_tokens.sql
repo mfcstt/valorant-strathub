@@ -1,5 +1,5 @@
 -- =============================================================================
--- Migração — PostgreSQL / Supabase
+-- Migração - PostgreSQL / Supabase
 --
 -- Alinha um banco que roda a versão antiga ao schema atual:
 --

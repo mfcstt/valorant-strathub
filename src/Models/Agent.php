@@ -7,7 +7,7 @@ namespace App\Models;
 use App\Support\Database;
 
 /**
- * Agente do Valorant — dado de referência, populado por database/seeds.sql.
+ * Agente do Valorant - dado de referência, populado por database/seeds.sql.
  */
 final class Agent
 {

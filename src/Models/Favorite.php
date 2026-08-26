@@ -11,7 +11,7 @@ use App\Support\Database;
  *
  * A listagem de favoritas não vive aqui: ela é um filtro de
  * {@see Strategy::paginate()} (`favorited_by`), o que evita manter duas cópias
- * da mesma consulta gigante — era exatamente onde a versão anterior divergia,
+ * da mesma consulta gigante - era exatamente onde a versão anterior divergia,
  * com a lista de favoritas e a de explorar tendo ordenações diferentes.
  */
 final class Favorite

@@ -32,7 +32,7 @@ $errorId = $inputId . '-error';
 
 // O autocomplete de senha precisa distinguir login de cadastro: "senha" é o
 // mesmo $name nos dois formulários, mas o gerenciador de senha do navegador
-// só sugere uma senha nova quando o hint é "new-password" — com
+// só sugere uma senha nova quando o hint é "new-password" - com
 // "current-password" (valor anterior, fixo para todo campo de senha) ele
 // tentava preencher com uma senha já salva também na tela de cadastro.
 $autocomplete = match (true) {

@@ -46,7 +46,7 @@ if (session_status() === PHP_SESSION_NONE) {
         // um eventual XSS: o script não consegue exfiltrar a sessão.
         'httponly' => true,
         // 'Lax' permite o cookie em navegação normal entre sites, mas não em
-        // POST cross-site — uma segunda linha de defesa junto do token CSRF.
+        // POST cross-site - uma segunda linha de defesa junto do token CSRF.
         'samesite' => 'Lax',
     ]);
 
@@ -55,7 +55,7 @@ if (session_status() === PHP_SESSION_NONE) {
     ini_set('session.use_strict_mode', '1');
     ini_set('session.use_only_cookies', '1');
 
-    // Sessão no banco, não em arquivo — ver DatabaseSessionHandler para o porquê.
+    // Sessão no banco, não em arquivo - ver DatabaseSessionHandler para o porquê.
     // register_shutdown_function garante que a escrita aconteça antes do PHP
     // começar a destruir objetos no fim do script, incluindo a própria conexão
     // com o banco de que o handler depende.
@@ -70,7 +70,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Cabeçalhos de segurança
 // -----------------------------------------------------------------------------
 if (!headers_sent()) {
-    // Impede que o navegador "adivinhe" um tipo diferente do declarado — o vetor
+    // Impede que o navegador "adivinhe" um tipo diferente do declarado - o vetor
     // clássico de tratar um upload como HTML e executá-lo.
     header('X-Content-Type-Options: nosniff');
     header('X-Frame-Options: SAMEORIGIN');

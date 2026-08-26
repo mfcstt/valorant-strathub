@@ -15,7 +15,7 @@ use RuntimeException;
  *
  * Usado em desenvolvimento e como fallback quando não há credenciais do
  * Supabase. Não serve para produção em plataforma serverless, onde o
- * filesystem é efêmero — mas é exatamente o que permite clonar o repositório e
+ * filesystem é efêmero - mas é exatamente o que permite clonar o repositório e
  * ver a aplicação funcionando por completo sem criar conta em serviço nenhum.
  */
 final class LocalMediaStorage implements MediaStorage

@@ -62,7 +62,7 @@ $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
           <div class="flex gap-3 items-center">
             <i class="ph ph-clock text-gray-5 text-2xl shrink-0" aria-hidden="true"></i>
             <p class="text-gray-6 font-nunito text-sm">
-              Só você vê esta página por enquanto — a estratégia está em análise antes de aparecer pra outras pessoas.
+              Só você vê esta página por enquanto - a estratégia está em análise antes de aparecer pra outras pessoas.
             </p>
           </div>
           <a href="/strategy-edit?id=<?= e($strategy->id) ?>"

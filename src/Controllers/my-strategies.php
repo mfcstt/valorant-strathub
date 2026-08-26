@@ -14,7 +14,7 @@ if (!Auth::check()) {
 $userId = (int) Auth::id();
 
 // Aqui é o único lugar onde a pessoa vê as próprias estratégias pendentes ou
-// rejeitadas — em qualquer outra listagem, só o que já foi aprovado aparece.
+// rejeitadas - em qualquer outra listagem, só o que já foi aprovado aparece.
 $data = StrategyListing::build(
     fixedFilters: ['user_id' => $userId],
     defaultOrder: 'recentes',

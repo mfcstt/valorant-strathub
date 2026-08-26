@@ -8,7 +8,7 @@ use App\Services\UploadValidator;
 /**
  * Formulário de edição de uma estratégia já publicada.
  *
- * Muito parecido com strategy-create.component.php — a diferença é que aqui a
+ * Muito parecido com strategy-create.component.php - a diferença é que aqui a
  * mídia é opcional (mantém a atual se nada for enviado) e, se a estratégia foi
  * rejeitada, o motivo escrito pelo admin aparece no topo.
  *
@@ -35,7 +35,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
       <div>
         <p class="text-error-light font-nunito font-bold">Esta estratégia foi rejeitada</p>
         <p class="text-gray-6 font-nunito text-sm mt-1"><?= e($strategy->moderation_note) ?></p>
-        <p class="text-gray-5 font-nunito text-xs mt-2">Ajuste o que for preciso e envie de novo — ela volta pra fila de revisão.</p>
+        <p class="text-gray-5 font-nunito text-xs mt-2">Ajuste o que for preciso e envie de novo - ela volta pra fila de revisão.</p>
       </div>
     </div>
   </div>
@@ -119,7 +119,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
     </div>
 
     <p class="max-w-[381px] text-xs text-gray-5 font-nunito leading-relaxed">
-      Envie um arquivo novo só se quiser trocar a mídia atual — o que não for enviado de novo continua como está.
+      Envie um arquivo novo só se quiser trocar a mídia atual - o que não for enviado de novo continua como está.
     </p>
   </div>
 

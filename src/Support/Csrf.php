@@ -10,7 +10,7 @@ namespace App\Support;
  * Um token aleatório vive na sessão e é embutido em todo formulário que altera
  * estado. Um site de terceiros consegue fazer o navegador da vítima enviar um
  * POST (os cookies vão junto), mas não consegue ler a sessão para descobrir o
- * token — então a requisição forjada falha na comparação.
+ * token - então a requisição forjada falha na comparação.
  */
 final class Csrf
 {
@@ -72,7 +72,7 @@ final class Csrf
     }
 
     /**
-     * Gera um token novo — chamado no login e no logout, para que a troca de
+     * Gera um token novo - chamado no login e no logout, para que a troca de
      * identidade invalide tokens emitidos para a identidade anterior.
      */
     public static function rotate(): void

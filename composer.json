@@ -1,6 +1,6 @@
 {
     "name": "mfcstt/valorant-strathub",
-    "description": "Plataforma colaborativa de estratégias de Valorant — trabalho de conclusão de curso.",
+    "description": "Plataforma colaborativa de estratégias de Valorant - trabalho de conclusão de curso.",
     "type": "project",
     "license": "MIT",
     "require": {

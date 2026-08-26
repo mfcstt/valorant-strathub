@@ -32,7 +32,7 @@ if ($strategy === null || (int) $strategy->user_id !== $userId) {
 }
 
 if (!is_post()) {
-    // Pré-preenche o formulário com os dados atuais da estratégia — só quando
+    // Pré-preenche o formulário com os dados atuais da estratégia - só quando
     // não há dados de uma tentativa de envio anterior ainda na sessão (o
     // redirecionamento de uma validação que falhou já deixou os próprios lá,
     // e sobrescrever perderia o que a pessoa acabou de digitar).
@@ -62,7 +62,7 @@ $videoFile = $_FILES['video'] ?? null;
 
 // Trocar mídia é opcional na edição: quem não anexa um arquivo novo mantém o
 // que já estava publicado. Diferente da criação, não existe checagem de "pelo
-// menos uma mídia" aqui — a estratégia já tinha ao menos uma pra ter sido
+// menos uma mídia" aqui - a estratégia já tinha ao menos uma pra ter sido
 // publicada, e essa invariante nunca é quebrada por uma edição.
 $hasNewCover = UploadValidator::isSuccessful($coverFile);
 $hasNewVideo = UploadValidator::isSuccessful($videoFile);
@@ -134,7 +134,7 @@ if ($hasNewVideo) {
     if (!$videoResult->ok) {
         $validation->addError('video', (string) $videoResult->error);
 
-        // A capa nova pode ter subido com sucesso antes do vídeo falhar — sem
+        // A capa nova pode ter subido com sucesso antes do vídeo falhar - sem
         // esta limpeza ela ficaria órfã, já que updateOwnedBy() nunca é
         // alcançado neste caminho e a capa antiga continua sendo a "oficial".
         if ($hasNewCover && isset($coverResult) && $coverResult->file !== null) {
@@ -169,7 +169,7 @@ if (!$updated) {
 }
 
 // A mídia antiga só é apagada do Storage depois que a troca já está salva no
-// banco — assim uma falha aqui não deixa a estratégia num estado inconsistente,
+// banco - assim uma falha aqui não deixa a estratégia num estado inconsistente,
 // só um arquivo órfão (melhor esforço, igual ao resto do app).
 foreach ([[$oldCover, 'deleteImage'], [$oldVideo, 'deleteVideo']] as [$file, $method]) {
     if ($file === null) {

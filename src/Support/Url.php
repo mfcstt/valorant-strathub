@@ -16,10 +16,10 @@ final class Url
      * open redirect: o atacante manda um link que começa no domínio confiável e
      * termina numa página de phishing. As condições, em ordem:
      *
-     * - precisa começar com `/` — descarta `https://...` e `javascript:...`;
-     * - não pode começar com `//` — essa forma é interpretada como
+     * - precisa começar com `/` - descarta `https://...` e `javascript:...`;
+     * - não pode começar com `//` - essa forma é interpretada como
      *   "mesmo protocolo, outro host", ou seja, ainda é externa;
-     * - não pode conter CR ou LF — evita injeção de cabeçalho na resposta.
+     * - não pode conter CR ou LF - evita injeção de cabeçalho na resposta.
      */
     public static function safeInternalPath(?string $candidate, string $fallback = '/explore'): string
     {

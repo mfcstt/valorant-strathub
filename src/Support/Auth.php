@@ -14,7 +14,7 @@ use stdClass;
  *
  * A aplicação roda em plataformas serverless, onde a sessão em arquivo do PHP
  * não sobrevive entre invocações. A versão anterior resolvia isso com um cookie
- * `auth_uid` acompanhado de um HMAC do próprio id — e o segredo tinha um valor
+ * `auth_uid` acompanhado de um HMAC do próprio id - e o segredo tinha um valor
  * padrão embutido no código. Quem lesse o repositório conseguia calcular a
  * assinatura de qualquer id e entrar como qualquer usuário.
  *
@@ -24,9 +24,9 @@ use stdClass;
  * usado para achar a linha no banco; o `validator` é o segredo, guardado apenas
  * como hash SHA-256. Isso dá três propriedades que o desenho anterior não tinha:
  *
- * - **Imprevisibilidade** — o validator é aleatório, não derivado do id.
- * - **Revogabilidade** — apagar a linha invalida o cookie de imediato.
- * - **Expiração real** — `expires_at` é conferido no servidor, não só no cookie.
+ * - **Imprevisibilidade** - o validator é aleatório, não derivado do id.
+ * - **Revogabilidade** - apagar a linha invalida o cookie de imediato.
+ * - **Expiração real** - `expires_at` é conferido no servidor, não só no cookie.
  *
  * A busca é feita pelo selector (indexado) e a comparação do validator usa
  * `hash_equals`, para não vazar informação pelo tempo de resposta.
@@ -67,7 +67,7 @@ final class Auth
     /**
      * Descarta o usuário memoizado, forçando nova resolução.
      *
-     * Numa requisição real isso nunca é necessário — o cache vale por requisição.
+     * Numa requisição real isso nunca é necessário - o cache vale por requisição.
      * Existe para os testes, onde uma única execução simula várias requisições.
      */
     public static function forgetResolvedUser(): void
@@ -92,7 +92,7 @@ final class Auth
      * Se a pessoa autenticada pode moderar estratégias.
      *
      * A checagem vem do objeto de sessão (leve, sem consulta ao banco a
-     * cada requisição) — {@see toSessionUser()} copia `is_admin` do model
+     * cada requisição) - {@see toSessionUser()} copia `is_admin` do model
      * no login, e {@see resolveFromRememberCookie()} faz o mesmo ao
      * reidratar a sessão pelo cookie de "continuar conectado".
      */
@@ -167,7 +167,7 @@ final class Auth
     }
 
     /**
-     * Remove todos os tokens do usuário — usado ao trocar a senha, para
+     * Remove todos os tokens do usuário - usado ao trocar a senha, para
      * desconectar as outras sessões.
      */
     public static function revokeAllTokensFor(int $userId): void

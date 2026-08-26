@@ -1,5 +1,5 @@
 # =============================================================================
-# Valorant StratHub — imagem de produção
+# Valorant StratHub - imagem de produção
 #
 # A imagem anterior rodava `php -S` (servidor embutido, single-thread, que a
 # própria documentação do PHP marca como inadequado para produção) e fazia

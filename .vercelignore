@@ -1,4 +1,4 @@
-# Segredos nunca sobem — mas também nunca estão no Git, isto é defesa extra
+# Segredos nunca sobem - mas também nunca estão no Git, isto é defesa extra
 .env
 .env.*
 

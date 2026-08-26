@@ -11,7 +11,7 @@
     </a>
 
     <div class="text-gray-6 text-sm font-nunito leading-[160%] text-center md:text-right">
-      <p>&copy; <?= e(date('Y')) ?> Valorant StratHub — projeto acadêmico.</p>
+      <p>&copy; <?= e(date('Y')) ?> Valorant StratHub - projeto acadêmico.</p>
       <p class="text-gray-5 text-xs mt-1 max-w-md">
         Projeto de estudo sem vínculo com a Riot Games. Valorant e todos os ativos
         relacionados são propriedade da Riot Games, Inc.

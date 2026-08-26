@@ -2,10 +2,10 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 
-## [2.0.0] — 2026-08-24
+## [2.0.0] - 2026-08-24
 
 Revisão completa do projeto depois da entrega acadêmica: segurança, correção de
-defeitos, reorganização e ferramentas. Sem mudança no que a aplicação faz — o
+defeitos, reorganização e ferramentas. Sem mudança no que a aplicação faz - o
 conjunto de funcionalidades é o mesmo da versão entregue.
 
 ### Segurança
@@ -18,7 +18,7 @@ conjunto de funcionalidades é o mesmo da versão entregue.
   expiração conferida no servidor e revogação por dispositivo.
 - **`.env` removido do versionamento.** O arquivo estava commitado num
   repositório público com a senha do Postgres e a `SUPABASE_SERVICE_KEY`, que
-  ignora RLS. O `.gitignore` passou a ignorá-lo — o README afirmava que já
+  ignora RLS. O `.gitignore` passou a ignorá-lo - o README afirmava que já
   ignorava.
 - **Proteção CSRF adicionada.** Não existia nenhuma. Synchronizer token
   verificado num ponto único do roteador para toda requisição `POST`.
@@ -58,7 +58,7 @@ conjunto de funcionalidades é o mesmo da versão entregue.
 - **Erro 500 em estratégia inexistente.** `/strategy?id=999` acessava propriedade
   de `null`; agora retorna 404.
 - **N+1 nas listagens.** `is_favorite` era uma consulta por card, e cada model
-  abria a sua própria conexão PDO — mais de quinze por página. Conexão única por
+  abria a sua própria conexão PDO - mais de quinze por página. Conexão única por
   requisição e subconsulta `EXISTS`.
 - **Fotos de Brimstone e Cypher.** O banco apontava para `brimstone.png` e
   `cypher.png`, mas os arquivos em disco eram `brim.png` e `chypher.png`. As duas
@@ -119,6 +119,6 @@ conjunto de funcionalidades é o mesmo da versão entregue.
 - Acessibilidade: `label` associado a cada campo, `aria-label` nos botões de
   ícone, skip link e foco preso dentro do modal.
 
-## [1.0.0] — 2025
+## [1.0.0] - 2025
 
 Versão entregue como trabalho de conclusão de curso.

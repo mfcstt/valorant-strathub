@@ -16,12 +16,12 @@ use RuntimeException;
  * ## Tratamento de erro
  *
  * A versão anterior devolvia `false` para qualquer falha e registrava a causa
- * apenas no log — quem chamava não tinha como dizer à pessoa o que aconteceu, e
+ * apenas no log - quem chamava não tinha como dizer à pessoa o que aconteceu, e
  * o controller acabava mostrando "Erro ao fazer upload. Tente novamente." para
  * um arquivo grande demais e para uma chave de API inválida.
  *
  * Aqui as falhas previsíveis (validação) voltam como {@see StorageResult} com
- * mensagem própria, e as inesperadas (rede, credencial) sobem como exceção — a
+ * mensagem própria, e as inesperadas (rede, credencial) sobem como exceção - a
  * distinção entre "a pessoa precisa corrigir algo" e "o sistema falhou".
  */
 final class SupabaseStorageService implements MediaStorage
@@ -206,7 +206,7 @@ final class SupabaseStorageService implements MediaStorage
 
     /**
      * Guarda o nome original apenas como informação, já sem caminho e limitado
-     * em tamanho — ele nunca é usado para montar caminho de arquivo.
+     * em tamanho - ele nunca é usado para montar caminho de arquivo.
      */
     private static function sanitizeOriginalName(string $name): string
     {

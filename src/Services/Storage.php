@@ -10,7 +10,7 @@ use App\Support\Config;
  * Resolve qual implementação de armazenamento usar.
  *
  * Os controllers pedem `Storage::disk()` e não precisam saber se a mídia vai
- * para o Supabase ou para o disco local — a decisão é de configuração.
+ * para o Supabase ou para o disco local - a decisão é de configuração.
  */
 final class Storage
 {
@@ -25,7 +25,7 @@ final class Storage
     }
 
     /**
-     * Substitui a implementação — usado pelos testes.
+     * Substitui a implementação - usado pelos testes.
      */
     public static function swap(?MediaStorage $disk): void
     {

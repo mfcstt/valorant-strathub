@@ -92,7 +92,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
     </div>
 
     <p class="max-w-[381px] text-xs text-gray-5 font-nunito leading-relaxed">
-      Envie uma imagem, um vídeo ou os dois — ao menos uma mídia é necessária para publicar.
+      Envie uma imagem, um vídeo ou os dois - ao menos uma mídia é necessária para publicar.
     </p>
   </div>
 

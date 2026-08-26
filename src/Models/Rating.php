@@ -97,7 +97,7 @@ final class Rating
      * O `ON CONFLICT ... DO UPDATE` original é sintaxe do PostgreSQL 9.5+ e
      * também funciona no SQLite 3.24+, mas a checagem explícita torna o caminho
      * legível e permite distinguir criação de atualização para a mensagem de
-     * retorno — sem uma segunda consulta só para isso.
+     * retorno - sem uma segunda consulta só para isso.
      *
      * @return bool true quando atualizou uma avaliação existente
      */

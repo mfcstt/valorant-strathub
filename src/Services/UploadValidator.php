@@ -9,13 +9,13 @@ namespace App\Services;
  *
  * ## Por que não usar `$_FILES['x']['type']`
  *
- * Aquele campo é o header `Content-Type` que o navegador declarou — é entrada
+ * Aquele campo é o header `Content-Type` que o navegador declarou - é entrada
  * do usuário, não uma medição. Um cliente qualquer pode enviar um executável
  * anunciando `image/png`. A versão anterior validava exatamente esse campo mais
  * a extensão do nome original, que também vem do cliente.
  *
  * Aqui o tipo é **medido** com `finfo`, que lê os bytes iniciais do arquivo, e a
- * extensão salva é **derivada** do tipo medido — o nome original nunca influencia
+ * extensão salva é **derivada** do tipo medido - o nome original nunca influencia
  * o caminho de destino.
  */
 final class UploadValidator

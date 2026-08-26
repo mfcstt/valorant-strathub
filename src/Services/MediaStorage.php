@@ -9,7 +9,7 @@ namespace App\Services;
  *
  * Duas implementações: {@see SupabaseStorageService} para produção e
  * {@see LocalMediaStorage} para desenvolvimento. A interface existe para o
- * projeto rodar sem nenhuma conta externa — antes, o único caminho possível
+ * projeto rodar sem nenhuma conta externa - antes, o único caminho possível
  * exigia credenciais do Supabase para criar qualquer estratégia com imagem.
  */
 interface MediaStorage

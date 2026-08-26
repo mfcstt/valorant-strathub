@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * A sessão vive no banco, não em arquivo — é a peça que corrige o bug em que
+ * A sessão vive no banco, não em arquivo - é a peça que corrige o bug em que
  * todo formulário do site devolvia 419 em produção: a Vercel podia atender o
  * GET que gera o token CSRF e o POST que o envia em duas instâncias
  * serverless diferentes, sem disco compartilhado entre elas.
@@ -30,7 +30,7 @@ final class DatabaseSessionHandlerTest extends TestCase
     public function ler_sessao_inexistente_devolve_string_vazia(): void
     {
         // String vazia (não false) é o que o PHP espera para "sessão nova,
-        // ainda sem dados" — false sinalizaria falha de I/O.
+        // ainda sem dados" - false sinalizaria falha de I/O.
         $this->assertSame('', $this->handler->read('id-que-nao-existe'));
     }
 
@@ -87,8 +87,8 @@ final class DatabaseSessionHandlerTest extends TestCase
     #[Test]
     public function open_e_close_sempre_confirmam_sucesso(): void
     {
-        // O handler não abre nenhum recurso próprio — a conexão já vem pronta
-        // via injeção — então não há nada que possa falhar aqui.
+        // O handler não abre nenhum recurso próprio - a conexão já vem pronta
+        // via injeção - então não há nada que possa falhar aqui.
         $this->assertTrue($this->handler->open('', 'strathub_session'));
         $this->assertTrue($this->handler->close());
     }

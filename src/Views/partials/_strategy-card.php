@@ -9,7 +9,7 @@ use App\Support\Auth;
  *
  * ## Estrutura
  *
- * A versão anterior era um `<a>` com `<form>` e `<button>` dentro — conteúdo
+ * A versão anterior era um `<a>` com `<form>` e `<button>` dentro - conteúdo
  * interativo aninhado em âncora é HTML inválido, e o comportamento varia por
  * navegador (daí os `event.stopPropagation()` inline tentando remendar). Aqui o
  * card é um `<article>`; o link que cobre a área fica numa camada abaixo dos

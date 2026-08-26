@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * Template base de todas as páginas.
  *
- * Recebe $view (nome da view) e, quando houver, $component — ambos já validados
+ * Recebe $view (nome da view) e, quando houver, $component - ambos já validados
  * por App\Support\View.
  *
  * O CSS do Tailwind agora vem de um arquivo compilado (`/CSS/tailwind.build.css`)

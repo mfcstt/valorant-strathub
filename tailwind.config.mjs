@@ -2,7 +2,7 @@
  * Configuração do Tailwind.
  *
  * Antes esta paleta vivia em `public/JS/tailwindCustom.js`, carregado no
- * navegador junto do `cdn.tailwindcss.com` — o que significava compilar o CSS
+ * navegador junto do `cdn.tailwindcss.com` - o que significava compilar o CSS
  * no cliente a cada visita. Agora ela alimenta a compilação, e o `content`
  * abaixo é o que permite ao Tailwind descartar tudo que o projeto não usa.
  */

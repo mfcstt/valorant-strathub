@@ -61,7 +61,7 @@ if (!function_exists('asset_version')) {
      * arquivo.
      *
      * `public/static.php` serve CSS/JS com `Cache-Control: immutable,
-     * max-age=31536000` — o navegador nunca revalida essa URL. Sem um sufixo
+     * max-age=31536000` - o navegador nunca revalida essa URL. Sem um sufixo
      * que mude junto com o conteúdo, uma correção de CSS ou JS não chegaria a
      * quem já visitou o site antes do deploy, por até um ano.
      *
@@ -209,7 +209,7 @@ if (!function_exists('redirect_back')) {
      * Volta para uma rota interna informada pelo formulário.
      *
      * A decisão sobre o destino ser seguro vive em {@see Url::safeInternalPath()},
-     * separada do efeito colateral de redirecionar — é o que permite testá-la.
+     * separada do efeito colateral de redirecionar - é o que permite testá-la.
      */
     function redirect_back(?string $candidate, string $fallback = '/explore'): never
     {

@@ -17,7 +17,7 @@ use SessionHandlerInterface;
  * mas não na Vercel: cada requisição pode cair numa instância serverless
  * diferente, sem disco compartilhado entre elas. Na prática, a sessão criada
  * no GET de uma página deixava de existir quando o POST do formulário
- * chegava — o token CSRF gerado na hora de desenhar a página não batia mais
+ * chegava - o token CSRF gerado na hora de desenhar a página não batia mais
  * com nada, e todo formulário do site (login, cadastro, criar estratégia,
  * avaliar, favoritar) devolvia 419 mesmo com a pessoa fazendo tudo certo.
  *
@@ -41,7 +41,7 @@ final class DatabaseSessionHandler implements SessionHandlerInterface
     }
 
     // A interface declara `string|false`, mas esta implementação nunca falha
-    // de um jeito que justifique `false` — string vazia já cobre "sem dados".
+    // de um jeito que justifique `false` - string vazia já cobre "sem dados".
     // PHP permite estreitar o tipo de retorno de forma covariante.
     public function read(string $id): string
     {
@@ -50,7 +50,7 @@ final class DatabaseSessionHandler implements SessionHandlerInterface
             ['id' => $id],
         );
 
-        // String vazia (não false) sinaliza "sessão nova, sem dados ainda" —
+        // String vazia (não false) sinaliza "sessão nova, sem dados ainda" -
         // é o que o PHP espera para um id que ainda não tem registro.
         return is_array($row) ? (string) $row['payload'] : '';
     }

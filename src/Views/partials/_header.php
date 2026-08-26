@@ -6,7 +6,7 @@ use App\Models\Strategy;
 use App\Support\Auth;
 
 /**
- * Cabeçalho e navegação, compartilhados por todas as páginas internas —
+ * Cabeçalho e navegação, compartilhados por todas as páginas internas -
  * inclusive a de erro, que antes ficava sem eles e obrigava quem já estava
  * logado a recomeçar a navegação do zero ao cair numa URL inválida.
  */
@@ -21,7 +21,7 @@ $navigation = [
     '/favorites' => ['Favoritas', 'ph-heart', true],
 ];
 
-// Só quem modera vê o item — e só faz a consulta de contagem quando precisa,
+// Só quem modera vê o item - e só faz a consulta de contagem quando precisa,
 // em vez de pagar essa query em toda requisição de qualquer pessoa.
 $pendingCount = 0;
 if ($isAdmin) {

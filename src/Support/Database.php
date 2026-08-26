@@ -13,7 +13,7 @@ use RuntimeException;
  * Acesso ao banco via PDO, com uma única conexão por requisição.
  *
  * A versão anterior instanciava `new Database(...)` no construtor de cada model,
- * abrindo uma conexão TCP nova a cada objeto criado — dezenas por página, cada
+ * abrindo uma conexão TCP nova a cada objeto criado - dezenas por página, cada
  * uma pagando a latência de rede até o Supabase. Aqui a conexão é resolvida uma
  * vez e reaproveitada.
  */
@@ -48,7 +48,7 @@ final class Database
     }
 
     /**
-     * Substitui a conexão compartilhada — usado pelos testes.
+     * Substitui a conexão compartilhada - usado pelos testes.
      */
     public static function swap(?self $database): void
     {

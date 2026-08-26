@@ -39,7 +39,7 @@ final class Flash
     }
 
     /**
-     * Lê sem remover — útil quando a mesma chave é consultada mais de uma vez
+     * Lê sem remover - útil quando a mesma chave é consultada mais de uma vez
      * na renderização de uma única página.
      */
     public function peek(string $key, mixed $default = null): mixed

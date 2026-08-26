@@ -22,7 +22,7 @@ $selectedElo = strtolower(old('elo', (string) ($user->elo ?? 'ferro')));
 $createdAt = $user->created_at !== null ? strtotime((string) $user->created_at) : false;
 $maxImageMb = intdiv(UploadValidator::MAX_IMAGE_BYTES, 1024 * 1024);
 
-// Sufixo no singular ou plural conforme a contagem — "1 publicadas" (singular
+// Sufixo no singular ou plural conforme a contagem - "1 publicadas" (singular
 // seguido de plural) já apareceu em produção.
 $suffix = static fn (int $count, string $singular, string $plural): string => $count === 1 ? $singular : $plural;
 
@@ -126,7 +126,7 @@ $activity = [
             <i class="ph ph-calendar text-xl absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-5"
               aria-hidden="true"></i>
             <input type="text" id="created-at" class="inpForm pl-10 w-full" disabled
-              value="<?= e($createdAt !== false ? date('d/m/Y', $createdAt) : '—') ?>">
+              value="<?= e($createdAt !== false ? date('d/m/Y', $createdAt) : '-') ?>">
           </div>
         </div>
 

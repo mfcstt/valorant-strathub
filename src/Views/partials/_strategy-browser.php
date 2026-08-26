@@ -8,7 +8,7 @@ use App\Models\Strategy;
  * Navegador de estratégias: busca, ordenação, filtros, grade e paginação.
  *
  * Explorar, Minhas estratégias e Favoritas eram três arquivos de ~140 linhas com
- * o mesmo markup copiado — e as cópias já divergiam (rótulos, ícones e ids de
+ * o mesmo markup copiado - e as cópias já divergiam (rótulos, ícones e ids de
  * painel diferentes para o mesmo controle). Agora as três páginas passam por aqui
  * e informam apenas o que muda de fato.
  *
@@ -58,7 +58,7 @@ $isFiltered = $search !== '' || $has_active_filters;
       <h1 class="font-rammetto text-2xl text-gray-7"><?= e($browser_title) ?></h1>
       <?php if ($total > 0): ?>
         <?php
-        // As duas palavras concordam em número juntas — "1 estratégia
+        // As duas palavras concordam em número juntas - "1 estratégia
         // publicadas" (singular seguido de plural) já apareceu em produção.
         $isSingular = $total === 1;
         $noun = $isSingular ? 'estratégia' : 'estratégias';

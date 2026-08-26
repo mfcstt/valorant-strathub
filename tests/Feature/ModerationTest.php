@@ -15,7 +15,7 @@ use Tests\TestCase;
  * Moderação de estratégias.
  *
  * Toda estratégia nova nasce PENDING e só aparece publicamente depois de
- * aprovada — sem isso, qualquer pessoa cadastrada publica direto no site,
+ * aprovada - sem isso, qualquer pessoa cadastrada publica direto no site,
  * sem nenhum filtro antes de virar um link compartilhável.
  */
 final class ModerationTest extends TestCase

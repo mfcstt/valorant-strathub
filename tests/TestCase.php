@@ -20,7 +20,7 @@ use RuntimeException;
  * produção enquanto todos os testes passavam.
  *
  * Definindo `TEST_DB_DRIVER=pgsql`, os mesmos testes rodam contra um Postgres
- * real — é o que a CI faz num job separado.
+ * real - é o que a CI faz num job separado.
  */
 abstract class TestCase extends BaseTestCase
 {

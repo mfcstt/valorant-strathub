@@ -1,5 +1,5 @@
 -- =============================================================================
--- Valorant StratHub — schema SQLite (desenvolvimento local)
+-- Valorant StratHub - schema SQLite (desenvolvimento local)
 --
 -- Aplicado automaticamente pela aplicação na primeira execução quando
 -- USE_SQLITE=true. Espelha database/schema.pgsql.sql; as diferenças são só de
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS ratings (
     UNIQUE (user_id, strategy_id)
 );
 
--- Sessões (mesmo motivo do schema PostgreSQL — ver DatabaseSessionHandler).
+-- Sessões (mesmo motivo do schema PostgreSQL - ver DatabaseSessionHandler).
 CREATE TABLE IF NOT EXISTS sessions (
     id             VARCHAR(128) PRIMARY KEY,
     payload        TEXT NOT NULL,

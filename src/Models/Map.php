@@ -7,7 +7,7 @@ namespace App\Models;
 use App\Support\Database;
 
 /**
- * Mapa do Valorant — dado de referência, populado por database/seeds.sql.
+ * Mapa do Valorant - dado de referência, populado por database/seeds.sql.
  */
 final class Map
 {

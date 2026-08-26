@@ -10,7 +10,7 @@ use App\Support\Database;
 /**
  * Metadados de um arquivo guardado no Supabase Storage.
  *
- * `Image` e `Video` eram duas classes praticamente idênticas — mesmas colunas,
+ * `Image` e `Video` eram duas classes praticamente idênticas - mesmas colunas,
  * mesmo `save()`, mesmo `delete()`, mesmo cálculo de URL pública, com o bucket
  * como única diferença real. O comportamento comum vive aqui; as subclasses
  * declaram apenas o que muda.
@@ -27,7 +27,7 @@ abstract class MediaFile
     public mixed $created_at = null;
 
     /**
-     * Nome da tabela. Valor fixo por subclasse — nunca vem de entrada externa.
+     * Nome da tabela. Valor fixo por subclasse - nunca vem de entrada externa.
      */
     abstract protected static function table(): string;
 

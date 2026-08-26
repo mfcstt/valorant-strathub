@@ -1,5 +1,5 @@
 -- =============================================================================
--- Valorant StratHub — schema PostgreSQL (Supabase)
+-- Valorant StratHub - schema PostgreSQL (Supabase)
 --
 -- Aplicar num banco vazio:
 --   psql "$DATABASE_URL" -f database/schema.pgsql.sql

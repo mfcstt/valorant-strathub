@@ -12,7 +12,7 @@ use App\Models\Strategy;
  * Lê os filtros da requisição e monta os dados de uma página de listagem.
  *
  * Explorar, Minhas estratégias e Favoritas tinham o mesmo bloco de parsing de
- * filtros e a mesma closure de `usort` de 25 linhas copiada três vezes — e as
+ * filtros e a mesma closure de `usort` de 25 linhas copiada três vezes - e as
  * cópias já haviam divergido entre si. Agora as três páginas diferem apenas nos
  * filtros fixos que passam para cá.
  */

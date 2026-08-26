@@ -105,7 +105,7 @@ final class Config
     }
 
     /**
-     * Reinicia o cache — usado pelos testes.
+     * Reinicia o cache - usado pelos testes.
      */
     public static function flush(): void
     {
@@ -196,7 +196,7 @@ final class Config
      * Configuração de armazenamento de mídia.
      *
      * O driver `local` grava em `public/uploads` e existe para o projeto rodar
-     * ponta a ponta sem nenhuma conta externa — quem clona o repositório
+     * ponta a ponta sem nenhuma conta externa - quem clona o repositório
      * consegue criar uma estratégia com imagem já na primeira execução. O driver
      * é escolhido automaticamente: se não houver credenciais do Supabase, cai
      * para o local em vez de falhar no meio de um upload.

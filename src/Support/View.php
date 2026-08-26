@@ -12,7 +12,7 @@ use RuntimeException;
  * As views ficam em `src/Views`. O template base (`layouts/base.php`) inclui a
  * view pedida, que por sua vez pode incluir um componente. Nomes de view e de
  * componente vêm sempre do código da aplicação, nunca da requisição, mas são
- * validados de todo modo — é o tipo de invariante que custa uma linha para
+ * validados de todo modo - é o tipo de invariante que custa uma linha para
  * garantir e caro para descobrir que faltava.
  */
 final class View

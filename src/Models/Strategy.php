@@ -13,7 +13,7 @@ use App\Support\Database;
  * ## Ordenação
  *
  * A versão anterior paginava no SQL (`ORDER BY created_at`) e só então reordenava
- * em PHP com `usort` — sobre os 10 itens já trazidos. O resultado é que "Mais
+ * em PHP com `usort` - sobre os 10 itens já trazidos. O resultado é que "Mais
  * estrelas" ordenava um recorte arbitrário: a estratégia mais bem avaliada do
  * site podia nunca aparecer no topo. Aqui a ordenação vive no `ORDER BY`, então
  * `LIMIT`/`OFFSET` recortam a lista já ordenada.
@@ -95,7 +95,7 @@ final class Strategy
      * `$2`… varrendo a consulta em busca de literais de string. A sequência
      * `'\'` faz esse scanner interpretar `\'` como aspa escapada, então ele
      * considera o resto da consulta como parte de um literal e para de
-     * substituir — as ocorrências seguintes de `:search` chegam cruas ao banco
+     * substituir - as ocorrências seguintes de `:search` chegam cruas ao banco
      * e o Postgres devolve erro de sintaxe. Com `!` o problema não existe.
      *
      * O SQLite aceita os dois, então o bug só aparecia em produção.
@@ -246,7 +246,7 @@ final class Strategy
         [$where, $params, $joins] = self::conditions($filters);
 
         // Os prefixos vêm da configuração (e variam com o driver de storage),
-        // e entram como parâmetro vinculado em vez de interpolados no SQL — era
+        // e entram como parâmetro vinculado em vez de interpolados no SQL - era
         // o único lugar da consulta onde um valor de configuração era concatenado
         // direto na string.
         $params['cover_prefix'] = (string) Config::get('storage.image_prefix', '');
@@ -410,7 +410,7 @@ final class Strategy
         $database = Database::connection();
 
         // Toda estratégia nova nasce PENDING, salvo quando quem chama informa
-        // outro status explicitamente — é o caso de fixtures de teste que
+        // outro status explicitamente - é o caso de fixtures de teste que
         // simulam conteúdo já aprovado, sem precisar passar pela moderação.
         $database->execute(
             'INSERT INTO strategies
@@ -448,7 +448,7 @@ final class Strategy
     }
 
     /**
-     * Atualiza título, categoria, descrição, agente, mapa e mídia — sempre
+     * Atualiza título, categoria, descrição, agente, mapa e mídia - sempre
      * reabrindo a moderação (volta para PENDING e limpa a nota anterior).
      *
      * Qualquer edição precisa passar pela revisão de novo, mesmo numa
@@ -489,7 +489,7 @@ final class Strategy
 
     /**
      * Aprova ou rejeita uma estratégia pendente. Usado só pela fila de
-     * moderação — não checa posse, porque quem chama já é admin.
+     * moderação - não checa posse, porque quem chama já é admin.
      */
     public static function moderate(int $id, string $status, ?string $note = null): bool
     {
@@ -502,7 +502,7 @@ final class Strategy
     }
 
     /**
-     * Quantas estratégias aguardam moderação — usado no selo do menu de admin.
+     * Quantas estratégias aguardam moderação - usado no selo do menu de admin.
      */
     public static function pendingCount(): int
     {

@@ -13,7 +13,7 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 // A aplicação usa $_SESSION diretamente. Fora do contexto web não existe sessão
-// real, então um array simples cumpre o contrato — e ainda deixa cada teste
+// real, então um array simples cumpre o contrato - e ainda deixa cada teste
 // partir de um estado limpo.
 if (!isset($_SESSION)) {
     $_SESSION = [];

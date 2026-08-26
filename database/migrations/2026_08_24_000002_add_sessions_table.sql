@@ -1,11 +1,11 @@
 -- =============================================================================
--- Migração — PostgreSQL / Supabase
+-- Migração - PostgreSQL / Supabase
 --
 -- Adiciona a tabela de sessões. Sem ela, todo formulário do site (login,
 -- cadastro, criar estratégia, avaliar, favoritar) devolve 419 em produção: o
 -- handler de sessão padrão do PHP grava em arquivo local, e a Vercel pode
 -- atender o GET que gera a página e o POST que envia o formulário em duas
--- instâncias serverless diferentes, sem disco compartilhado entre elas — a
+-- instâncias serverless diferentes, sem disco compartilhado entre elas - a
 -- sessão criada na primeira simplesmente não existe na segunda.
 --
 -- Puramente aditiva: cria uma tabela nova, não toca em nada existente.

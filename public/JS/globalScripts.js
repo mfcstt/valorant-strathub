@@ -1,7 +1,7 @@
 /**
  * Comportamentos presentes em toda página.
  *
- * Antes, boa parte disso vivia em blocos <script> inline dentro das views — o
+ * Antes, boa parte disso vivia em blocos <script> inline dentro das views - o
  * que impede cache pelo navegador e, mais adiante, impede adotar uma Content
  * Security Policy sem `unsafe-inline`.
  */
@@ -65,7 +65,7 @@ function initToasts() {
  * Confirmação antes de enviar formulários destrutivos.
  *
  * Declarada por `data-confirm` no <form>, em vez de `onclick` inline em cada
- * botão — o que também mantinha a mensagem duplicada em quatro lugares.
+ * botão - o que também mantinha a mensagem duplicada em quatro lugares.
  */
 function initConfirmForms() {
   document.querySelectorAll('form[data-confirm]').forEach((form) => {

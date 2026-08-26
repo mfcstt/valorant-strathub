@@ -27,7 +27,7 @@ if ($strategy === null) {
 $userId = (int) Auth::id();
 
 // Avaliar a própria estratégia inflaria a nota do autor e distorceria a
-// ordenação de "Mais estrelas" — a regra que sustenta a página inicial.
+// ordenação de "Mais estrelas" - a regra que sustenta a página inicial.
 if ((int) $strategy->user_id === $userId) {
     flash()->put('error', 'Você não pode avaliar a sua própria estratégia.');
     redirect('/strategy?id=' . $strategyId);

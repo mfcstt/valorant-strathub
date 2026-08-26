@@ -1,9 +1,9 @@
 -- =============================================================================
--- Limpeza de mídia órfã no Supabase — OPCIONAL, não roda automaticamente.
+-- Limpeza de mídia órfã no Supabase - OPCIONAL, não roda automaticamente.
 --
 -- Identifica imagens e vídeos sem nenhuma referência viva: nem capa de
 -- estratégia, nem avatar de usuário atual. A maioria data de outubro/novembro
--- de 2025, de antes da correção em ProfileActions.php e strategy-create.php —
+-- de 2025, de antes da correção em ProfileActions.php e strategy-create.php -
 -- o app antigo deixava um arquivo órfão sempre que um upload tinha sucesso e
 -- o passo seguinte falhava (vídeo inválido, conta apagada, avatar trocado).
 --
@@ -20,7 +20,7 @@
 --      (comentado no final deste arquivo).
 --
 -- Nenhuma estratégia ou avatar atualmente exibido no site referencia essas
--- linhas — apagá-las não muda nada visível, só libera espaço no Storage.
+-- linhas - apagá-las não muda nada visível, só libera espaço no Storage.
 -- =============================================================================
 
 -- Imagens órfãs (nem capa de estratégia, nem avatar de ninguém)

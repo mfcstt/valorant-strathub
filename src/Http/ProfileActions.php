@@ -17,7 +17,7 @@ use App\Support\Validation;
  * As quatro ações do formulário de perfil.
  *
  * O controller original resolvia isso num `if/else if` de 130 linhas dentro de
- * um único `try`, onde qualquer exceção — de validação a falha de rede — caía no
+ * um único `try`, onde qualquer exceção - de validação a falha de rede - caía no
  * mesmo `catch` e virava a mesma mensagem. Aqui cada ação é um método com o seu
  * próprio caminho de erro.
  */
@@ -146,7 +146,7 @@ final class ProfileActions
         // Apagados antes do usuário, e não depois: o `ON DELETE CASCADE` do
         // banco remove as linhas de `images`/`videos` automaticamente, mas não
         // sabe nada sobre o Supabase Storage. Sem este passo, o arquivo
-        // continua público e acessível indefinidamente — órfão, sem nenhuma
+        // continua público e acessível indefinidamente - órfão, sem nenhuma
         // linha no banco que aponte para ele.
         $this->deleteOwnedMediaFiles();
 
@@ -161,7 +161,7 @@ final class ProfileActions
      * Remove do Supabase Storage toda mídia pertencente a este usuário.
      *
      * Melhor esforço: uma falha de rede ao apagar um arquivo não pode impedir
-     * a exclusão da conta em si — a pessoa pediu para sair, e um objeto órfão
+     * a exclusão da conta em si - a pessoa pediu para sair, e um objeto órfão
      * no bucket é um problema bem menor do que uma conta presa sem poder ser
      * apagada.
      */
@@ -190,7 +190,7 @@ final class ProfileActions
      * Apaga do Storage o avatar anterior, se ele for um arquivo nosso.
      *
      * `avatarDefault.png` e uma string vazia (conta sem avatar ainda) não
-     * apontam para nada no bucket — nesses casos não há o que apagar.
+     * apontam para nada no bucket - nesses casos não há o que apagar.
      */
     private function deletePreviousAvatar(string $previousAvatarUrl): void
     {
@@ -234,7 +234,7 @@ final class ProfileActions
 
         // Guardado antes do upload: é o que permite apagar o arquivo antigo do
         // Storage depois de confirmado que o novo já está no lugar. Sem isso,
-        // cada troca de avatar deixa o arquivo anterior órfão no bucket — o
+        // cada troca de avatar deixa o arquivo anterior órfão no bucket - o
         // registro em `users.avatar` é sobrescrito, mas o objeto em si nunca
         // é removido.
         $previousAvatar = (string) ($_SESSION['auth']->avatar ?? '');

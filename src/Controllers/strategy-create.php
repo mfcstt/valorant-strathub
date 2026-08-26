@@ -108,7 +108,7 @@ if ($hasVideo) {
         $validation->addError('video', (string) $videoResult->error);
 
         // A capa pode ter subido com sucesso antes do vídeo falhar. Sem esta
-        // limpeza, ela ficaria órfã — um arquivo público no Storage e uma
+        // limpeza, ela ficaria órfã - um arquivo público no Storage e uma
         // linha em `images` sem nenhuma estratégia apontando para ela, já
         // que Strategy::create() nunca é alcançado neste caminho.
         if ($coverResult !== null && $coverResult->file !== null) {
@@ -135,5 +135,5 @@ $strategyId = Strategy::create([
     'map_id' => $mapId,
 ]);
 
-flash()->put('message', 'Estratégia enviada! Como o projeto ainda não tem moderação automática, ela passa por uma revisão manual antes de aparecer pra outras pessoas — isso deve levar pouco tempo.');
+flash()->put('message', 'Estratégia enviada! Como o projeto ainda não tem moderação automática, ela passa por uma revisão manual antes de aparecer pra outras pessoas - isso deve levar pouco tempo.');
 redirect('/strategy?id=' . $strategyId);

@@ -3,7 +3,7 @@
 #
 #   docker compose up
 #
-# Sobe a aplicação em http://localhost:8080 com SQLite — sem precisar de
+# Sobe a aplicação em http://localhost:8080 com SQLite - sem precisar de
 # credenciais do Supabase para rodar o projeto pela primeira vez.
 # =============================================================================
 
@@ -13,14 +13,14 @@ services:
       context: .
       target: runtime
     ports:
-      - '8080:80'
+      - "8080:80"
     environment:
       APP_ENV: local
-      APP_DEBUG: 'true'
+      APP_DEBUG: "true"
       # Um segredo fixo aqui é aceitável porque este arquivo descreve apenas o
       # ambiente local. Em produção o valor vem do painel da hospedagem.
       APP_SECRET: desenvolvimento-local-nao-usar-em-producao-0000
-      USE_SQLITE: 'true'
+      USE_SQLITE: "true"
     volumes:
       # Código montado para refletir alterações sem rebuild. `vendor` e os
       # assets compilados ficam de fora para não sobrescrever o que veio da
@@ -30,7 +30,13 @@ services:
       - ./database:/var/www/html/database
       - ./resources:/var/www/html/resources
     healthcheck:
-      test: ['CMD', 'php', '-r', 'exit(@file_get_contents("http://127.0.0.1/login") === false ? 1 : 0);']
+      test:
+        [
+          "CMD",
+          "php",
+          "-r",
+          'exit(@file_get_contents("http://127.0.0.1/login") === false ? 1 : 0);',
+        ]
       interval: 15s
       timeout: 5s
       retries: 5

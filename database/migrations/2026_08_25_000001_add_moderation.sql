@@ -2,7 +2,7 @@
 -- Moderação de estratégias.
 --
 -- Aditiva e segura para rodar em produção sem downtime:
---   - `users.is_admin` nasce FALSE em todo mundo — ninguém vira admin sozinho.
+--   - `users.is_admin` nasce FALSE em todo mundo - ninguém vira admin sozinho.
 --   - `strategies.status` nasce 'pending' em toda linha existente, inclusive
 --     nas já publicadas hoje (decisão do dono do projeto: colocar tudo em
 --     análise para testar o fluxo de aprovação do zero).

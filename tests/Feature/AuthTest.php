@@ -14,7 +14,7 @@ use Tests\TestCase;
  * O token de "continuar conectado" precisa ser imprevisível e revogável.
  *
  * O mecanismo anterior era um cookie `auth_uid` acompanhado do HMAC do próprio
- * id, com o segredo embutido no código como valor padrão — bastava ler o
+ * id, com o segredo embutido no código como valor padrão - bastava ler o
  * repositório para forjar o login de qualquer conta.
  */
 final class AuthTest extends TestCase

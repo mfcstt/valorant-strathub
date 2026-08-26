@@ -49,7 +49,7 @@ if (!Strategy::deleteOwnedBy($strategyId, $userId)) {
 }
 
 // A limpeza da mídia acontece depois e não pode derrubar a operação: se o
-// Supabase estiver fora do ar, o pior resultado é um arquivo órfão no bucket —
+// Supabase estiver fora do ar, o pior resultado é um arquivo órfão no bucket -
 // bem melhor que devolver erro para uma exclusão que já aconteceu.
 try {
     $storage = Storage::disk();

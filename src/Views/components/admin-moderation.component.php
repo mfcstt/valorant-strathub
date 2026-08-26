@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Fila de moderação: só quem é admin (App\Support\Auth::isAdmin()) chega aqui
- * — o controller já bloqueia o resto com 403.
+ * - o controller já bloqueia o resto com 403.
  *
  * @var list<\App\Models\Strategy> $strategies
  * @var int $total
@@ -97,7 +97,7 @@ declare(strict_types=1);
 
                     <label for="nota-<?= e($strategy->id) ?>" class="sr-only">Motivo da rejeição</label>
                     <textarea id="nota-<?= e($strategy->id) ?>" name="nota" required maxlength="500" rows="2"
-                      placeholder="Explique o motivo — a pessoa vai ver isso e pode corrigir e reenviar"
+                      placeholder="Explique o motivo - a pessoa vai ver isso e pode corrigir e reenviar"
                       class="w-full resize-none bg-gray-1 border border-gray-3 rounded-md px-3 py-2 text-gray-7 font-nunito text-sm leading-6 placeholder:text-gray-5 outline-none focus:outline-red-base"></textarea>
 
                     <button type="submit"

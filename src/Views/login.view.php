@@ -23,7 +23,7 @@ $selectedElo = strtolower(trim(old('elo')));
 <section class="min-h-screen flex p-4 md:items-stretch md:justify-start items-center justify-center">
   <!-- Arte lateral -->
   <!-- bg-left-top, e não bg-center: a imagem tem a logo "VALORANT" colada no
-       canto superior esquerdo — centralizar o recorte cortava o próprio texto. -->
+       canto superior esquerdo - centralizar o recorte cortava o próprio texto. -->
   <div class="hidden md:flex md:flex-col justify-between md:w-2/4 md:min-h-screen p-8 rounded-[18px] bg-thumb bg-cover bg-no-repeat bg-left-top"></div>
 
   <!-- Formulários -->
