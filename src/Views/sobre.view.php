@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * Sobre o projeto: pra quem chega de um link sem contexto nenhum.
  *
- * Inclui o mesmo cabeçalho das páginas internas — funciona tanto pra quem
+ * Inclui o mesmo cabeçalho das páginas internas - funciona tanto pra quem
  * ainda não tem conta (mostra Login) quanto pra quem já está logado.
  */
 
@@ -19,9 +19,9 @@ $stats = [
 ];
 
 $features = [
-    ['icon' => 'ph-target', 'title' => 'Cadastro por agente e mapa', 'text' => 'Cada estratégia leva um título, categoria (ataque, defesa, pós-plant ou retake), o agente e o mapa certos — nada de vasculhar vídeo por vídeo pra achar a informação certa.'],
-    ['icon' => 'ph-image', 'title' => 'Imagem ou vídeo de apoio', 'text' => 'Uma captura de tela ou um clipe curto vale mais que um parágrafo de instrução — a estratégia fica fácil de reproduzir olhando.'],
-    ['icon' => 'ph-star', 'title' => 'Avaliação pela comunidade', 'text' => 'Quem testou dá nota e comentário. Com o tempo, as melhores estratégias sobem — sem depender de um administrador decidindo o que é bom.'],
+    ['icon' => 'ph-target', 'title' => 'Cadastro por agente e mapa', 'text' => 'Cada estratégia leva um título, categoria (ataque, defesa, pós-plant ou retake), o agente e o mapa certos - nada de vasculhar vídeo por vídeo pra achar a informação certa.'],
+    ['icon' => 'ph-image', 'title' => 'Imagem ou vídeo de apoio', 'text' => 'Uma captura de tela ou um clipe curto vale mais que um parágrafo de instrução - a estratégia fica fácil de reproduzir olhando.'],
+    ['icon' => 'ph-star', 'title' => 'Avaliação pela comunidade', 'text' => 'Quem testou dá nota e comentário. Com o tempo, as melhores estratégias sobem - sem depender de um administrador decidindo o que é bom.'],
     ['icon' => 'ph-magnifying-glass', 'title' => 'Busca e filtros', 'text' => 'Filtra por mapa, agente e categoria pra achar exatamente o que precisa antes de entrar na partida.'],
 ];
 
@@ -42,7 +42,7 @@ $team = [
     </h1>
     <p class="mt-6 max-w-2xl mx-auto text-gray-6 font-nunito text-base md:text-lg leading-[170%]">
       O Valorant StratHub nasceu de um problema real: em qualquer comunidade de jogadores, as boas
-      táticas circulam soltas — um vídeo aqui no YouTube, um print ali no grupo, uma explicação perdida
+      táticas circulam soltas - um vídeo aqui no YouTube, um print ali no grupo, uma explicação perdida
       lá no meio de uma call. A plataforma reúne tudo isso num só lugar, organizado por agente, mapa e
       categoria, e deixa a própria comunidade avaliar o que funciona de verdade.
     </p>
@@ -87,13 +87,13 @@ $team = [
       <p class="mt-4 text-gray-6 font-nunito leading-[170%]">
         A ideia surgiu de dentro de uma comunidade real: o servidor de Discord
         <strong class="text-gray-7">Valorant Lovers BR</strong>. Estratégias já circulavam ali o tempo
-        todo — só que espalhadas entre Instagram, TikTok, Reddit, YouTube e mensagens de texto, sem
+        todo - só que espalhadas entre Instagram, TikTok, Reddit, YouTube e mensagens de texto, sem
         nenhum lugar central pra guardar, buscar ou avaliar o que já tinha sido testado.
       </p>
       <p class="mt-4 text-gray-6 font-nunito leading-[170%]">
         O StratHub parte de um princípio simples: a base de jogadores é muito maior que qualquer equipe
         de administradores. Deixar que os próprios jogadores publiquem e avaliem estratégias gera muito
-        mais variedade e renovação de conteúdo do que depender de alguém curando tudo manualmente —
+        mais variedade e renovação de conteúdo do que depender de alguém curando tudo manualmente -
         e é a comunidade quem decide, pelas avaliações, o que realmente funciona.
       </p>
     </div>
@@ -145,7 +145,7 @@ $team = [
         </div>
         <div class="sm:col-span-2">
           <dt class="text-gray-5 text-sm">Stack</dt>
-          <dd class="text-gray-7 mt-1">PHP, PostgreSQL, Tailwind CSS — arquitetura MVC, responsivo do celular ao desktop</dd>
+          <dd class="text-gray-7 mt-1">PHP, PostgreSQL, Tailwind CSS - arquitetura MVC, responsivo do celular ao desktop</dd>
         </div>
       </dl>
 
