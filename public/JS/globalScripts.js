@@ -33,20 +33,45 @@ function initClearFieldButtons() {
 }
 
 /**
- * Toasts de mensagem e erro: entram pela direita e saem sozinhos.
+ * Toasts de mensagem e erro: entram pela direita.
+ *
+ * Um aviso curto ("Estratégia excluída com sucesso.") some sozinho - a
+ * barrinha de progresso mostra quanto tempo falta. Um aviso longo (por
+ * exemplo, o texto explicando que a estratégia entrou em moderação) fica na
+ * tela até a pessoa fechar: sumia rápido demais pra dar tempo de ler o
+ * parágrafo inteiro. O botão de fechar funciona nos dois casos.
  */
 function initToasts() {
   const PADDING = 32
   const VISIBLE_MS = 4500
+  const LONG_MESSAGE_CHARS = 70
 
   document.querySelectorAll('[data-toast]').forEach((toast) => {
     const progress = toast.querySelector('.progress')
+    const closeButton = toast.querySelector('[data-toast-close]')
+    const text = toast.querySelector('span')?.textContent ?? ''
+    const isLong = text.trim().length > LONG_MESSAGE_CHARS
     const offscreen = () => `-${toast.offsetWidth + PADDING}px`
+
+    let hideTimeout = null
+
+    const hide = () => {
+      if (hideTimeout) clearTimeout(hideTimeout)
+      toast.style.right = offscreen()
+    }
 
     toast.style.right = offscreen()
     requestAnimationFrame(() => {
       toast.style.right = `${PADDING}px`
     })
+
+    closeButton?.addEventListener('click', hide)
+
+    if (isLong) {
+      // Sem barra de progresso nem timer: a pessoa fecha quando quiser.
+      progress?.parentElement?.classList.add('hidden')
+      return
+    }
 
     if (progress) {
       progress.style.transition = `width ${VISIBLE_MS}ms linear`
@@ -55,9 +80,7 @@ function initToasts() {
       })
     }
 
-    setTimeout(() => {
-      toast.style.right = offscreen()
-    }, VISIBLE_MS)
+    hideTimeout = setTimeout(hide, VISIBLE_MS)
   })
 }
 

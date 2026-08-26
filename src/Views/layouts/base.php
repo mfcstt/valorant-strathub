@@ -61,9 +61,13 @@ $error = flash()->get('error');
   <?php if (is_string($message) && $message !== ''): ?>
     <div id="message" role="status" aria-live="polite" data-toast
       class="fixed bottom-8 right-[-400px] z-20 w-auto max-w-[90vw] md:max-w-[480px] break-words flex flex-col pb-1 px-1 text-white border border-red-base rounded-md bg-gray-1 shadow-buttonHover">
-      <div class="flex items-center gap-2 px-8 pt-4 pb-3">
-        <i class="ph ph-check-circle text-red-base text-2xl" aria-hidden="true"></i>
-        <span class="text-lg"><?= e($message) ?></span>
+      <div class="flex items-start gap-2 pl-6 pr-2 pt-4 pb-3">
+        <i class="ph ph-check-circle text-red-base text-2xl shrink-0" aria-hidden="true"></i>
+        <span class="text-lg flex-1"><?= e($message) ?></span>
+        <button type="button" data-toast-close aria-label="Fechar aviso"
+          class="shrink-0 p-1 rounded text-gray-5 outline-none hover:text-white focus:text-white focus:outline-red-base transition-all">
+          <i class="ph ph-x text-xl" aria-hidden="true"></i>
+        </button>
       </div>
       <div class="w-full h-0.5 bg-gray-3 rounded-xl">
         <div class="progress h-full bg-red-light" style="width:0"></div>
@@ -74,9 +78,13 @@ $error = flash()->get('error');
   <?php if (is_string($error) && $error !== ''): ?>
     <div id="error" role="alert" aria-live="assertive" data-toast
       class="fixed bottom-8 right-[-400px] z-20 w-auto max-w-[90vw] md:max-w-[480px] break-words flex flex-col pb-1 px-1 text-white border border-red-base rounded-md bg-gray-1 shadow-buttonHover">
-      <div class="flex items-center gap-2 px-8 pt-4 pb-3">
-        <i class="ph ph-warning text-red-base text-2xl" aria-hidden="true"></i>
-        <span class="text-lg"><?= e($error) ?></span>
+      <div class="flex items-start gap-2 pl-6 pr-2 pt-4 pb-3">
+        <i class="ph ph-warning text-red-base text-2xl shrink-0" aria-hidden="true"></i>
+        <span class="text-lg flex-1"><?= e($error) ?></span>
+        <button type="button" data-toast-close aria-label="Fechar aviso"
+          class="shrink-0 p-1 rounded text-gray-5 outline-none hover:text-white focus:text-white focus:outline-red-base transition-all">
+          <i class="ph ph-x text-xl" aria-hidden="true"></i>
+        </button>
       </div>
       <div class="w-full h-0.5 bg-gray-3 rounded-xl">
         <div class="progress h-full bg-red-light" style="width:0"></div>
