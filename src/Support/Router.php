@@ -36,6 +36,9 @@ final class Router
         'favorite-toggle' => ['file' => 'favorite-toggle', 'methods' => ['POST']],
         'rating-create' => ['file' => 'rating-create', 'methods' => ['POST']],
         'profile' => ['file' => 'profile', 'methods' => ['GET', 'POST']],
+        'strategy-edit' => ['file' => 'strategy-edit', 'methods' => ['GET', 'POST']],
+        'admin/moderacao' => ['file' => 'admin-moderation', 'methods' => ['GET']],
+        'admin/moderar' => ['file' => 'admin-moderate', 'methods' => ['POST']],
     ];
 
     /**

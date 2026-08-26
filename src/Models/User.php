@@ -14,6 +14,7 @@ final class User
     public mixed $password = null;
     public mixed $avatar = null;
     public mixed $elo = null;
+    public mixed $is_admin = null;
     public mixed $created_at = null;
     public mixed $updated_at = null;
 
@@ -32,7 +33,7 @@ final class User
         'radiante',
     ];
 
-    private const COLUMNS = 'id, name, email, password, avatar, elo, created_at, updated_at';
+    private const COLUMNS = 'id, name, email, password, avatar, elo, is_admin, created_at, updated_at';
 
     public static function find(int $id): ?self
     {
@@ -133,6 +134,11 @@ final class User
     public function verifyPassword(string $plainPassword): bool
     {
         return password_verify($plainPassword, (string) $this->password);
+    }
+
+    public function isAdmin(): bool
+    {
+        return (bool) $this->is_admin;
     }
 
     public static function isValidElo(string $elo): bool

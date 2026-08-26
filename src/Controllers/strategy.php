@@ -22,6 +22,15 @@ if ($strategy === null) {
     abort(404, 'Esta estratégia não existe ou foi removida.');
 }
 
+// Pendente ou rejeitada: só quem publicou (pra acompanhar a moderação, editar
+// e reenviar) ou um admin (pra revisar) pode ver. Pra qualquer outra pessoa,
+// inclusive um link direto compartilhado, é como se a página não existisse —
+// não expõe se a estratégia existe, só ainda não passou pela revisão.
+$isOwnerOrAdmin = ($viewerId !== null && (int) $strategy->user_id === $viewerId) || Auth::isAdmin();
+if (!$strategy->isApproved() && !$isOwnerOrAdmin) {
+    abort(404, 'Esta estratégia não existe ou foi removida.');
+}
+
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $ratings = Rating::paginateForStrategy($strategyId, $page, 5);
 

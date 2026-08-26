@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
     password   VARCHAR(255) NOT NULL,
     avatar     VARCHAR(500) DEFAULT 'avatarDefault.png',
     elo        VARCHAR(50)  DEFAULT 'ferro',
+    is_admin   BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -72,18 +73,24 @@ CREATE TABLE IF NOT EXISTS videos (
 );
 
 -- Estratégias ----------------------------------------------------------------
+-- Moderação: toda estratégia nova nasce "pending" e só fica visível para
+-- outras pessoas depois de aprovada por um admin (App\Support\Auth::isAdmin()).
+-- O autor sempre continua vendo a própria, em qualquer status.
 CREATE TABLE IF NOT EXISTS strategies (
-    id             SERIAL PRIMARY KEY,
-    title          VARCHAR(255) NOT NULL,
-    category       VARCHAR(100) NOT NULL,
-    description    TEXT,
-    cover_image_id INTEGER REFERENCES images(id) ON DELETE SET NULL,
-    video_id       INTEGER REFERENCES videos(id) ON DELETE SET NULL,
-    user_id        INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    agent_id       INTEGER REFERENCES agents(id) ON DELETE SET NULL,
-    map_id         INTEGER REFERENCES maps(id) ON DELETE SET NULL,
-    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id              SERIAL PRIMARY KEY,
+    title           VARCHAR(255) NOT NULL,
+    category        VARCHAR(100) NOT NULL,
+    description     TEXT,
+    cover_image_id  INTEGER REFERENCES images(id) ON DELETE SET NULL,
+    video_id        INTEGER REFERENCES videos(id) ON DELETE SET NULL,
+    user_id         INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    agent_id        INTEGER REFERENCES agents(id) ON DELETE SET NULL,
+    map_id          INTEGER REFERENCES maps(id) ON DELETE SET NULL,
+    status          VARCHAR(20) NOT NULL DEFAULT 'pending'
+                    CHECK (status IN ('pending', 'approved', 'rejected')),
+    moderation_note TEXT,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Avaliações -----------------------------------------------------------------

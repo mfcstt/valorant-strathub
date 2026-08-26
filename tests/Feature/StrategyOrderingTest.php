@@ -153,6 +153,7 @@ final class StrategyOrderingTest extends TestCase
             'user_id' => $this->authorId,
             'agent_id' => null,
             'map_id' => null,
+            'status' => Strategy::STATUS_APPROVED,
         ]);
 
         // A data é fixada explicitamente para os testes de ordenação serem

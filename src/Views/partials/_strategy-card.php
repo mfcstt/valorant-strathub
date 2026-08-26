@@ -60,7 +60,7 @@ $returnTo = $queryString !== '' ? $currentUrl . '?' . $queryString : $currentUrl
 
   <!-- Conteúdo -->
   <div class="relative z-[4] h-full flex flex-col justify-between p-4 pointer-events-none">
-    <div class="flex items-start">
+    <div class="flex items-start gap-2">
       <p class="flex items-center gap-1.5 px-3 py-1.5 text-lg text-gray-7 font-bold font-rajdhani bg-gray-1/80 rounded-full backdrop-blur-sm">
         <?= e(number_format($strategy->ratingAverage(), 1, ',', '.')) ?>
         <span class="text-xs font-medium">/ 5</span>
@@ -70,6 +70,18 @@ $returnTo = $queryString !== '' ? $currentUrl . '?' . $queryString : $currentUrl
         </span>
         <i class="ph-fill ph-star text-sm" aria-hidden="true"></i>
       </p>
+
+      <?php if ($strategy->isPending()): ?>
+        <p class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold font-rajdhani text-gray-6 bg-gray-1/80 rounded-full backdrop-blur-sm uppercase">
+          <i class="ph ph-clock" aria-hidden="true"></i>
+          Em análise
+        </p>
+      <?php elseif ($strategy->isRejected()): ?>
+        <p class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold font-rajdhani text-error-light bg-gray-1/80 rounded-full backdrop-blur-sm uppercase">
+          <i class="ph ph-x-circle" aria-hidden="true"></i>
+          Rejeitada
+        </p>
+      <?php endif; ?>
     </div>
 
     <div class="space-y-3">
@@ -113,6 +125,12 @@ $returnTo = $queryString !== '' ? $currentUrl . '?' . $queryString : $currentUrl
       </form>
 
       <?php if ($isOwner): ?>
+        <a href="/strategy-edit?id=<?= e($strategy->id) ?>"
+          class="flex px-3 py-1.5 bg-gray-1/80 backdrop-blur-sm border border-gray-3 rounded-md text-gray-5 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all ease-in-out duration-300"
+          aria-label="Editar estratégia">
+          <i class="ph ph-pencil-simple text-base" aria-hidden="true"></i>
+        </a>
+
         <form method="post" action="/strategy-delete"
           data-confirm="Excluir “<?= e($strategy->title) ?>”? Esta ação é irreversível.">
           <?= csrf_field() ?>

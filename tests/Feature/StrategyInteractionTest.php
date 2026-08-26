@@ -45,6 +45,7 @@ final class StrategyInteractionTest extends TestCase
             'user_id' => $this->authorId,
             'agent_id' => null,
             'map_id' => null,
+            'status' => Strategy::STATUS_APPROVED,
         ]);
     }
 
@@ -88,6 +89,7 @@ final class StrategyInteractionTest extends TestCase
             'user_id' => $this->authorId,
             'agent_id' => null,
             'map_id' => null,
+            'status' => Strategy::STATUS_APPROVED,
         ]);
 
         Favorite::toggle($this->otherId, $outra);
@@ -160,6 +162,7 @@ final class StrategyInteractionTest extends TestCase
             'user_id' => $this->authorId,
             'agent_id' => null,
             'map_id' => null,
+            'status' => Strategy::STATUS_APPROVED,
         ]);
 
         // Sem escapar, "%" casaria com qualquer coisa e traria as duas

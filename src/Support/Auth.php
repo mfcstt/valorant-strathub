@@ -88,6 +88,21 @@ final class Auth
         return !self::check() && !empty($_SESSION[self::GUEST_KEY]);
     }
 
+    /**
+     * Se a pessoa autenticada pode moderar estratégias.
+     *
+     * A checagem vem do objeto de sessão (leve, sem consulta ao banco a
+     * cada requisição) — {@see toSessionUser()} copia `is_admin` do model
+     * no login, e {@see resolveFromRememberCookie()} faz o mesmo ao
+     * reidratar a sessão pelo cookie de "continuar conectado".
+     */
+    public static function isAdmin(): bool
+    {
+        $user = self::user();
+
+        return $user !== null && (bool) ($user->is_admin ?? false);
+    }
+
     public static function enterGuestMode(): void
     {
         self::logout();
@@ -174,6 +189,7 @@ final class Auth
         $session->email = $user->email;
         $session->avatar = $user->avatar;
         $session->elo = $user->elo ?? 'ferro';
+        $session->is_admin = (bool) $user->is_admin;
         $session->created_at = $user->created_at;
         $session->updated_at = $user->updated_at;
 

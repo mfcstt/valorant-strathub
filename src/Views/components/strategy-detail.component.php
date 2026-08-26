@@ -38,6 +38,43 @@ $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
 ?>
 
 <div class="modalBlur w-full h-full">
+  <?php if ($isOwner && !$strategy->isApproved()): ?>
+    <div class="w-full max-w-[1366px] mx-auto px-4 md:px-0 mb-6">
+      <?php if ($strategy->isRejected()): ?>
+        <div class="flex flex-wrap items-start justify-between gap-3 p-4 rounded-md bg-error-base/10 border border-error-base">
+          <div class="flex gap-3">
+            <i class="ph ph-warning-circle text-error-light text-2xl shrink-0" aria-hidden="true"></i>
+            <div>
+              <p class="text-error-light font-nunito font-bold">Esta estratégia foi rejeitada</p>
+              <?php if ($strategy->moderation_note): ?>
+                <p class="text-gray-6 font-nunito text-sm mt-1"><?= e($strategy->moderation_note) ?></p>
+              <?php endif; ?>
+            </div>
+          </div>
+          <a href="/strategy-edit?id=<?= e($strategy->id) ?>"
+            class="shrink-0 flex items-center gap-2 px-4 py-2 rounded-md text-white font-nunito bg-red-base outline-none hover:bg-red-light focus:bg-red-light focus:outline-red-base transition-all">
+            <i class="ph ph-pencil-simple text-lg" aria-hidden="true"></i>
+            Editar e reenviar
+          </a>
+        </div>
+      <?php else: ?>
+        <div class="flex flex-wrap items-center justify-between gap-3 p-4 rounded-md bg-gray-2 border border-gray-3">
+          <div class="flex gap-3 items-center">
+            <i class="ph ph-clock text-gray-5 text-2xl shrink-0" aria-hidden="true"></i>
+            <p class="text-gray-6 font-nunito text-sm">
+              Só você vê esta página por enquanto — a estratégia está em análise antes de aparecer pra outras pessoas.
+            </p>
+          </div>
+          <a href="/strategy-edit?id=<?= e($strategy->id) ?>"
+            class="shrink-0 flex items-center gap-2 px-4 py-2 rounded-md text-gray-5 font-nunito bg-gray-1/80 border border-gray-3 outline-none hover:text-red-light hover:border-red-base focus:text-red-light focus:outline-red-base transition-all">
+            <i class="ph ph-pencil-simple text-lg" aria-hidden="true"></i>
+            Editar
+          </a>
+        </div>
+      <?php endif; ?>
+    </div>
+  <?php endif; ?>
+
   <section class="relative flex items-start justify-center px-4 md:px-0">
     <article class="flex flex-col md:flex-row gap-6 md:gap-12 w-full max-w-[1366px]">
 

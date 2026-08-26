@@ -41,6 +41,8 @@ final class Strategy
     public mixed $agent_photo = null;
     public mixed $map_id = null;
     public mixed $map_name = null;
+    public mixed $status = null;
+    public mixed $moderation_note = null;
     public mixed $created_at = null;
     public mixed $updated_at = null;
     public mixed $rating_average = 0;
@@ -48,6 +50,20 @@ final class Strategy
     public mixed $is_favorite = 0;
 
     public const CATEGORIES = ['defesa', 'ataque', 'pós plant', 'retake'];
+
+    /**
+     * Estados de moderação. Toda estratégia nasce PENDING; só quem é dona
+     * (em qualquer status) ou um admin enxerga fora do APPROVED.
+     */
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_REJECTED = 'rejected';
+
+    /** @var list<string> */
+    public const ALL_STATUSES = [self::STATUS_PENDING, self::STATUS_APPROVED, self::STATUS_REJECTED];
+
+    /** @var list<string> */
+    private const PUBLIC_STATUSES = [self::STATUS_APPROVED];
 
     /**
      * Ordenações aceitas, mapeadas para expressões SQL.
@@ -107,6 +123,21 @@ final class Strategy
         return (bool) $this->is_favorite;
     }
 
+    public function isPending(): bool
+    {
+        return $this->status === self::STATUS_PENDING;
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->status === self::STATUS_APPROVED;
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->status === self::STATUS_REJECTED;
+    }
+
     public function ratingAverage(): float
     {
         return round((float) $this->rating_average, 1);
@@ -125,7 +156,7 @@ final class Strategy
     public static function find(int $id, ?int $viewerId = null): ?self
     {
         $result = self::query(
-            ['id' => $id],
+            ['id' => $id, 'statuses' => self::ALL_STATUSES],
             $viewerId,
             self::resolveOrder(null),
             1,
@@ -245,6 +276,8 @@ final class Strategy
                    e.user_id,
                    e.agent_id,
                    e.map_id,
+                   e.status,
+                   e.moderation_note,
                    e.created_at,
                    e.updated_at,
                    u.name  AS author_name,
@@ -268,7 +301,7 @@ final class Strategy
               LEFT JOIN ratings r ON r.strategy_id = e.id
               {$joins}
              WHERE {$where}
-             GROUP BY e.id, u.name, a.name, a.photo, m.name, i.file_path, v.file_path, v.duration
+             GROUP BY e.id, u.name, a.name, a.photo, m.name, i.file_path, v.file_path, v.duration, e.status, e.moderation_note
              ORDER BY {$orderBy}
              LIMIT {$limit} OFFSET {$offset}
             SQL;
@@ -294,6 +327,21 @@ final class Strategy
         if (isset($filters['id'])) {
             $clauses[] = 'e.id = :id';
             $params['id'] = (int) $filters['id'];
+        }
+
+        // Toda listagem pública só mostra estratégias aprovadas. Quem chama
+        // esta consulta pedindo outra coisa (o próprio dono vendo as suas, a
+        // fila de moderação, ou find()/delete()/edit() buscando por id
+        // independente de status) informa `statuses` explicitamente.
+        $statuses = $filters['statuses'] ?? self::PUBLIC_STATUSES;
+        if ($statuses !== []) {
+            $placeholders = [];
+            foreach (array_values($statuses) as $index => $status) {
+                $key = "status_{$index}";
+                $placeholders[] = ":{$key}";
+                $params[$key] = (string) $status;
+            }
+            $clauses[] = 'e.status IN (' . implode(', ', $placeholders) . ')';
         }
 
         if (!empty($filters['user_id'])) {
@@ -361,11 +409,14 @@ final class Strategy
     {
         $database = Database::connection();
 
+        // Toda estratégia nova nasce PENDING, salvo quando quem chama informa
+        // outro status explicitamente — é o caso de fixtures de teste que
+        // simulam conteúdo já aprovado, sem precisar passar pela moderação.
         $database->execute(
             'INSERT INTO strategies
-                 (title, category, description, cover_image_id, video_id, user_id, agent_id, map_id)
+                 (title, category, description, cover_image_id, video_id, user_id, agent_id, map_id, status)
              VALUES
-                 (:title, :category, :description, :cover_image_id, :video_id, :user_id, :agent_id, :map_id)',
+                 (:title, :category, :description, :cover_image_id, :video_id, :user_id, :agent_id, :map_id, :status)',
             [
                 'title' => $attributes['title'],
                 'category' => $attributes['category'],
@@ -375,6 +426,7 @@ final class Strategy
                 'user_id' => $attributes['user_id'],
                 'agent_id' => $attributes['agent_id'],
                 'map_id' => $attributes['map_id'],
+                'status' => $attributes['status'] ?? self::STATUS_PENDING,
             ],
         );
 
@@ -393,5 +445,70 @@ final class Strategy
             'DELETE FROM strategies WHERE id = :id AND user_id = :user_id',
             ['id' => $id, 'user_id' => $userId],
         ) > 0;
+    }
+
+    /**
+     * Atualiza título, categoria, descrição, agente, mapa e mídia — sempre
+     * reabrindo a moderação (volta para PENDING e limpa a nota anterior).
+     *
+     * Qualquer edição precisa passar pela revisão de novo, mesmo numa
+     * estratégia já aprovada: é o jeito mais simples de garantir que nada
+     * publicado escapa da moderação depois de alterado.
+     *
+     * @param array<string, mixed> $attributes
+     */
+    public static function updateOwnedBy(int $id, int $userId, array $attributes): bool
+    {
+        return Database::connection()->execute(
+            'UPDATE strategies
+                SET title = :title,
+                    category = :category,
+                    description = :description,
+                    agent_id = :agent_id,
+                    map_id = :map_id,
+                    cover_image_id = :cover_image_id,
+                    video_id = :video_id,
+                    status = :status,
+                    moderation_note = NULL,
+                    updated_at = CURRENT_TIMESTAMP
+              WHERE id = :id AND user_id = :user_id',
+            [
+                'title' => $attributes['title'],
+                'category' => $attributes['category'],
+                'description' => $attributes['description'],
+                'agent_id' => $attributes['agent_id'],
+                'map_id' => $attributes['map_id'],
+                'cover_image_id' => $attributes['cover_image_id'] ?? null,
+                'video_id' => $attributes['video_id'] ?? null,
+                'status' => self::STATUS_PENDING,
+                'id' => $id,
+                'user_id' => $userId,
+            ],
+        ) > 0;
+    }
+
+    /**
+     * Aprova ou rejeita uma estratégia pendente. Usado só pela fila de
+     * moderação — não checa posse, porque quem chama já é admin.
+     */
+    public static function moderate(int $id, string $status, ?string $note = null): bool
+    {
+        return Database::connection()->execute(
+            'UPDATE strategies
+                SET status = :status, moderation_note = :note, updated_at = CURRENT_TIMESTAMP
+              WHERE id = :id',
+            ['status' => $status, 'note' => $note, 'id' => $id],
+        ) > 0;
+    }
+
+    /**
+     * Quantas estratégias aguardam moderação — usado no selo do menu de admin.
+     */
+    public static function pendingCount(): int
+    {
+        return (int) Database::connection()->scalar(
+            'SELECT COUNT(*) FROM strategies WHERE status = :status',
+            ['status' => self::STATUS_PENDING],
+        );
     }
 }

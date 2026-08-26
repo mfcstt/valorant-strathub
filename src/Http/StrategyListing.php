@@ -28,12 +28,14 @@ final class StrategyListing
      *                                            "Minhas estratégias")
      * @param  string               $defaultOrder ordenação quando a requisição
      *                                            não especifica
+     * @param  list<string>         $statuses     estados aceitos (padrão: só aprovadas)
      * @return array<string, mixed> pronto para `compact`/`view`
      */
     public static function build(
         array $fixedFilters = [],
         string $defaultOrder = Strategy::DEFAULT_ORDER,
         ?int $viewerId = null,
+        array $statuses = [Strategy::STATUS_APPROVED],
     ): array {
         $search = trim((string) ($_GET['pesquisar'] ?? ''));
         $order = Strategy::normalizeOrder(
@@ -54,6 +56,7 @@ final class StrategyListing
                 'map_id' => $filterMap,
                 'category' => $filterCategory,
                 'order' => $order,
+                'statuses' => $statuses,
             ],
             $page,
             self::PER_PAGE,

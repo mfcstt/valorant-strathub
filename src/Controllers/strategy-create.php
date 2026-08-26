@@ -135,5 +135,5 @@ $strategyId = Strategy::create([
     'map_id' => $mapId,
 ]);
 
-flash()->put('message', 'Estratégia publicada com sucesso!');
+flash()->put('message', 'Estratégia enviada! Como o projeto ainda não tem moderação automática, ela passa por uma revisão manual antes de aparecer pra outras pessoas — isso deve levar pouco tempo.');
 redirect('/strategy?id=' . $strategyId);

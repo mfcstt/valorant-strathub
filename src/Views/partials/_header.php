@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Strategy;
 use App\Support\Auth;
 
 /**
@@ -11,6 +12,7 @@ use App\Support\Auth;
  */
 
 $user = Auth::user();
+$isAdmin = Auth::isAdmin();
 
 /** Itens de navegação: rota => [rótulo, ícone, exige login] */
 $navigation = [
@@ -18,6 +20,14 @@ $navigation = [
     '/my-strategies' => ['Minhas estratégias', 'ph-strategy', true],
     '/favorites' => ['Favoritas', 'ph-heart', true],
 ];
+
+// Só quem modera vê o item — e só faz a consulta de contagem quando precisa,
+// em vez de pagar essa query em toda requisição de qualquer pessoa.
+$pendingCount = 0;
+if ($isAdmin) {
+    $navigation['/admin/moderacao'] = ['Moderação', 'ph-shield-check', true];
+    $pendingCount = Strategy::pendingCount();
+}
 
 $currentPath = '/' . ltrim((string) (parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? ''), '/');
 
@@ -48,6 +58,11 @@ $avatarUrl = ($user !== null && $user->avatar && $user->avatar !== 'avatarDefaul
               <?= $currentPath === $path ? 'aria-current="page"' : '' ?>>
               <i class="ph <?= e($icon) ?> text-xl" aria-hidden="true"></i>
               <?= e($label) ?>
+              <?php if ($path === '/admin/moderacao' && $pendingCount > 0): ?>
+                <span class="flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-red-base text-white text-xs font-bold">
+                  <?= e($pendingCount) ?>
+                </span>
+              <?php endif; ?>
             </a>
           </li>
         <?php endforeach; ?>
@@ -118,6 +133,11 @@ $avatarUrl = ($user !== null && $user->avatar && $user->avatar !== 'avatarDefaul
         <a href="<?= e($path) ?>" class="flex items-center gap-2 px-4 py-3 text-gray-6 hover:bg-gray-2">
           <i class="ph <?= e($icon) ?> text-xl" aria-hidden="true"></i>
           <?= e($label) ?>
+          <?php if ($path === '/admin/moderacao' && $pendingCount > 0): ?>
+            <span class="flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-red-base text-white text-xs font-bold">
+              <?= e($pendingCount) ?>
+            </span>
+          <?php endif; ?>
         </a>
       <?php endforeach; ?>
 
