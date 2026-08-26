@@ -32,6 +32,21 @@ $selectedElo = strtolower(trim(old('elo')));
        para além do centro, deixando um vão vazio desproporcional no topo. -->
   <div class="w-full md:w-2/4 text-gray-5 flex items-center justify-center">
     <div class="flex flex-col font-nunito">
+      <!-- Quem chega direto aqui (link do LinkedIn, por exemplo) não sabe do
+           que se trata o site - o link "Sobre o projeto" no rodapé é fácil de
+           não ver sem rolar a página inteira. Este bloco resolve isso logo de
+           cara, sem competir visualmente com o formulário abaixo. -->
+      <div class="w-[328px] mx-auto mb-6 p-3 rounded-md bg-gray-2 border border-gray-3 flex items-center gap-3">
+        <i class="ph ph-graduation-cap text-red-light text-2xl shrink-0" aria-hidden="true"></i>
+        <p class="text-xs text-gray-5 leading-relaxed">
+          TCC de ADS na Fatec Bragança Paulista, por Guilherme, Gustavo, João Victor e Maria.
+          <a href="/sobre"
+            class="text-red-light font-bold outline-none hover:text-red-base focus:text-red-base underline underline-offset-2 transition-all">
+            Saiba mais sobre o projeto
+          </a>
+        </p>
+      </div>
+
       <header class="flex gap-1 w-[328px] mx-auto p-1 rounded-[10px] bg-gray-2 text-center">
         <div class="relative flex-1 rounded-md">
           <input type="checkbox" id="btnL" class="checkbox absolute opacity-0 pointer-events-none"
