@@ -27,6 +27,7 @@ final class Router
         // tenha pedido. Por POST, a verificação de CSRF cobre esse caso.
         'logout' => ['file' => 'logout', 'methods' => ['POST']],
         'guest' => ['file' => 'guest', 'methods' => ['GET']],
+        'sobre' => ['file' => 'sobre', 'methods' => ['GET']],
         'explore' => ['file' => 'explore', 'methods' => ['GET']],
         'strategy' => ['file' => 'strategy', 'methods' => ['GET']],
         'strategy-create' => ['file' => 'strategy-create', 'methods' => ['GET', 'POST']],
