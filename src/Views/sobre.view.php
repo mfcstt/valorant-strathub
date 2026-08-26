@@ -85,10 +85,11 @@ $team = [
     <div class="max-w-3xl mx-auto">
       <h2 class="font-rammetto text-2xl text-gray-7">Por que essa plataforma existe</h2>
       <p class="mt-4 text-gray-6 font-nunito leading-[170%]">
-        A ideia surgiu de dentro de uma comunidade real: o servidor de Discord
-        <strong class="text-gray-7">Valorant Lovers BR</strong>. Estratégias já circulavam ali o tempo
-        todo - só que espalhadas entre Instagram, TikTok, Reddit, YouTube e mensagens de texto, sem
-        nenhum lugar central pra guardar, buscar ou avaliar o que já tinha sido testado.
+        A ideia surgiu de um lugar bem menos formal do que parece: o
+        <strong class="text-gray-7">Vavazinho bó</strong>, um servidor de Discord nosso, entre amigos
+        que jogam Valorant juntos. Estratégias já circulavam ali o tempo todo - só que espalhadas entre
+        Instagram, TikTok, Reddit, YouTube e mensagens de texto, sem nenhum lugar central pra guardar,
+        buscar ou avaliar o que já tinha sido testado.
       </p>
       <p class="mt-4 text-gray-6 font-nunito leading-[170%]">
         O StratHub parte de um princípio simples: a base de jogadores é muito maior que qualquer equipe
@@ -104,7 +105,7 @@ $team = [
     <div class="max-w-4xl mx-auto text-center">
       <h2 class="font-rammetto text-2xl text-gray-7">O que quem testou achou</h2>
       <p class="mt-3 text-gray-6 font-nunito leading-[170%] max-w-xl mx-auto">
-        15 jogadores do Valorant Lovers BR testaram a plataforma e responderam uma pesquisa. Notas de
+        15 amigos do Vavazinho bó testaram a plataforma e responderam uma pesquisa. Notas de
         1 a 5 por critério:
       </p>
 
