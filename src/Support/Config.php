@@ -231,6 +231,12 @@ final class Config
             'driver' => $driver,
             'url' => $supabaseUrl,
             'service_key' => $supabaseKey ?? '',
+            // Só para o upload direto (ver SupabaseStorageService::createSignedUpload()):
+            // a API do Supabase Storage exige um header Authorization mesmo
+            // quando a URL já carrega um token assinado, e é a anon key -
+            // nunca a service key acima - que é segura para chegar ao
+            // navegador (é literalmente para isso que ela existe).
+            'anon_key' => self::env('SUPABASE_ANON_KEY', ''),
             'image_bucket' => $imageBucket,
             'video_bucket' => $videoBucket,
             'local_path' => dirname(__DIR__, 2) . '/public/uploads',

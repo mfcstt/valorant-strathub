@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Services\Storage;
 use App\Services\UploadValidator;
 use App\Support\Auth;
+use App\Support\Config;
 
 /**
  * Primeiro passo do upload direto: devolve uma URL assinada do Supabase
@@ -74,4 +75,8 @@ $signed = $storage->createSignedUpload($storageKind, (int) Auth::id(), $extensio
 $respond(200, [
     'upload_url' => $signed['upload_url'],
     'path' => $signed['path'],
+    // A API do Supabase Storage exige um header Authorization mesmo com o
+    // token assinado já na URL - a anon key é feita para ser pública, ao
+    // contrário da service key usada no resto deste serviço.
+    'authorization' => (string) Config::get('storage.anon_key', ''),
 ]);

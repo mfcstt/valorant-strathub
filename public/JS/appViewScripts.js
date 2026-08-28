@@ -377,7 +377,13 @@ function initDirectUpload() {
 
         const uploadResponse = await fetch(signData.upload_url, {
           method: 'POST',
-          headers: { 'x-upsert': 'true' },
+          headers: {
+            'x-upsert': 'true',
+            // A API do Supabase Storage exige esse header mesmo com o token
+            // assinado já na URL - sem ele, recusa com "headers must have
+            // required property 'authorization'".
+            Authorization: `Bearer ${signData.authorization}`,
+          },
           body: uploadBody,
         })
 
