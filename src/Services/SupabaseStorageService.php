@@ -23,6 +23,20 @@ use RuntimeException;
  * Aqui as falhas previsíveis (validação) voltam como {@see StorageResult} com
  * mensagem própria, e as inesperadas (rede, credencial) sobem como exceção - a
  * distinção entre "a pessoa precisa corrigir algo" e "o sistema falhou".
+ *
+ * ## Dois caminhos de upload
+ *
+ * `uploadImage()`/`uploadVideo()` recebem o arquivo já no corpo da requisição
+ * PHP ($_FILES) e o reenviam para o Supabase - o caminho original, que na
+ * Vercel esbarra no limite de ~4,5 MB de toda função serverless (bem abaixo
+ * dos 100 MB de vídeo que o formulário anuncia).
+ *
+ * `createSignedUpload()` + `finalizeUpload()` são o caminho usado quando o
+ * navegador envia o arquivo direto para o Supabase, sem passar pela função:
+ * a validação de tipo e tamanho, que antes lia os bytes recebidos, passa a
+ * consultar o objeto já hospedado (HEAD na URL do Storage) - a mesma garantia
+ * de "medir o conteúdo real, não confiar no que foi declarado", só que depois
+ * do envio em vez de antes.
  */
 final class SupabaseStorageService implements MediaStorage
 {
@@ -44,6 +58,11 @@ final class SupabaseStorageService implements MediaStorage
         return $this->baseUrl !== '' && $this->apiKey !== '';
     }
 
+    public function supportsDirectUpload(): bool
+    {
+        return true;
+    }
+
     /**
      * Envia uma imagem e registra os metadados no banco.
      *
@@ -51,7 +70,7 @@ final class SupabaseStorageService implements MediaStorage
      */
     public function uploadImage(array $file, int $userId): StorageResult
     {
-        return $this->upload($file, $userId, new Image(), $this->imageBucket, 'image');
+        return $this->upload($file, $userId, 'image');
     }
 
     /**
@@ -59,7 +78,7 @@ final class SupabaseStorageService implements MediaStorage
      */
     public function uploadVideo(array $file, int $userId): StorageResult
     {
-        return $this->upload($file, $userId, new Video(), $this->videoBucket, 'video');
+        return $this->upload($file, $userId, 'video');
     }
 
     public function deleteImage(string $filePath): bool
@@ -73,16 +92,138 @@ final class SupabaseStorageService implements MediaStorage
     }
 
     /**
+     * Pede ao Supabase uma URL de upload assinada - o navegador envia o
+     * arquivo direto para ela, sem esse pedido carregar o binário.
+     *
+     * O objeto ainda não existe no bucket neste momento: só passa a existir
+     * quando o navegador de fato faz o POST na URL devolvida.
+     */
+    public function createSignedUpload(string $kind, int $userId, string $extension): array
+    {
+        if (!$this->isConfigured()) {
+            throw new RuntimeException(
+                'Supabase Storage não configurado: defina SUPABASE_URL e SUPABASE_SERVICE_KEY.'
+            );
+        }
+
+        $bucket = $kind === 'image' ? $this->imageBucket : $this->videoBucket;
+
+        // Mesmo esquema de nome do upload tradicional: gerado, nunca derivado
+        // de nada que o cliente informe, para o caminho no bucket nunca ser
+        // influenciável (inclusive contra "../").
+        $filename = bin2hex(random_bytes(16)) . '.' . $extension;
+        $objectPath = "user_{$userId}/{$filename}";
+        $encodedPath = self::encodePath($objectPath);
+
+        $response = $this->request(
+            'POST',
+            "{$this->baseUrl}/storage/v1/object/upload/sign/{$bucket}/{$encodedPath}",
+            [],
+            '{}',
+        );
+
+        if ($response['status'] < 200 || $response['status'] >= 300) {
+            throw new RuntimeException(sprintf(
+                'Supabase Storage recusou gerar a URL de upload (HTTP %d).',
+                $response['status'],
+            ));
+        }
+
+        /** @var array{url?: string}|null $decoded */
+        $decoded = json_decode($response['body'], true);
+        $relativeUrl = is_array($decoded) ? ($decoded['url'] ?? null) : null;
+
+        if (!is_string($relativeUrl) || $relativeUrl === '') {
+            throw new RuntimeException('Resposta inesperada do Supabase Storage ao assinar o upload.');
+        }
+
+        // A API devolve um caminho relativo (com o token já na query string);
+        // a URL completa é o que o navegador de fato precisa para enviar.
+        return [
+            'upload_url' => "{$this->baseUrl}/storage/v1{$relativeUrl}",
+            'path' => $objectPath,
+        ];
+    }
+
+    /**
+     * Confirma um upload feito direto pelo navegador: consulta o objeto já
+     * hospedado (não confia em nada que o navegador tenha declarado antes de
+     * enviar) e só então cria o registro em `images`/`videos`.
+     */
+    public function finalizeUpload(string $kind, string $path, int $userId): StorageResult
+    {
+        // O prefixo do caminho é gerado por nós em createSignedUpload() como
+        // "user_{id}/...": conferir que bate com quem está chamando impede
+        // alguém de finalizar o upload de outra pessoa informando o path dela.
+        if (!str_starts_with($path, "user_{$userId}/")) {
+            return StorageResult::failure('Envio inválido.');
+        }
+
+        $bucket = $kind === 'image' ? $this->imageBucket : $this->videoBucket;
+        $maxBytes = $kind === 'image' ? UploadValidator::MAX_IMAGE_BYTES : UploadValidator::MAX_VIDEO_BYTES;
+        $allowedTypes = $kind === 'image' ? UploadValidator::imageTypes() : UploadValidator::videoTypes();
+        $label = $kind === 'image' ? 'imagem' : 'vídeo';
+
+        $head = $this->request('HEAD', $this->objectUrl($bucket, $path));
+
+        if ($head['status'] < 200 || $head['status'] >= 300) {
+            return StorageResult::failure(
+                "Não encontramos o arquivo enviado. Tente selecionar a {$label} de novo.",
+            );
+        }
+
+        $size = self::headerAsInt($head['headers'], 'content-length');
+        $mime = self::headerValue($head['headers'], 'content-type');
+
+        if ($size === null || $size <= 0) {
+            $this->deleteObject($bucket, $path);
+
+            return StorageResult::failure("O arquivo de {$label} está vazio.");
+        }
+
+        if ($size > $maxBytes) {
+            $this->deleteObject($bucket, $path);
+
+            return StorageResult::failure(sprintf(
+                '%s muito grande. O limite é %d MB.',
+                ucfirst($label),
+                intdiv($maxBytes, 1024 * 1024),
+            ));
+        }
+
+        // O Content-Type é o que o Supabase gravou no momento do envio - o
+        // navegador o declara a partir do próprio arquivo (`File.type`), não
+        // de um campo de formulário arbitrário, mas ainda assim é o cliente
+        // quem envia: por isso o tamanho acima e a checagem de extensão do
+        // nome (definida por nós em createSignedUpload(), nunca pelo cliente)
+        // continuam sendo a defesa que não depende de nada declarado.
+        if ($mime === null || !isset($allowedTypes[$mime])) {
+            $this->deleteObject($bucket, $path);
+
+            return StorageResult::failure(sprintf(
+                'Formato de %s não suportado. Use: %s.',
+                $label,
+                implode(', ', array_unique(array_values($allowedTypes))),
+            ));
+        }
+
+        $record = $this->buildRecord($kind, $path, $userId, $size, $mime);
+
+        if (!$record->save()) {
+            $this->deleteObject($bucket, $path);
+
+            throw new RuntimeException('Falha ao registrar o arquivo no banco de dados.');
+        }
+
+        return StorageResult::success($record);
+    }
+
+    /**
      * @param array<string, mixed> $file
      * @param 'image'|'video'      $kind
      */
-    private function upload(
-        array $file,
-        int $userId,
-        MediaFile $record,
-        string $bucket,
-        string $kind,
-    ): StorageResult {
+    private function upload(array $file, int $userId, string $kind): StorageResult
+    {
         $validation = $kind === 'image'
             ? UploadValidator::validateImage($file)
             : UploadValidator::validateVideo($file);
@@ -97,8 +238,8 @@ final class SupabaseStorageService implements MediaStorage
             );
         }
 
-        // O nome de destino é gerado, nunca derivado do nome original: isso evita
-        // que o cliente influencie o caminho no bucket (inclusive com "../").
+        $bucket = $kind === 'image' ? $this->imageBucket : $this->videoBucket;
+
         $filename = bin2hex(random_bytes(16)) . '.' . $validation['extension'];
         $objectPath = "user_{$userId}/{$filename}";
 
@@ -109,16 +250,8 @@ final class SupabaseStorageService implements MediaStorage
 
         $this->putObject($bucket, $objectPath, $contents, $validation['mime']);
 
-        $record->filename = $filename;
+        $record = $this->buildRecord($kind, $objectPath, $userId, (int) $file['size'], $validation['mime']);
         $record->original_name = self::sanitizeOriginalName((string) ($file['name'] ?? $filename));
-        $record->file_path = $objectPath;
-        $record->file_size = (int) $file['size'];
-        $record->mime_type = $validation['mime'];
-        $record->user_id = $userId;
-
-        if ($record instanceof Video) {
-            $record->duration = null;
-        }
 
         if (!$record->save()) {
             // O arquivo já subiu, mas o registro falhou: remover o objeto evita
@@ -129,6 +262,30 @@ final class SupabaseStorageService implements MediaStorage
         }
 
         return StorageResult::success($record);
+    }
+
+    /**
+     * Monta (sem salvar) o registro de Image ou Video para um objeto já
+     * existente no bucket - usado pelos dois caminhos de upload.
+     *
+     * @param 'image'|'video' $kind
+     */
+    private function buildRecord(string $kind, string $path, int $userId, int $size, string $mime): MediaFile
+    {
+        $record = $kind === 'image' ? new Image() : new Video();
+
+        $record->filename = basename($path);
+        $record->original_name = basename($path);
+        $record->file_path = $path;
+        $record->file_size = $size;
+        $record->mime_type = $mime;
+        $record->user_id = $userId;
+
+        if ($record instanceof Video) {
+            $record->duration = null;
+        }
+
+        return $record;
     }
 
     private function putObject(string $bucket, string $path, string $contents, string $mime): void
@@ -159,16 +316,21 @@ final class SupabaseStorageService implements MediaStorage
 
     private function objectUrl(string $bucket, string $path): string
     {
-        // Cada segmento é codificado separadamente para preservar as barras da
-        // hierarquia do bucket.
-        $encoded = implode('/', array_map('rawurlencode', explode('/', $path)));
+        return "{$this->baseUrl}/storage/v1/object/{$bucket}/" . self::encodePath($path);
+    }
 
-        return "{$this->baseUrl}/storage/v1/object/{$bucket}/{$encoded}";
+    /**
+     * Cada segmento é codificado separadamente para preservar as barras da
+     * hierarquia do bucket.
+     */
+    private static function encodePath(string $path): string
+    {
+        return implode('/', array_map('rawurlencode', explode('/', $path)));
     }
 
     /**
      * @param  list<string> $headers
-     * @return array{status: int, body: string}
+     * @return array{status: int, headers: array<string, string>, body: string}
      */
     private function request(string $method, string $url, array $headers = [], ?string $body = null): array
     {
@@ -177,7 +339,9 @@ final class SupabaseStorageService implements MediaStorage
         curl_setopt_array($handle, [
             CURLOPT_URL => $url,
             CURLOPT_CUSTOMREQUEST => $method,
+            CURLOPT_NOBODY => $method === 'HEAD',
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => true,
             CURLOPT_TIMEOUT => 60,
             CURLOPT_CONNECTTIMEOUT => 10,
             CURLOPT_SSL_VERIFYPEER => true,
@@ -192,16 +356,65 @@ final class SupabaseStorageService implements MediaStorage
             curl_setopt($handle, CURLOPT_POSTFIELDS, $body);
         }
 
-        $response = curl_exec($handle);
+        $raw = curl_exec($handle);
         $status = (int) curl_getinfo($handle, CURLINFO_HTTP_CODE);
+        $headerSize = (int) curl_getinfo($handle, CURLINFO_HEADER_SIZE);
         $error = curl_error($handle);
         curl_close($handle);
 
-        if ($response === false) {
+        if ($raw === false) {
             throw new RuntimeException("Falha de rede ao falar com o Supabase Storage: {$error}");
         }
 
-        return ['status' => $status, 'body' => (string) $response];
+        $rawResponse = (string) $raw;
+
+        return [
+            'status' => $status,
+            'headers' => self::parseHeaders(substr($rawResponse, 0, $headerSize)),
+            'body' => substr($rawResponse, $headerSize),
+        ];
+    }
+
+    /**
+     * @return array<string, string> nomes em minúsculo, último valor vence
+     *         (redirects concatenam blocos de header; só a última resposta importa)
+     */
+    private static function parseHeaders(string $raw): array
+    {
+        $headers = [];
+
+        foreach (explode("\r\n", $raw) as $line) {
+            if (!str_contains($line, ':')) {
+                continue;
+            }
+
+            [$name, $value] = explode(':', $line, 2);
+            $headers[strtolower(trim($name))] = trim($value);
+        }
+
+        return $headers;
+    }
+
+    /**
+     * @param array<string, string> $headers
+     */
+    private static function headerValue(array $headers, string $name): ?string
+    {
+        $value = $headers[strtolower($name)] ?? null;
+
+        // Content-Type pode vir com parâmetros ("video/mp4; charset=...");
+        // só o tipo em si entra na comparação com a allowlist.
+        return $value !== null ? trim(explode(';', $value)[0]) : null;
+    }
+
+    /**
+     * @param array<string, string> $headers
+     */
+    private static function headerAsInt(array $headers, string $name): ?int
+    {
+        $value = $headers[strtolower($name)] ?? null;
+
+        return $value !== null && ctype_digit($value) ? (int) $value : null;
     }
 
     /**

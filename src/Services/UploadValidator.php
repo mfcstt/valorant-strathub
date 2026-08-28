@@ -46,6 +46,26 @@ final class UploadValidator
     public const MAX_VIDEO_BYTES = 100 * 1024 * 1024;
 
     /**
+     * Expostos para o upload direto (ver SupabaseStorageService::finalizeUpload()),
+     * que precisa validar o tipo real de um arquivo que nunca passou por
+     * validate() — o navegador o enviou direto para o Storage.
+     *
+     * @return array<string, string>
+     */
+    public static function imageTypes(): array
+    {
+        return self::IMAGE_TYPES;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function videoTypes(): array
+    {
+        return self::VIDEO_TYPES;
+    }
+
+    /**
      * Resultado da validação: erro legível ou o tipo e extensão detectados.
      *
      * @param  array<string, mixed> $file entrada de $_FILES

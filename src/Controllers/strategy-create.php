@@ -16,7 +16,11 @@ if (!Auth::check()) {
 }
 
 if (!is_post()) {
-    view('app', ['agents' => Agent::all(), 'maps' => Map::all()], 'strategy-create');
+    view('app', [
+        'agents' => Agent::all(),
+        'maps' => Map::all(),
+        'direct_upload' => Storage::disk()->supportsDirectUpload(),
+    ], 'strategy-create');
 
     return;
 }
@@ -32,8 +36,19 @@ $mapId = filter_var($_POST['mapa'] ?? '', FILTER_VALIDATE_INT) ?: null;
 $coverFile = $_FILES['capa'] ?? null;
 $videoFile = $_FILES['video'] ?? null;
 
-$hasCover = UploadValidator::isSuccessful($coverFile);
-$hasVideo = UploadValidator::isSuccessful($videoFile);
+// Dois jeitos de a mídia chegar aqui: no corpo deste POST ($_FILES, usado em
+// ambiente local) ou já hospedada no Storage antes deste envio (capa_path/
+// video_path, preenchidos pelo JS depois do upload direto - ver upload-sign.php).
+// Um vídeo de alguns MB no corpo do POST não sobrevive à Vercel: toda função
+// serverless corta a requisição em ~4,5 MB, bem abaixo do limite de 100 MB que
+// o formulário anuncia.
+$coverPath = trim((string) ($_POST['capa_path'] ?? ''));
+$videoPath = trim((string) ($_POST['video_path'] ?? ''));
+
+$hasCoverUpload = UploadValidator::isSuccessful($coverFile);
+$hasVideoUpload = UploadValidator::isSuccessful($videoFile);
+$hasCover = $hasCoverUpload || $coverPath !== '';
+$hasVideo = $hasVideoUpload || $videoPath !== '';
 
 $validation = Validation::validate([
     'titulo' => ['required', 'min:3', 'max:100'],
@@ -71,7 +86,7 @@ if (!$hasCover && !$hasVideo) {
 /**
  * Devolve a pessoa ao formulário preservando o que ela digitou.
  */
-$backToForm = static function (Validation $validation) use ($title, $category, $description, $agentId, $mapId): never {
+$backToForm = static function (Validation $validation) use ($title, $category, $description, $agentId, $mapId, $coverPath, $videoPath): never {
     $validation->flashErrors();
     flash()->put('formData', [
         'titulo' => $title,
@@ -79,6 +94,12 @@ $backToForm = static function (Validation $validation) use ($title, $category, $
         'descricao' => $description,
         'agente' => $agentId,
         'mapa' => $mapId,
+        // Preserva o upload direto já feito: sem isso, corrigir um erro de
+        // texto (ex.: título curto) obrigaria a reenviar a mídia do zero, já
+        // que o navegador enviou o arquivo direto para o Storage antes mesmo
+        // de "Publicar" ser clicado.
+        'capa_path' => $coverPath,
+        'video_path' => $videoPath,
     ]);
 
     redirect('/strategy-create');
@@ -92,36 +113,40 @@ $storage = Storage::disk();
 $coverResult = null;
 $videoResult = null;
 
-if ($hasCover) {
+if ($hasCoverUpload) {
     $coverResult = $storage->uploadImage((array) $coverFile, $userId);
-
-    if (!$coverResult->ok) {
-        $validation->addError('capa', (string) $coverResult->error);
-        $backToForm($validation);
-    }
+} elseif ($coverPath !== '') {
+    $coverResult = $storage->finalizeUpload('image', $coverPath, $userId);
 }
 
-if ($hasVideo) {
+if ($coverResult !== null && !$coverResult->ok) {
+    $validation->addError('capa', (string) $coverResult->error);
+    $backToForm($validation);
+}
+
+if ($hasVideoUpload) {
     $videoResult = $storage->uploadVideo((array) $videoFile, $userId);
+} elseif ($videoPath !== '') {
+    $videoResult = $storage->finalizeUpload('video', $videoPath, $userId);
+}
 
-    if (!$videoResult->ok) {
-        $validation->addError('video', (string) $videoResult->error);
+if ($videoResult !== null && !$videoResult->ok) {
+    $validation->addError('video', (string) $videoResult->error);
 
-        // A capa pode ter subido com sucesso antes do vídeo falhar. Sem esta
-        // limpeza, ela ficaria órfã - um arquivo público no Storage e uma
-        // linha em `images` sem nenhuma estratégia apontando para ela, já
-        // que Strategy::create() nunca é alcançado neste caminho.
-        if ($coverResult !== null && $coverResult->file !== null) {
-            try {
-                $storage->deleteImage((string) $coverResult->file->file_path);
-                $coverResult->file->delete();
-            } catch (\Throwable $e) {
-                error_log('[strathub] falha ao limpar capa órfã após vídeo inválido: ' . $e->getMessage());
-            }
+    // A capa pode ter subido com sucesso antes do vídeo falhar. Sem esta
+    // limpeza, ela ficaria órfã - um arquivo público no Storage e uma
+    // linha em `images` sem nenhuma estratégia apontando para ela, já
+    // que Strategy::create() nunca é alcançado neste caminho.
+    if ($coverResult !== null && $coverResult->file !== null) {
+        try {
+            $storage->deleteImage((string) $coverResult->file->file_path);
+            $coverResult->file->delete();
+        } catch (\Throwable $e) {
+            error_log('[strathub] falha ao limpar capa órfã após vídeo inválido: ' . $e->getMessage());
         }
-
-        $backToForm($validation);
     }
+
+    $backToForm($validation);
 }
 
 $strategyId = Strategy::create([

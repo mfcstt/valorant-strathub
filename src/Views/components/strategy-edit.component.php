@@ -12,9 +12,12 @@ use App\Services\UploadValidator;
  * mídia é opcional (mantém a atual se nada for enviado) e, se a estratégia foi
  * rejeitada, o motivo escrito pelo admin aparece no topo.
  *
+ * Upload direto: ver o comentário equivalente em strategy-create.component.php.
+ *
  * @var \App\Models\Strategy $strategy
  * @var list<\App\Models\Agent> $agents
  * @var list<\App\Models\Map>   $maps
+ * @var bool                     $direct_upload
  */
 
 $errors = flash()->peek('validations') ?? [];
@@ -49,9 +52,12 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
 <?php endif; ?>
 
 <form action="/strategy-edit?id=<?= e($strategy->id) ?>" method="post" enctype="multipart/form-data" novalidate
+  data-direct-upload="<?= $direct_upload ? '1' : '0' ?>"
   class="w-full max-w-[1366px] flex flex-col gap-6 mx-auto px-4 pb-10 md:w-max md:flex-row md:gap-12 md:px-0 md:max-w-none">
 
   <?= csrf_field() ?>
+  <input type="hidden" name="capa_path" id="capa-path" value="<?= e(old('capa_path')) ?>">
+  <input type="hidden" name="video_path" id="video-path" value="<?= e(old('video_path')) ?>">
 
   <div class="flex flex-col gap-6 w-full md:w-auto">
     <!-- Capa -->
@@ -75,8 +81,8 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
       </label>
 
       <p id="image-upload-warning" class="mt-2 hidden flex gap-1.5 items-center justify-center text-gray-6 bg-gray-3 border border-gray-4 rounded-lg p-2">
-        <i class="ph ph-clock text-base" aria-hidden="true"></i>
-        <span class="text-xs">Nova imagem selecionada. Clique em “Salvar” para trocar.</span>
+        <i id="image-upload-warning-icon" class="ph ph-clock text-base" aria-hidden="true"></i>
+        <span id="image-upload-warning-text" class="text-xs">Nova imagem selecionada. Clique em “Salvar” para trocar.</span>
       </p>
 
       <?php field_errors($errors, 'capa', 'center'); ?>
@@ -111,8 +117,8 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
       </label>
 
       <p id="video-upload-warning" class="mt-2 hidden flex gap-1.5 items-center justify-center text-gray-6 bg-gray-3 border border-gray-4 rounded-lg p-2">
-        <i class="ph ph-clock text-base" aria-hidden="true"></i>
-        <span class="text-xs">Novo vídeo selecionado. Clique em “Salvar” para trocar.</span>
+        <i id="video-upload-warning-icon" class="ph ph-clock text-base" aria-hidden="true"></i>
+        <span id="video-upload-warning-text" class="text-xs">Novo vídeo selecionado. Clique em “Salvar” para trocar.</span>
       </p>
 
       <?php field_errors($errors, 'video', 'center'); ?>
@@ -210,8 +216,8 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
         Cancelar
       </a>
 
-      <button type="submit"
-        class="px-5 py-3 text-white bg-red-base rounded-md outline-none hover:bg-red-light focus:bg-red-light focus:outline-red-base transition-all ease-in-out duration-300">
+      <button type="submit" id="publish-button"
+        class="px-5 py-3 text-white bg-red-base rounded-md outline-none hover:bg-red-light focus:bg-red-light focus:outline-red-base transition-all ease-in-out duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
         Salvar alterações
       </button>
     </div>

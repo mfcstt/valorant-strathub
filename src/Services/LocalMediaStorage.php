@@ -58,6 +58,28 @@ final class LocalMediaStorage implements MediaStorage
     }
 
     /**
+     * Upload direto exige um Storage HTTP externo (o navegador precisa de uma
+     * URL para enviar o arquivo) - não existe equivalente para gravar direto
+     * em disco local, então este driver nunca suporta.
+     */
+    public function supportsDirectUpload(): bool
+    {
+        return false;
+    }
+
+    public function createSignedUpload(string $kind, int $userId, string $extension): ?array
+    {
+        return null;
+    }
+
+    public function finalizeUpload(string $kind, string $path, int $userId): StorageResult
+    {
+        throw new \LogicException(
+            'LocalMediaStorage não suporta upload direto - supportsDirectUpload() já devolve false.'
+        );
+    }
+
+    /**
      * @param array<string, mixed> $file
      * @param 'image'|'video'      $kind
      */

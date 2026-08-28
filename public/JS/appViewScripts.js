@@ -288,6 +288,125 @@ function initVideoPreview() {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Upload direto para o Storage                                               */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Some com o corpo de um vídeo (ou imagem) antes mesmo de ele sair do
+ * navegador: toda função serverless da Vercel corta a requisição em ~4,5 MB,
+ * bem abaixo dos 100 MB de vídeo e 5 MB de imagem que o formulário anuncia.
+ * Em vez de o arquivo viajar dentro do POST de /strategy-create, ele vai
+ * direto para o Storage assim que é escolhido - o formulário principal só
+ * carrega o caminho resultante, um texto curto que nunca esbarra em limite
+ * nenhum.
+ *
+ * Só roda quando o servidor marcou data-direct-upload="1" no <form> (ver
+ * strategy-create.component.php) - no ambiente local, sem esse limite, o
+ * upload tradicional dentro do próprio POST continua funcionando normalmente.
+ */
+function initDirectUpload() {
+  const form = document.querySelector('form[data-direct-upload="1"]')
+  if (!form) return
+
+  const token = form.querySelector('input[name="_token"]')?.value
+  const submitButton = document.getElementById('publish-button')
+  let pendingUploads = 0
+
+  const setUploading = (isUploading) => {
+    pendingUploads += isUploading ? 1 : -1
+    if (submitButton) submitButton.disabled = pendingUploads > 0
+  }
+
+  const setIcon = (icon, name) => {
+    if (!icon) return
+    icon.classList.remove('ph-clock', 'ph-spinner', 'animate-spin', 'ph-check-circle', 'ph-warning')
+    icon.classList.add(name)
+    if (name === 'ph-spinner') icon.classList.add('animate-spin')
+  }
+
+  const fields = [
+    {
+      input: document.getElementById('image-input'),
+      kind: 'capa',
+      pathField: document.getElementById('capa-path'),
+      text: document.getElementById('image-upload-warning-text'),
+      icon: document.getElementById('image-upload-warning-icon'),
+    },
+    {
+      input: document.getElementById('video-input'),
+      kind: 'video',
+      pathField: document.getElementById('video-path'),
+      text: document.getElementById('video-upload-warning-text'),
+      icon: document.getElementById('video-upload-warning-icon'),
+    },
+  ]
+
+  fields.forEach(({ input, kind, pathField, text, icon }) => {
+    if (!input || !pathField) return
+
+    input.addEventListener('change', async () => {
+      const file = input.files?.[0]
+      pathField.value = ''
+      if (!file) return
+
+      const extension = (file.name.split('.').pop() || '').toLowerCase()
+
+      if (text) text.textContent = 'Enviando...'
+      setIcon(icon, 'ph-spinner')
+      setUploading(true)
+
+      try {
+        const signResponse = await fetch('/upload-sign', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': token || '' },
+          body: JSON.stringify({ kind, extension }),
+        })
+
+        const signData = await signResponse.json().catch(() => null)
+
+        if (!signResponse.ok || !signData?.upload_url) {
+          throw new Error(signData?.error || 'Não foi possível preparar o envio.')
+        }
+
+        // Mesmo formato que o SDK oficial do Supabase usa para este endpoint:
+        // FormData com o arquivo num campo sem nome, não o arquivo cru no
+        // corpo - o endpoint de upload assinado espera multipart.
+        const uploadBody = new FormData()
+        uploadBody.append('cacheControl', '3600')
+        uploadBody.append('', file)
+
+        const uploadResponse = await fetch(signData.upload_url, {
+          method: 'POST',
+          headers: { 'x-upsert': 'true' },
+          body: uploadBody,
+        })
+
+        if (!uploadResponse.ok) {
+          throw new Error('O envio para o servidor de arquivos falhou. Tente de novo.')
+        }
+
+        pathField.value = signData.path
+
+        // O <input> original não precisa mais viajar no envio principal do
+        // formulário - o arquivo já está no Storage, só o caminho importa.
+        // Sem isso o binário seria enviado de novo, dessa vez sim estourando
+        // o limite da função serverless.
+        input.removeAttribute('name')
+
+        if (text) text.textContent = 'Enviado. Clique em “Publicar” para concluir.'
+        setIcon(icon, 'ph-check-circle')
+      } catch (error) {
+        pathField.value = ''
+        if (text) text.textContent = error instanceof Error ? error.message : 'Falha ao enviar o arquivo.'
+        setIcon(icon, 'ph-warning')
+      } finally {
+        setUploading(false)
+      }
+    })
+  })
+}
+
+/* -------------------------------------------------------------------------- */
 /* Vídeos usados como capa nas listagens                                      */
 /* -------------------------------------------------------------------------- */
 
@@ -509,6 +628,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCardPicker('.map-option', '.map-card')
   initImagePreview()
   initVideoPreview()
+  initDirectUpload()
   initLazyVideoCovers()
   initImageLightbox()
   initShareButtons()

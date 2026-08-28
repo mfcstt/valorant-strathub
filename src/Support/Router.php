@@ -38,6 +38,7 @@ final class Router
         'rating-create' => ['file' => 'rating-create', 'methods' => ['POST']],
         'profile' => ['file' => 'profile', 'methods' => ['GET', 'POST']],
         'strategy-edit' => ['file' => 'strategy-edit', 'methods' => ['GET', 'POST']],
+        'upload-sign' => ['file' => 'upload-sign', 'methods' => ['POST']],
         'admin/moderacao' => ['file' => 'admin-moderation', 'methods' => ['GET']],
         'admin/moderar' => ['file' => 'admin-moderate', 'methods' => ['POST']],
     ];

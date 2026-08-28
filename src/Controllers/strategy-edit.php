@@ -46,7 +46,12 @@ if (!is_post()) {
         ]);
     }
 
-    view('app', ['agents' => Agent::all(), 'maps' => Map::all(), 'strategy' => $strategy], 'strategy-edit');
+    view('app', [
+        'agents' => Agent::all(),
+        'maps' => Map::all(),
+        'strategy' => $strategy,
+        'direct_upload' => Storage::disk()->supportsDirectUpload(),
+    ], 'strategy-edit');
 
     return;
 }
@@ -59,13 +64,17 @@ $mapId = filter_var($_POST['mapa'] ?? '', FILTER_VALIDATE_INT) ?: null;
 
 $coverFile = $_FILES['capa'] ?? null;
 $videoFile = $_FILES['video'] ?? null;
+$coverPath = trim((string) ($_POST['capa_path'] ?? ''));
+$videoPath = trim((string) ($_POST['video_path'] ?? ''));
 
 // Trocar mídia é opcional na edição: quem não anexa um arquivo novo mantém o
 // que já estava publicado. Diferente da criação, não existe checagem de "pelo
 // menos uma mídia" aqui - a estratégia já tinha ao menos uma pra ter sido
 // publicada, e essa invariante nunca é quebrada por uma edição.
-$hasNewCover = UploadValidator::isSuccessful($coverFile);
-$hasNewVideo = UploadValidator::isSuccessful($videoFile);
+$hasNewCoverUpload = UploadValidator::isSuccessful($coverFile);
+$hasNewVideoUpload = UploadValidator::isSuccessful($videoFile);
+$hasNewCover = $hasNewCoverUpload || $coverPath !== '';
+$hasNewVideo = $hasNewVideoUpload || $videoPath !== '';
 
 $validation = Validation::validate([
     'titulo' => ['required', 'min:3', 'max:100'],
@@ -92,7 +101,7 @@ foreach (['capa' => $coverFile, 'video' => $videoFile] as $field => $file) {
 /**
  * Devolve a pessoa ao formulário preservando o que ela digitou.
  */
-$backToForm = static function (Validation $validation) use ($title, $category, $description, $agentId, $mapId, $strategyId): never {
+$backToForm = static function (Validation $validation) use ($title, $category, $description, $agentId, $mapId, $strategyId, $coverPath, $videoPath): never {
     $validation->flashErrors();
     flash()->put('formData', [
         'titulo' => $title,
@@ -100,6 +109,8 @@ $backToForm = static function (Validation $validation) use ($title, $category, $
         'descricao' => $description,
         'agente' => $agentId,
         'mapa' => $mapId,
+        'capa_path' => $coverPath,
+        'video_path' => $videoPath,
     ]);
 
     redirect('/strategy-edit?id=' . $strategyId);
@@ -115,9 +126,13 @@ $coverImageId = $strategy->cover_image_id;
 $videoId = $strategy->video_id;
 $oldCover = null;
 $oldVideo = null;
+$coverResult = null;
+$videoResult = null;
 
 if ($hasNewCover) {
-    $coverResult = $storage->uploadImage((array) $coverFile, $userId);
+    $coverResult = $hasNewCoverUpload
+        ? $storage->uploadImage((array) $coverFile, $userId)
+        : $storage->finalizeUpload('image', $coverPath, $userId);
 
     if (!$coverResult->ok) {
         $validation->addError('capa', (string) $coverResult->error);
@@ -129,7 +144,9 @@ if ($hasNewCover) {
 }
 
 if ($hasNewVideo) {
-    $videoResult = $storage->uploadVideo((array) $videoFile, $userId);
+    $videoResult = $hasNewVideoUpload
+        ? $storage->uploadVideo((array) $videoFile, $userId)
+        : $storage->finalizeUpload('video', $videoPath, $userId);
 
     if (!$videoResult->ok) {
         $validation->addError('video', (string) $videoResult->error);
@@ -137,7 +154,7 @@ if ($hasNewVideo) {
         // A capa nova pode ter subido com sucesso antes do vídeo falhar - sem
         // esta limpeza ela ficaria órfã, já que updateOwnedBy() nunca é
         // alcançado neste caminho e a capa antiga continua sendo a "oficial".
-        if ($hasNewCover && isset($coverResult) && $coverResult->file !== null) {
+        if ($coverResult !== null && $coverResult->file !== null) {
             try {
                 $storage->deleteImage((string) $coverResult->file->file_path);
                 $coverResult->file->delete();

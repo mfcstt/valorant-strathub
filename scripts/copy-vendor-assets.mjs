@@ -10,7 +10,7 @@
  * ## Por que só woff2
  *
  * O pacote traz cinco formatos da mesma fonte, somando ~12 MB nas duas variantes
- * usadas. Todo navegador que este projeto suporta lê woff2 — os outros formatos
+ * usadas. Todo navegador que este projeto suporta lê woff2 - os outros formatos
  * são fallback para navegadores que não existem mais. Copiar só o woff2 reduz o
  * diretório para ~300 KB, e as regras `@font-face` são reescritas para apontar
  * apenas para ele, evitando 404 no console.
