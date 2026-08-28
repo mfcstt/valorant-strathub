@@ -46,3 +46,4 @@ public/uploads/*
 # Screenshots soltos gerados na raiz durante verificação manual (não devem ser versionados)
 /*.png
 /*.jpg
+.serena/
