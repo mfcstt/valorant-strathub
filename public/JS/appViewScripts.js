@@ -419,6 +419,107 @@ function initDirectUpload() {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Validação do formulário de estratégia antes do envio                       */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Bloqueia o envio quando falta um campo obrigatório, em vez de deixar o
+ * navegador mandar o formulário incompleto pro servidor.
+ *
+ * Por que isso importa aqui: o <input type="file"> nunca é repopulado pelo
+ * navegador (por segurança), então uma ida e volta ao servidor faz a
+ * pré-visualização da imagem/vídeo já escolhidos sumir da tela - mesmo com o
+ * arquivo em si já salvo no Storage e o caminho preservado no campo oculto.
+ * Pra quem está preenchendo o formulário, parece que a mídia "sumiu".
+ * Validando antes de enviar, a página nunca recarrega e nada se perde.
+ */
+function initStrategyFormValidation() {
+  const forms = document.querySelectorAll('form[data-direct-upload]')
+
+  forms.forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      const problems = collectStrategyFormProblems(form)
+
+      clearStrategyFormErrors(form)
+
+      if (problems.length === 0) return
+
+      event.preventDefault()
+      problems.forEach((problem) => showStrategyFieldError(form, problem))
+      form.querySelector(problems[0].target)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
+
+    // Qualquer interação limpa os avisos antigos - evita um "campo
+    // obrigatório" continuar na tela depois que a pessoa já corrigiu.
+    form.addEventListener('input', () => clearStrategyFormErrors(form))
+    form.addEventListener('change', () => clearStrategyFormErrors(form))
+  })
+}
+
+function collectStrategyFormProblems(form) {
+  const problems = []
+
+  const titulo = form.querySelector('#field-titulo')
+  if (titulo && titulo.value.trim() === '') {
+    problems.push({ target: '#titulo-field', message: 'O título é obrigatório.' })
+  }
+
+  const categoria = form.querySelector('#categoria')
+  if (categoria && categoria.value === '') {
+    problems.push({ target: '#categoria-field', message: 'Selecione uma categoria.' })
+  }
+
+  if (!form.querySelector('input[name="agente"]:checked')) {
+    problems.push({ target: '#agente-field', message: 'Selecione um agente.' })
+  }
+
+  if (!form.querySelector('input[name="mapa"]:checked')) {
+    problems.push({ target: '#mapa-field', message: 'Selecione um mapa.' })
+  }
+
+  if (form.dataset.requiresMedia === '1') {
+    const capaPath = form.querySelector('#capa-path')?.value ?? ''
+    const videoPath = form.querySelector('#video-path')?.value ?? ''
+    const capaFile = form.querySelector('#image-input')?.files.length ?? 0
+    const videoFile = form.querySelector('#video-input')?.files.length ?? 0
+
+    if (capaPath === '' && videoPath === '' && capaFile === 0 && videoFile === 0) {
+      problems.push({ target: '#media-field', message: 'Envie uma imagem de capa ou um vídeo.' })
+    }
+  }
+
+  return problems
+}
+
+function clearStrategyFormErrors(form) {
+  form.querySelectorAll('[data-client-error]').forEach((el) => el.remove())
+}
+
+function showStrategyFieldError(form, problem) {
+  const container = form.querySelector(problem.target)
+  if (!container) return
+
+  const list = document.createElement('ul')
+  list.dataset.clientError = '1'
+  list.className = 'mt-2 ml-1 flex flex-wrap gap-x-3'
+
+  const item = document.createElement('li')
+  item.className = 'flex gap-1.5 items-center text-start text-error-light'
+
+  const icon = document.createElement('i')
+  icon.className = 'ph ph-warning text-base'
+  icon.setAttribute('aria-hidden', 'true')
+
+  const span = document.createElement('span')
+  span.className = 'text-xs mt-[2px]'
+  span.textContent = problem.message
+
+  item.append(icon, span)
+  list.append(item)
+  container.append(list)
+}
+
+/* -------------------------------------------------------------------------- */
 /* Vídeos usados como capa nas listagens                                      */
 /* -------------------------------------------------------------------------- */
 
@@ -641,6 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initImagePreview()
   initVideoPreview()
   initDirectUpload()
+  initStrategyFormValidation()
   initLazyVideoCovers()
   initImageLightbox()
   initShareButtons()

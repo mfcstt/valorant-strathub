@@ -53,7 +53,7 @@ $hasVideo = $hasVideoUpload || $videoPath !== '';
 $validation = Validation::validate([
     'titulo' => ['required', 'min:3', 'max:100'],
     'categoria' => ['required', 'in:' . implode(',', Strategy::CATEGORIES)],
-    'descricao' => ['required', 'min:10', 'max:500'],
+    'descricao' => ['max:500'],
     'agente' => ['required', 'integer'],
     'mapa' => ['required', 'integer'],
 ], [...$_POST, 'categoria' => $category]);

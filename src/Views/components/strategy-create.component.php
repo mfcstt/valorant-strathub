@@ -33,7 +33,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
 ?>
 
 <form action="/strategy-create" method="post" enctype="multipart/form-data" novalidate
-  data-direct-upload="<?= $direct_upload ? '1' : '0' ?>"
+  data-direct-upload="<?= $direct_upload ? '1' : '0' ?>" data-requires-media="1"
   class="w-full max-w-[1366px] flex flex-col gap-6 mx-auto px-4 pb-10 md:w-max md:flex-row md:gap-12 md:px-0 md:max-w-none">
 
   <?= csrf_field() ?>
@@ -103,9 +103,11 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
       <?php field_errors($errors, 'video', 'center'); ?>
     </div>
 
-    <p class="max-w-[381px] text-xs text-gray-5 font-nunito leading-relaxed">
-      Envie uma imagem, um vídeo ou os dois - ao menos uma mídia é necessária para publicar.
-    </p>
+    <div id="media-field">
+      <p class="max-w-[381px] text-xs text-gray-5 font-nunito leading-relaxed">
+        Envie uma imagem, um vídeo ou os dois - ao menos uma mídia é necessária para publicar.
+      </p>
+    </div>
   </div>
 
   <div class="flex flex-col justify-between w-full mt-6 md:mt-0">
@@ -116,7 +118,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
         <?php input('text', 'titulo', 'Título da estratégia', 'ph ph-target'); ?>
 
         <!-- Categoria -->
-        <div>
+        <div id="categoria-field">
           <label for="categoria" class="block text-gray-7 font-nunito text-sm mb-2">Categoria</label>
           <div class="flex items-center relative">
             <select id="categoria" name="categoria" class="inpForm pl-10" required>
@@ -134,7 +136,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
         </div>
 
         <!-- Agente -->
-        <fieldset class="min-w-0">
+        <fieldset id="agente-field" class="min-w-0">
           <legend class="block text-gray-7 font-nunito text-sm mb-2">Agente</legend>
 
           <div class="agent-selection-container flex gap-3 overflow-x-auto pb-2 w-full max-w-[500px] md:w-[700px]">
@@ -155,7 +157,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
         </fieldset>
 
         <!-- Mapa -->
-        <fieldset class="min-w-0">
+        <fieldset id="mapa-field" class="min-w-0">
           <legend class="block text-gray-7 font-nunito text-sm mb-2">Mapa</legend>
 
           <div class="map-selection-container flex gap-3 overflow-x-auto pb-2 w-full max-w-[500px] md:w-[700px]">
@@ -177,9 +179,11 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
 
         <!-- Descrição -->
         <div>
-          <label for="descricao" class="sr-only">Descrição</label>
+          <label for="descricao" class="block text-gray-7 font-nunito text-sm mb-2">
+            Descrição <span class="text-gray-5 font-normal">(opcional)</span>
+          </label>
           <div class="relative">
-            <textarea id="descricao" name="descricao" maxlength="500" required
+            <textarea id="descricao" name="descricao" maxlength="500"
               placeholder="Descreva o posicionamento, o timing e as habilidades usadas"
               class="inpForm resize-none w-full h-[200px] bg-gray-1 border border-gray-3 rounded-md px-4 py-3 text-gray-7 font-nunito leading-6 placeholder:text-gray-5 outline-none focus:outline-red-base"><?= e($description) ?></textarea>
           </div>

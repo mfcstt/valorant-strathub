@@ -137,7 +137,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
         <?php input('text', 'titulo', 'Título da estratégia', 'ph ph-target'); ?>
 
         <!-- Categoria -->
-        <div>
+        <div id="categoria-field">
           <label for="categoria" class="block text-gray-7 font-nunito text-sm mb-2">Categoria</label>
           <div class="flex items-center relative">
             <select id="categoria" name="categoria" class="inpForm pl-10" required>
@@ -155,7 +155,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
         </div>
 
         <!-- Agente -->
-        <fieldset class="min-w-0">
+        <fieldset id="agente-field" class="min-w-0">
           <legend class="block text-gray-7 font-nunito text-sm mb-2">Agente</legend>
 
           <div class="agent-selection-container flex gap-3 overflow-x-auto pb-2 w-full max-w-[500px] md:w-[700px]">
@@ -176,7 +176,7 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
         </fieldset>
 
         <!-- Mapa -->
-        <fieldset class="min-w-0">
+        <fieldset id="mapa-field" class="min-w-0">
           <legend class="block text-gray-7 font-nunito text-sm mb-2">Mapa</legend>
 
           <div class="map-selection-container flex gap-3 overflow-x-auto pb-2 w-full max-w-[500px] md:w-[700px]">
@@ -198,9 +198,11 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
 
         <!-- Descrição -->
         <div>
-          <label for="descricao" class="sr-only">Descrição</label>
+          <label for="descricao" class="block text-gray-7 font-nunito text-sm mb-2">
+            Descrição <span class="text-gray-5 font-normal">(opcional)</span>
+          </label>
           <div class="relative">
-            <textarea id="descricao" name="descricao" maxlength="500" required
+            <textarea id="descricao" name="descricao" maxlength="500"
               placeholder="Descreva o posicionamento, o timing e as habilidades usadas"
               class="inpForm resize-none w-full h-[200px] bg-gray-1 border border-gray-3 rounded-md px-4 py-3 text-gray-7 font-nunito leading-6 placeholder:text-gray-5 outline-none focus:outline-red-base"><?= e($description) ?></textarea>
           </div>

@@ -261,7 +261,9 @@ $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
           </p>
         </div>
 
-        <p class="mt-8 text-gray-6 leading-[160%] font-nunito break-words whitespace-pre-line"><?= e($strategy->description) ?></p>
+        <?php if ($strategy->description !== null && trim((string) $strategy->description) !== ''): ?>
+          <p class="mt-8 text-gray-6 leading-[160%] font-nunito break-words whitespace-pre-line"><?= e($strategy->description) ?></p>
+        <?php endif; ?>
       </div>
     </article>
   </section>

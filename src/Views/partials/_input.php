@@ -27,8 +27,14 @@ $value = $type === 'password'
     : old($name, $name === 'pesquisar' ? (string) ($_GET[$name] ?? '') : '');
 
 $hasError = $fieldErrors !== [];
-$inputId = 'field-' . $name;
+
+// Sufixo por formulário: login e cadastro compartilham nomes de campo
+// ("email", "senha") na mesma página (as abas só escondem uma via CSS, as
+// duas continuam no DOM) - sem isso os dois campos "senha" teriam o mesmo id.
+$fieldSuffix = $form !== null && $form !== '' ? "-{$form}" : '';
+$inputId = 'field-' . $name . $fieldSuffix;
 $errorId = $inputId . '-error';
+$wrapperId = $name . $fieldSuffix . '-field';
 
 // O autocomplete de senha precisa distinguir login de cadastro: "senha" é o
 // mesmo $name nos dois formulários, mas o gerenciador de senha do navegador
@@ -44,7 +50,7 @@ $autocomplete = match (true) {
 };
 ?>
 
-<div>
+<div id="<?= e($wrapperId) ?>">
   <div class="flex items-center relative">
     <label for="<?= e($inputId) ?>" class="sr-only"><?= e($placeholder) ?></label>
 
