@@ -152,10 +152,13 @@ final class SupabaseStorageService implements MediaStorage
      */
     public function finalizeUpload(string $kind, string $path, int $userId): StorageResult
     {
-        // O prefixo do caminho é gerado por nós em createSignedUpload() como
-        // "user_{id}/...": conferir que bate com quem está chamando impede
-        // alguém de finalizar o upload de outra pessoa informando o path dela.
-        if (!str_starts_with($path, "user_{$userId}/")) {
+        // O caminho é sempre "user_{id}/{32 hex}.{extensão}" - o formato exato
+        // gerado por createSignedUpload(), nunca outra coisa. Checar só o
+        // prefixo com str_starts_with() seria frágil contra um path como
+        // "user_{id}/../user_{outro}/x.jpg": passa no prefixo, mas pode ser
+        // resolvido pelo Storage como um objeto de outro usuário. Casar contra
+        // o formato inteiro elimina esse desvio - e qualquer outro - de uma vez.
+        if (!preg_match('#^user_' . $userId . '/[a-f0-9]{32}\.[a-z0-9]+$#', $path)) {
             return StorageResult::failure('Envio inválido.');
         }
 
