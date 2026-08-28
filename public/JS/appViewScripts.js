@@ -375,8 +375,12 @@ function initDirectUpload() {
         uploadBody.append('cacheControl', '3600')
         uploadBody.append('', file)
 
+        // PUT, não POST: o SDK oficial (storage-js) usa PUT para efetivar o
+        // envio nesta URL - um POST aqui cai no mesmo endpoint que *cria* a
+        // URL assinada e devolve outro token, sem gravar nada no Storage
+        // (foi exatamente isso que causou o vídeo "sumido" em produção).
         const uploadResponse = await fetch(signData.upload_url, {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             'x-upsert': 'true',
             // A API do Supabase Storage exige os dois - sem apikey, "headers
