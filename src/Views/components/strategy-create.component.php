@@ -82,8 +82,13 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
         <span id="video-preview-box" class="absolute inset-0 hidden z-10">
           <img id="video-thumbnail" alt="Pré-visualização do vídeo"
             class="w-full h-full object-cover rounded-[18px] hidden">
-          <video id="video-player" muted controls playsinline
-            class="w-full h-full object-cover rounded-[18px] hidden"></video>
+          <!-- Sem `controls`: com controles nativos, o navegador intercepta o
+               clique pra dar play/pause em vez de deixar o <label> abrir o
+               seletor de arquivo de novo - impossível trocar o vídeo depois
+               de escolhido uma vez. pointer-events-none reforça isso mesmo
+               em navegadores que reagem ao clique sem `controls`. -->
+          <video id="video-player" muted playsinline
+            class="w-full h-full object-cover rounded-[18px] pointer-events-none hidden"></video>
           <span id="video-fallback"
             class="w-full h-full hidden items-center justify-center bg-gray-3 text-gray-6 font-nunito text-sm rounded-[18px]">
             <i class="ph ph-video text-xl mr-2" aria-hidden="true"></i>
