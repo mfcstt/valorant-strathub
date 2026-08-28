@@ -31,8 +31,14 @@ if (!Auth::check()) {
     $respond(401, ['error' => 'Faça login para enviar arquivos.']);
 }
 
-$kind = (string) ($_POST['kind'] ?? '');
-$extension = strtolower((string) ($_POST['extension'] ?? ''));
+// O corpo vem como JSON (o JS manda application/json), não como um
+// formulário tradicional - o PHP só popula $_POST automaticamente para
+// application/x-www-form-urlencoded ou multipart/form-data.
+$payload = json_decode((string) file_get_contents('php://input'), true);
+$payload = is_array($payload) ? $payload : [];
+
+$kind = (string) ($payload['kind'] ?? '');
+$extension = strtolower((string) ($payload['extension'] ?? ''));
 
 $storageKind = match ($kind) {
     'capa' => 'image',
