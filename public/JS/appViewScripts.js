@@ -379,9 +379,11 @@ function initDirectUpload() {
           method: 'POST',
           headers: {
             'x-upsert': 'true',
-            // A API do Supabase Storage exige esse header mesmo com o token
-            // assinado já na URL - sem ele, recusa com "headers must have
-            // required property 'authorization'".
+            // A API do Supabase Storage exige os dois - sem apikey, "headers
+            // must have required property 'authorization'"; só com
+            // Authorization e sem apikey, ela tenta decodificar o valor como
+            // JWT e recusa a chave publicável nova com "Invalid Compact JWS".
+            apikey: signData.authorization,
             Authorization: `Bearer ${signData.authorization}`,
           },
           body: uploadBody,
