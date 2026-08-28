@@ -211,7 +211,7 @@ function initImagePreview() {
     }
 
     // URL.createObjectURL em vez de FileReader + data URL: não carrega o arquivo
-    // inteiro na memória como string base64, o que importa em vídeos de 100 MB.
+    // inteiro na memória como string base64, o que importa em vídeos de 50 MB.
     objectUrl = URL.createObjectURL(file)
     preview.src = objectUrl
     previewBox.classList.remove('hidden')
@@ -294,7 +294,7 @@ function initVideoPreview() {
 /**
  * Some com o corpo de um vídeo (ou imagem) antes mesmo de ele sair do
  * navegador: toda função serverless da Vercel corta a requisição em ~4,5 MB,
- * bem abaixo dos 100 MB de vídeo e 5 MB de imagem que o formulário anuncia.
+ * bem abaixo dos 50 MB de vídeo e 5 MB de imagem que o formulário anuncia.
  * Em vez de o arquivo viajar dentro do POST de /strategy-create, ele vai
  * direto para o Storage assim que é escolhido - o formulário principal só
  * carrega o caminho resultante, um texto curto que nunca esbarra em limite

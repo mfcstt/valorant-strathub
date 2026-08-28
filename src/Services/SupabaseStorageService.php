@@ -29,7 +29,7 @@ use RuntimeException;
  * `uploadImage()`/`uploadVideo()` recebem o arquivo já no corpo da requisição
  * PHP ($_FILES) e o reenviam para o Supabase - o caminho original, que na
  * Vercel esbarra no limite de ~4,5 MB de toda função serverless (bem abaixo
- * dos 100 MB de vídeo que o formulário anuncia).
+ * dos 50 MB de vídeo que o formulário anuncia).
  *
  * `createSignedUpload()` + `finalizeUpload()` são o caminho usado quando o
  * navegador envia o arquivo direto para o Supabase, sem passar pela função:

@@ -43,12 +43,16 @@ final class UploadValidator
     ];
 
     public const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
-    public const MAX_VIDEO_BYTES = 100 * 1024 * 1024;
+
+    // 50 MB, não um número escolhido pelo app: é o teto global de upload do
+    // plano Free do Supabase Storage (não configurável nesse plano). Um vídeo
+    // maior é recusado pelo próprio Storage antes de chegar no finalizeUpload().
+    public const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
 
     /**
      * Expostos para o upload direto (ver SupabaseStorageService::finalizeUpload()),
      * que precisa validar o tipo real de um arquivo que nunca passou por
-     * validate() — o navegador o enviou direto para o Storage.
+     * validate() - o navegador o enviou direto para o Storage.
      *
      * @return array<string, string>
      */

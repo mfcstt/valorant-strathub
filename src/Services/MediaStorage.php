@@ -15,7 +15,7 @@ namespace App\Services;
  * ## Upload direto (createSignedUpload / finalizeUpload)
  *
  * A Vercel corta toda requisição de função serverless em ~4,5 MB - bem abaixo
- * dos 100 MB de vídeo e 5 MB de imagem que o formulário anuncia. Um vídeo
+ * dos 50 MB de vídeo e 5 MB de imagem que o formulário anuncia. Um vídeo
  * passado direto no corpo do POST para uploadVideo() falha com HTTP 413 antes
  * mesmo de o PHP rodar, então o navegador precisa enviar o arquivo grande
  * direto para o Storage - a função serverless só participa dos dois pedaços

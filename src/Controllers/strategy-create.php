@@ -40,7 +40,7 @@ $videoFile = $_FILES['video'] ?? null;
 // ambiente local) ou já hospedada no Storage antes deste envio (capa_path/
 // video_path, preenchidos pelo JS depois do upload direto - ver upload-sign.php).
 // Um vídeo de alguns MB no corpo do POST não sobrevive à Vercel: toda função
-// serverless corta a requisição em ~4,5 MB, bem abaixo do limite de 100 MB que
+// serverless corta a requisição em ~4,5 MB, bem abaixo do limite de 50 MB que
 // o formulário anuncia.
 $coverPath = trim((string) ($_POST['capa_path'] ?? ''));
 $videoPath = trim((string) ($_POST['video_path'] ?? ''));
