@@ -80,6 +80,12 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
           class="absolute inset-0 opacity-0 -z-10">
       </label>
 
+      <button type="button" id="image-replace-button"
+        class="mt-2 w-full flex items-center justify-center gap-1.5 text-xs text-gray-5 font-nunito outline-none hover:text-red-light focus:text-red-light transition-all">
+        <i class="ph ph-arrows-clockwise" aria-hidden="true"></i>
+        Substituir imagem
+      </button>
+
       <p id="image-upload-warning" class="mt-2 hidden flex gap-1.5 items-center justify-center text-gray-6 bg-gray-3 border border-gray-4 rounded-lg p-2">
         <i id="image-upload-warning-icon" class="ph ph-clock text-base" aria-hidden="true"></i>
         <span id="image-upload-warning-text" class="text-xs">Nova imagem selecionada. Clique em “Salvar” para trocar.</span>
@@ -102,13 +108,8 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
         <span id="video-preview-box" class="absolute inset-0 z-10 <?= $strategy->video_url ? '' : 'hidden' ?>">
           <img id="video-thumbnail" alt="Pré-visualização do vídeo"
             class="w-full h-full object-cover rounded-[18px] hidden">
-          <!-- Sem `controls`: com controles nativos, o navegador intercepta o
-               clique pra dar play/pause em vez de deixar o <label> abrir o
-               seletor de arquivo de novo - impossível trocar o vídeo depois
-               de escolhido uma vez. pointer-events-none reforça isso mesmo
-               em navegadores que reagem ao clique sem `controls`. -->
-          <video id="video-player" muted playsinline
-            class="w-full h-full object-cover rounded-[18px] pointer-events-none <?= $strategy->video_url ? '' : 'hidden' ?>"
+          <video id="video-player" muted controls playsinline
+            class="w-full h-full object-cover rounded-[18px] <?= $strategy->video_url ? '' : 'hidden' ?>"
             <?= $strategy->video_url ? 'src="' . e((string) $strategy->video_url) . '"' : '' ?>></video>
           <span id="video-fallback"
             class="w-full h-full hidden items-center justify-center bg-gray-3 text-gray-6 font-nunito text-sm rounded-[18px]">
@@ -120,6 +121,12 @@ $maxVideoMb = intdiv(UploadValidator::MAX_VIDEO_BYTES, 1024 * 1024);
         <input type="file" id="video-input" name="video" accept="video/mp4,video/webm,video/quicktime"
           class="absolute inset-0 opacity-0 -z-10">
       </label>
+
+      <button type="button" id="video-replace-button"
+        class="mt-2 w-full flex items-center justify-center gap-1.5 text-xs text-gray-5 font-nunito outline-none hover:text-red-light focus:text-red-light transition-all">
+        <i class="ph ph-arrows-clockwise" aria-hidden="true"></i>
+        Substituir vídeo
+      </button>
 
       <p id="video-upload-warning" class="mt-2 hidden flex gap-1.5 items-center justify-center text-gray-6 bg-gray-3 border border-gray-4 rounded-lg p-2">
         <i id="video-upload-warning-icon" class="ph ph-clock text-base" aria-hidden="true"></i>

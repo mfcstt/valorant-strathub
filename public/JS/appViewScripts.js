@@ -287,6 +287,25 @@ function initVideoPreview() {
   })
 }
 
+/**
+ * Botão dedicado pra trocar a imagem/vídeo já selecionados.
+ *
+ * O vídeo tem `controls` pra dar pra conferir antes de publicar - só que,
+ * com controles nativos, clicar em cima do vídeo dá play/pause em vez de
+ * abrir o seletor de arquivo de novo (o <label> perde a disputa pelo clique).
+ * Esse botão contorna isso chamando input.click() diretamente, sem depender
+ * do clique na caixa - também disponível na imagem, por consistência.
+ */
+function initMediaReplaceButtons() {
+  document.getElementById('image-replace-button')?.addEventListener('click', () => {
+    document.getElementById('image-input')?.click()
+  })
+
+  document.getElementById('video-replace-button')?.addEventListener('click', () => {
+    document.getElementById('video-input')?.click()
+  })
+}
+
 /* -------------------------------------------------------------------------- */
 /* Upload direto para o Storage                                               */
 /* -------------------------------------------------------------------------- */
@@ -304,6 +323,19 @@ function initVideoPreview() {
  * strategy-create.component.php) - no ambiente local, sem esse limite, o
  * upload tradicional dentro do próprio POST continua funcionando normalmente.
  */
+/**
+ * Apaga um upload direto que ficou pra trás no Storage - best-effort, sem
+ * bloquear nada: se falhar, o arquivo só continua órfão, o que já era o
+ * comportamento antes desta função existir.
+ */
+function cleanupOrphanedUpload(kind, path, token) {
+  fetch('/upload-cleanup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': token || '' },
+    body: JSON.stringify({ kind, path }),
+  }).catch(() => {})
+}
+
 function initDirectUpload() {
   const form = document.querySelector('form[data-direct-upload="1"]')
   if (!form) return
@@ -346,6 +378,13 @@ function initDirectUpload() {
 
     input.addEventListener('change', async () => {
       const file = input.files?.[0]
+      // Guardado antes de zerar: se a pessoa já tinha escolhido um arquivo
+      // pra esse campo nesta mesma sessão do formulário e troca de novo antes
+      // de publicar, o primeiro upload fica órfão no Storage - nada nunca
+      // chega a referenciá-lo, já que só o caminho mais recente é enviado no
+      // POST final. Limpo esse órfão em best-effort depois que o novo upload
+      // for confirmado (ver cleanupOrphanedUpload()).
+      const previousPath = pathField.value
       pathField.value = ''
       if (!file) return
 
@@ -407,6 +446,10 @@ function initDirectUpload() {
 
         if (text) text.textContent = 'Enviado. Clique em “Publicar” para concluir.'
         setIcon(icon, 'ph-check-circle')
+
+        if (previousPath && previousPath !== signData.path) {
+          cleanupOrphanedUpload(kind, previousPath, token)
+        }
       } catch (error) {
         pathField.value = ''
         if (text) text.textContent = error instanceof Error ? error.message : 'Falha ao enviar o arquivo.'
@@ -741,6 +784,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCardPicker('.map-option', '.map-card')
   initImagePreview()
   initVideoPreview()
+  initMediaReplaceButtons()
   initDirectUpload()
   initStrategyFormValidation()
   initLazyVideoCovers()

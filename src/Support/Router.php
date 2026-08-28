@@ -39,6 +39,7 @@ final class Router
         'profile' => ['file' => 'profile', 'methods' => ['GET', 'POST']],
         'strategy-edit' => ['file' => 'strategy-edit', 'methods' => ['GET', 'POST']],
         'upload-sign' => ['file' => 'upload-sign', 'methods' => ['POST']],
+        'upload-cleanup' => ['file' => 'upload-cleanup', 'methods' => ['POST']],
         'admin/moderacao' => ['file' => 'admin-moderation', 'methods' => ['GET']],
         'admin/moderar' => ['file' => 'admin-moderate', 'methods' => ['POST']],
     ];
